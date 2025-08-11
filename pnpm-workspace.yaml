@@ -1,0 +1,4 @@
+# pnpm-workspace.yaml
+packages:
+  - "packages/@react-ui"
+  - "apps/storybook-react-ui"

@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@gmzh/react-ui';
 import React from 'react';
 
-import { Component } from './Component';
+import Component from './Component';
 
-const App: React.FC = () => {
+export default function App(): React.JSX.Element {
   return (
     <ThemeProvider>
       <div className="p-4">
@@ -12,6 +12,4 @@ const App: React.FC = () => {
       </div>
     </ThemeProvider>
   );
-};
-
-export default App;
+}
