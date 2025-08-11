@@ -6,10 +6,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "storybook dev -p 6006",
-    "build": "storybook build",
+    "build": "storybook build --output-dir dist",
     "lint": "eslint . --ext .ts,.tsx",
     "preview": "storybook preview",
-    "clean": "rm -rf storybook-static dist .turbo"
+    "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
     "@gmzh/react-ui": "latest",
