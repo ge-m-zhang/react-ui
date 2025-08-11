@@ -82,7 +82,7 @@ importers:
     dependencies:
       '@gmzh/react-ui':
         specifier: latest
-        version: 0.1.3(react@18.3.1)
+        version: 0.1.4(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -609,8 +609,8 @@ packages:
     resolution: {integrity: sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@gmzh/react-ui@0.1.3':
-    resolution: {integrity: sha512-Kx1zUTsk69zNAyk+miWbPJby7kGnjCbZOAv71NplJgTYc9hrJtEymBQ8mut/AbxLZiUgKmhfUNxluXlZHe6sNg==}
+  '@gmzh/react-ui@0.1.4':
+    resolution: {integrity: sha512-4WaArp2Jw0EGYyUoM3ipxXE+2AEwwon7m+eQ8duMH7ASywWODXlhfRBuVL3Qq5pPUN6r8C/whzdReRLnHhmh/g==}
     peerDependencies:
       react: ^18.2.0
 
@@ -3239,7 +3239,7 @@ snapshots:
 
   '@eslint/js@8.56.0': {}
 
-  '@gmzh/react-ui@0.1.3(react@18.3.1)':
+  '@gmzh/react-ui@0.1.4(react@18.3.1)':
     dependencies:
       class-variance-authority: 0.7.1
       clsx: 2.1.1
