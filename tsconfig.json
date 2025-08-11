@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@apps/*": ["apps/*"],
+      "@packages/*": ["packages/*"]
+    },
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "esModuleInterop": true
+  },
+  "exclude": ["**/node_modules", "**/dist", "**/build", "**/.eslintrc.*"]
+}

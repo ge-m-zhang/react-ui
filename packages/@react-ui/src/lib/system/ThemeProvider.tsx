@@ -55,11 +55,11 @@ interface ThemeProviderProps {
   enableSystem?: boolean;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+export const ThemeProvider = ({
   children,
   defaultTheme = 'system',
   enableSystem = true,
-}) => {
+}: ThemeProviderProps): React.JSX.Element => {
   const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(defaultTheme);
   const [isDark, setIsDark] = useState(false);
 
