@@ -78,8 +78,10 @@ Interactive component playground and documentation:
 - **Documentation** - Comprehensive usage guides
 - **Theme Testing** - Switch between light/dark modes
 
+**🌐 [View Live Documentation →](https://storybook-react-ui.vercel.app)**
+
 ```bash
-# Start Storybook
+# Start Storybook locally
 pnpm --filter storybook-react-ui dev
 ```
 
@@ -186,5 +188,6 @@ function App() {
 ## 📚 Resources
 
 - [Component Documentation](./packages/@react-ui/README.md)
+- [Storybook Documentation](https://storybook-react-ui.vercel.app) - Live component showcase
 - [Storybook Demo](http://localhost:6006) (when running locally)
 
