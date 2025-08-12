@@ -1,5 +1,7 @@
 # React UI Monorepo
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)]([https://deepwiki.com/ge-m-zhang/ReactNest-template](https://deepwiki.com/ge-m-zhang/react-ui))
+
 A comprehensive React UI component library monorepo built with TypeScript, Tailwind CSS, and modern development tools.
 
 ## 📁 Project Structure
