@@ -12,14 +12,30 @@ module.exports = {
     'prettier',
   ],
   rules: {
-    'simple-import-sort/imports': 'error',
-    'simple-import-sort/exports': 'error',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    '@typescript-eslint/consistent-type-imports': 'warn',
   },
   parserOptions: {
-    project: './tsconfig.json',
+    project: ['./tsconfig.json', './tsconfig.stories.json', './tsconfig.eslint.json'],
     tsconfigRootDir: __dirname,
-    sourceType: 'library',
+    sourceType: 'module',
     ecmaVersion: 'latest',
   },
+  overrides: [
+    // Do not type-check ESLint config files with TS project service
+    {
+      files: ['**/.eslintrc.*'],
+      parser: 'espree',
+      parserOptions: { project: null },
+    },
+    {
+      files: ['**/tailwind.config.ts'],
+      parserOptions: {
+        project: ['./tsconfig.eslint.json'],
+      },
+      rules: {
+        'import/no-relative-packages': 'off',
+      },
+    },
+  ],
 };

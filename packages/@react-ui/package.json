@@ -48,11 +48,11 @@
     "dev:ts": "tsc --watch",
     "dev:css": "tailwindcss -i ./src/lib/system/globals.css -o ./dist/styles.css --watch",
     "dev:concurrent": "concurrently \"npm run dev:ts\" \"npm run dev:css\"",
-    "lint": "eslint \"**/*.ts*\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist dist-cjs",
     "prepublishOnly": "npm run build",
-    "postpublish": "echo \" Successfully published @gmzh/react-ui@$(node -p \\\"require('./package.json').version\\\")\""
+     "postpublish": "echo \"Successfully published @gmzh/react-ui@$(node -p \"require('./package.json').version\")\""
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

@@ -16,6 +16,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
   },
   parserOptions: {
+    // Avoid including this config file itself in the TypeScript project
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
     sourceType: 'module',
@@ -27,6 +28,12 @@ module.exports = {
     node: true,
   },
   overrides: [
+    // Ensure config files aren't parsed with TS project service
+    {
+      files: ['**/.eslintrc.*'],
+      parser: 'espree',
+      parserOptions: { project: null },
+    },
     {
       files: ['apps/**/*.{ts,tsx}'],
       parserOptions: {
@@ -36,7 +43,18 @@ module.exports = {
     {
       files: ['packages/**/*.{ts,tsx}'],
       parserOptions: {
-        project: ['./packages/*/tsconfig.json'],
+        project: [
+          './packages/*/tsconfig.json',
+          './packages/*/tsconfig.stories.json',
+          './packages/*/tsconfig.eslint.json',
+        ],
+      },
+    },
+    {
+      files: ['**/tailwind.config.ts'],
+      rules: {
+        // Tailwind configs are executed outside TS path alias resolution; allow relative package imports here
+        'import/no-relative-packages': 'off',
       },
     },
   ],
