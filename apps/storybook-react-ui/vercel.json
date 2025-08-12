@@ -1,6 +1,9 @@
 {
-  "buildCommand": "pnpm build",
+  "buildCommand": "cd ../.. && pnpm install --frozen-lockfile && pnpm --filter storybook-react-ui build",
   "outputDirectory": "dist",
-  "installCommand": "pnpm install --no-frozen-lockfile",
-  "framework": null
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "framework": null,
+  "env": {
+    "SKIP_ENV_VALIDATION": "1"
+  }
 }
