@@ -67,7 +67,7 @@ jobs:
           echo "ui_version=${NEW_VERSION#v}" >> $GITHUB_OUTPUT
           cd ../..
 
-          ROOT_VERSION=$(npm version patch --no-git-tag-version)
+          ROOT_VERSION=$(npm version ${{ inputs.version }} --no-git-tag-version)
           echo "root_version=${ROOT_VERSION#v}" >> $GITHUB_OUTPUT
 
       - name: Commit and tag
