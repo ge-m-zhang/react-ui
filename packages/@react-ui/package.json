@@ -50,7 +50,9 @@
     "dev:concurrent": "concurrently \"npm run dev:ts\" \"npm run dev:css\"",
     "lint": "eslint \"**/*.ts*\"",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist dist-cjs"
+    "clean": "rm -rf dist dist-cjs",
+    "prepublishOnly": "npm run build",
+    "postpublish": "echo \" Successfully published @gmzh/react-ui@$(node -p \\\"require('./package.json').version\\\")\""
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

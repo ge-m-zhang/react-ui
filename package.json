@@ -14,7 +14,13 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "clean": "turbo run clean && rm -rf node_modules/.cache && rm -rf .turbo"
+    "clean": "turbo run clean && rm -rf node_modules/.cache && rm -rf .turbo",
+    "release:patch": "pnpm version patch && git push --follow-tags",
+    "release:minor": "pnpm version minor && git push --follow-tags",
+    "release:major": "pnpm version major && git push --follow-tags",
+    "prepare": "pnpm build",
+    "storybook": "turbo run dev --filter=storybook-react-ui",
+    "storybook:build": "turbo run build --filter=storybook-react-ui"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.6.14",
