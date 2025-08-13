@@ -69,8 +69,13 @@ jobs:
           echo "ui_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           cd ../..
 
-          # Update root package version to match
-          npm pkg set version=$NEW_VERSION
+          # Update root package version using simple node script
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '$NEW_VERSION';
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
           echo "root_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit and tag
