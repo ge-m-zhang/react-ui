@@ -1,0 +1,125 @@
+name: Release and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version bump type
+        required: true
+        default: patch
+        type: choice
+        options: [patch, minor, major]
+
+permissions:
+  contents: write
+  packages: write
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: release-${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9.11.0'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Configure git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint / Type-check / Build
+        run: |
+          pnpm lint
+          pnpm --filter @gmzh/react-ui typecheck
+          pnpm build
+
+      - name: Bump versions
+        id: version
+        run: |
+          cd packages/@react-ui
+          NEW_VERSION=$(npm version ${{ inputs.version }} --no-git-tag-version)
+          echo "ui_version=${NEW_VERSION#v}" >> $GITHUB_OUTPUT
+          cd ../..
+
+          ROOT_VERSION=$(npm version ${{ inputs.version }} --no-git-tag-version)
+          echo "root_version=${ROOT_VERSION#v}" >> $GITHUB_OUTPUT
+
+      - name: Commit and tag
+        run: |
+          git add .
+          git commit -m "chore: release @gmzh/react-ui v${{ steps.version.outputs.ui_version }}"
+          git tag "v${{ steps.version.outputs.ui_version }}"
+
+      - name: Validate publish (dry-run)
+        run: pnpm --filter @gmzh/react-ui publish --dry-run
+
+      - name: Publish to npm
+        run: pnpm --filter @gmzh/react-ui publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Wait for npm propagation
+        run: |
+          for i in {1..20}; do
+            if npm view @gmzh/react-ui@${{ steps.version.outputs.ui_version }} version &>/dev/null; then
+              echo "Available: @gmzh/react-ui@${{ steps.version.outputs.ui_version }}"
+              break
+            fi
+            [ $i -eq 20 ] && { echo "Timeout waiting for npm"; exit 1; }
+            sleep 15
+          done
+
+      - name: Push (triggers Vercel)
+        run: |
+          git push origin main
+          git push origin "v${{ steps.version.outputs.ui_version }}"
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.ui_version }}
+          name: "@gmzh/react-ui v${{ steps.version.outputs.ui_version }}"
+          body: |
+            ## @gmzh/react-ui v${{ steps.version.outputs.ui_version }}
+            
+            Install:
+            ```bash
+            npm i @gmzh/react-ui@${{ steps.version.outputs.ui_version }}
+            ```
+            
+            Docs: https://storybook-react-ui.vercel.app
+            npm: https://www.npmjs.com/package/@gmzh/react-ui
+            Repo: https://github.com/${{ github.repository }}
+
+      - name: Summary
+        run: |
+          echo "## Release complete" >> $GITHUB_STEP_SUMMARY
+          echo "- Package: @gmzh/react-ui@${{ steps.version.outputs.ui_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Docs: https://storybook-react-ui.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "- npm: https://www.npmjs.com/package/@gmzh/react-ui" >> $GITHUB_STEP_SUMMARY

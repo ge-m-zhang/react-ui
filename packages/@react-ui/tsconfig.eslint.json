@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*", "tailwind.config.ts", "tsconfig.stories.json"],
+  "exclude": ["node_modules", "dist"]
+}

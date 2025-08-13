@@ -20,13 +20,15 @@ export const performTextareaResize = (
   textarea: HTMLTextAreaElement,
   scrollHeightRef: React.MutableRefObject<number | null>,
 ): void => {
-  textarea.style.height = 'auto';
+  const textareaClone = textarea;
+  textareaClone.style.height = 'auto';
   const newScrollHeight = textarea.scrollHeight;
 
   // Only update if scrollHeight changed
-  if (scrollHeightRef.current !== newScrollHeight) {
-    textarea.style.height = `${newScrollHeight}px`;
-    scrollHeightRef.current = newScrollHeight;
+  const scrollHeightRefClone = scrollHeightRef;
+  if (scrollHeightRefClone.current !== newScrollHeight) {
+    textareaClone.style.height = `${newScrollHeight}px`;
+    scrollHeightRefClone.current = newScrollHeight;
   }
 };
 
@@ -37,7 +39,7 @@ export const performTextareaResize = (
  * @param delay - Delay in milliseconds
  * @returns Debounced function and cleanup function
  */
-export const createDebouncedFunction = <T extends (...args: any[]) => void>(
+export const createDebouncedFunction = <T extends (...args: unknown[]) => void>(
   func: T,
   delay: number,
 ): {
@@ -71,7 +73,9 @@ export const createDebouncedFunction = <T extends (...args: any[]) => void>(
  */
 export const useTextareaResize = (): {
   performResize: (textarea: HTMLTextAreaElement) => void;
-  createDebouncedResize: (delay?: number) => (textarea: HTMLTextAreaElement) => void;
+  createDebouncedResize: (
+    delay?: number,
+  ) => (textarea: HTMLTextAreaElement) => void;
   cleanup: () => void;
 } => {
   const scrollHeightRef = useRef<number | null>(null);
@@ -84,16 +88,15 @@ export const useTextareaResize = (): {
 
   // Create debounced resize function
   const createDebouncedResize = useCallback(
-    (delay: number = 16) => {
-      return (textarea: HTMLTextAreaElement) => {
+    (delay: number = 16) =>
+      (textarea: HTMLTextAreaElement) => {
         if (debounceTimeoutRef.current) {
           clearTimeout(debounceTimeoutRef.current);
         }
         debounceTimeoutRef.current = setTimeout(() => {
           performResize(textarea);
         }, delay);
-      };
-    },
+      },
     [performResize],
   );
 

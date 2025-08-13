@@ -1,6 +1,7 @@
 // packages/ui/src/lib/components/Button/Button.tsx
-import { forwardRef } from 'react';
 import { type VariantProps } from 'class-variance-authority';
+import { forwardRef } from 'react';
+
 import { cn } from '../../tools/classNames';
 import { buttonVariants } from './button.config';
 
@@ -35,13 +36,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       variant,
-      size,
+      size: buttonSize,
       color,
       fullWidth,
-      startIcon,
-      endIcon,
-      loading,
-      loadingText,
+      asChild: _asChild = false,
+      startIcon = null,
+      endIcon = null,
+      loading = false,
+      loadingText = 'Loading...',
       children,
       disabled,
       ...props
@@ -63,40 +65,90 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     };
 
+    const {
+      id,
+      name,
+      value,
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onMouseDown,
+      onMouseUp,
+      onFocus,
+      onBlur,
+      onKeyDown,
+      onKeyUp,
+      title,
+      role,
+      tabIndex,
+      form,
+      formAction,
+      formMethod,
+      formNoValidate,
+      formTarget,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+    } = props;
+
     return (
       <button
         ref={ref}
+        type='button'
         className={cn(
-          buttonVariants({ variant, size, color, fullWidth }),
-          getGapClass(size),
+          buttonVariants({ variant, size: buttonSize, color, fullWidth }),
+          getGapClass(buttonSize),
           className,
         )}
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         disabled={disabled || loading}
-        {...props}
+        id={id}
+        name={name}
+        value={value}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+        title={title}
+        role={role}
+        tabIndex={tabIndex}
+        form={form}
+        formAction={formAction}
+        formMethod={formMethod}
+        formNoValidate={formNoValidate}
+        formTarget={formTarget}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
       >
         {loading ? (
           <>
             <svg
-              className="animate-spin -ml-1 mr-2 h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+              className='animate-spin -ml-1 mr-2 h-4 w-4'
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
             >
               <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
+                className='opacity-25'
+                cx='12'
+                cy='12'
+                r='10'
+                stroke='currentColor'
+                strokeWidth='4'
               />
               <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                className='opacity-75'
+                fill='currentColor'
+                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
               />
             </svg>
-            {loadingText || 'Loading...'}
+            {loadingText ?? 'Loading...'}
           </>
         ) : (
           <>

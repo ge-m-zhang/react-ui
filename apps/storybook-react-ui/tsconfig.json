@@ -19,6 +19,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../../packages/@react-ui/src/**/*"],
+  "include": ["src", "../../packages/@react-ui/src/**/*", "tailwind.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

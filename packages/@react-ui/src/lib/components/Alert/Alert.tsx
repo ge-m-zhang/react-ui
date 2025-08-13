@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 /**
  * Alert Component
@@ -26,10 +26,15 @@ const variantStyles: Record<AlertVariant, string> = {
   info: 'bg-blue-100 text-blue-800 border-blue-200',
 };
 
-export const Alert: React.FC<AlertProps> = ({ children, variant = 'info', className = '' }) => {
-  return (
-    <div className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`} role="alert">
-      {children}
-    </div>
-  );
-};
+export const Alert = ({
+  children,
+  variant = 'info',
+  className = '',
+}: AlertProps) => (
+  <div
+    className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`}
+    role='alert'
+  >
+    {children}
+  </div>
+);

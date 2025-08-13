@@ -131,7 +131,9 @@ const boxVariants = cva('', {
 
 type BoxBaseProps = VariantProps<typeof boxVariants>;
 
-export interface BoxProps extends Omit<React.HTMLAttributes<HTMLElement>, 'as'>, BoxBaseProps {
+export interface BoxProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'as'>,
+    BoxBaseProps {
   as?: keyof JSX.IntrinsicElements;
 }
 
@@ -149,12 +151,12 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       rounded,
       shadow,
       position,
-      as,
+      as = 'div',
       ...props
     },
     ref,
   ) => {
-    const Component = as || 'div';
+    const Component = as ?? 'div';
     const elementProps = {
       ref,
       className: cn(

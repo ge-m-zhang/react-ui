@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { cn } from '../../tools/classNames';
+import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+
+import { cn } from '../../tools/classNames';
 
 /**
  * Tooltip Component
@@ -43,7 +44,8 @@ const tooltipVariants = cva(
       variant: {
         light: 'bg-white text-gray-900 border border-gray-200',
         dark: 'bg-gray-900 text-white',
-        label: 'bg-white text-gray-900 border border-gray-300 shadow-xl px-3 py-2 text-base',
+        label:
+          'bg-white text-gray-900 border border-gray-300 shadow-xl px-3 py-2 text-base',
       },
       visible: {
         true: 'opacity-100',
@@ -115,10 +117,12 @@ const getTooltipPosition = (
 ) => {
   const triggerRect = trigger.getBoundingClientRect();
   const tooltipRect = tooltip.getBoundingClientRect();
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-  const scrollX = window.scrollX;
-  const scrollY = window.scrollY;
+  const {
+    innerWidth: viewportWidth,
+    innerHeight: viewportHeight,
+    scrollX,
+    scrollY,
+  } = window;
 
   let top = 0;
   let left = 0;
@@ -128,7 +132,11 @@ const getTooltipPosition = (
   switch (placement) {
     case 'top':
       top = triggerRect.top + scrollY - tooltipRect.height - offset;
-      left = triggerRect.left + scrollX + triggerRect.width / 2 - tooltipRect.width / 2;
+      left =
+        triggerRect.left +
+        scrollX +
+        triggerRect.width / 2 -
+        tooltipRect.width / 2;
       break;
     case 'top-start':
       top = triggerRect.top + scrollY - tooltipRect.height - offset;
@@ -140,7 +148,11 @@ const getTooltipPosition = (
       break;
     case 'bottom':
       top = triggerRect.bottom + scrollY + offset;
-      left = triggerRect.left + scrollX + triggerRect.width / 2 - tooltipRect.width / 2;
+      left =
+        triggerRect.left +
+        scrollX +
+        triggerRect.width / 2 -
+        tooltipRect.width / 2;
       break;
     case 'bottom-start':
       top = triggerRect.bottom + scrollY + offset;
@@ -151,7 +163,11 @@ const getTooltipPosition = (
       left = triggerRect.right + scrollX - tooltipRect.width;
       break;
     case 'left':
-      top = triggerRect.top + scrollY + triggerRect.height / 2 - tooltipRect.height / 2;
+      top =
+        triggerRect.top +
+        scrollY +
+        triggerRect.height / 2 -
+        tooltipRect.height / 2;
       left = triggerRect.left + scrollX - tooltipRect.width - offset;
       break;
     case 'left-start':
@@ -163,7 +179,11 @@ const getTooltipPosition = (
       left = triggerRect.left + scrollX - tooltipRect.width - offset;
       break;
     case 'right':
-      top = triggerRect.top + scrollY + triggerRect.height / 2 - tooltipRect.height / 2;
+      top =
+        triggerRect.top +
+        scrollY +
+        triggerRect.height / 2 -
+        tooltipRect.height / 2;
       left = triggerRect.right + scrollX + offset;
       break;
     case 'right-start':
@@ -174,16 +194,24 @@ const getTooltipPosition = (
       top = triggerRect.bottom + scrollY - tooltipRect.height;
       left = triggerRect.right + scrollX + offset;
       break;
+    default:
+      break;
   }
 
   // Keep tooltip within viewport bounds
   top = Math.max(
     VIEWPORT_MARGIN,
-    Math.min(top, viewportHeight + scrollY - tooltipRect.height - VIEWPORT_MARGIN),
+    Math.min(
+      top,
+      viewportHeight + scrollY - tooltipRect.height - VIEWPORT_MARGIN,
+    ),
   );
   left = Math.max(
     VIEWPORT_MARGIN,
-    Math.min(left, viewportWidth + scrollX - tooltipRect.width - VIEWPORT_MARGIN),
+    Math.min(
+      left,
+      viewportWidth + scrollX - tooltipRect.width - VIEWPORT_MARGIN,
+    ),
   );
 
   return { top, left };
@@ -265,7 +293,11 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     // Position tooltip
     useEffect(() => {
       if (isOpen && triggerRef.current && tooltipRef.current) {
-        const { top, left } = getTooltipPosition(triggerRef.current, tooltipRef.current, placement);
+        const { top, left } = getTooltipPosition(
+          triggerRef.current,
+          tooltipRef.current,
+          placement,
+        );
         tooltipRef.current.style.top = `${top}px`;
         tooltipRef.current.style.left = `${left}px`;
       }
@@ -289,7 +321,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     }, []);
 
     if (!mounted) {
-      return <>{children}</>;
+      return children as React.JSX.Element;
     }
 
     const triggerHandlers: React.HTMLAttributes<HTMLElement> = {};
@@ -327,21 +359,38 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           ReactDOM.createPortal(
             <div
               ref={(node) => {
-                (tooltipRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+                (
+                  tooltipRef as React.MutableRefObject<HTMLDivElement | null>
+                ).current = node;
                 if (typeof ref === 'function') {
                   ref(node);
-                } else if (ref) {
-                  ref.current = node;
+                } else if (ref && 'current' in ref) {
+                  const mutableRef =
+                    ref as React.MutableRefObject<HTMLDivElement | null>;
+                  mutableRef.current = node;
                 }
               }}
               id={tooltipId}
-              role="tooltip"
+              role='tooltip'
               className={cn(tooltipVariants({ variant, visible: isOpen }))}
-              style={{ position: 'absolute' }}
-              {...tooltipProps}
+              style={{
+                position: 'absolute',
+                ...(tooltipProps?.style ?? {}),
+              }}
+              onMouseEnter={tooltipProps?.onMouseEnter}
+              onMouseLeave={tooltipProps?.onMouseLeave}
+              data-testid={
+                tooltipProps &&
+                typeof tooltipProps === 'object' &&
+                'data-testid' in tooltipProps
+                  ? (tooltipProps as { 'data-testid'?: string })['data-testid']
+                  : undefined
+              }
             >
               {content}
-              {arrow && <div className={cn(arrowVariants({ variant, placement }))} />}
+              {arrow && (
+                <div className={cn(arrowVariants({ variant, placement }))} />
+              )}
             </div>,
             document.body,
           )}
@@ -353,14 +402,110 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 Tooltip.displayName = 'Tooltip';
 
 // Convenience components
-export const LightTooltip = (props: Omit<TooltipProps, 'variant'>) => (
-  <Tooltip variant="light" {...props} />
+export const LightTooltip = ({
+  content,
+  children,
+  placement,
+  arrow,
+  open,
+  defaultOpen,
+  delay,
+  hideDelay,
+  trigger,
+  disableFocusListener,
+  disableHoverListener,
+  disableTouchListener,
+  onOpenChange,
+  tooltipProps,
+}: Omit<TooltipProps, 'variant'>) => (
+  <Tooltip
+    variant='light'
+    content={content}
+    placement={placement}
+    arrow={arrow}
+    open={open}
+    defaultOpen={defaultOpen}
+    delay={delay}
+    hideDelay={hideDelay}
+    trigger={trigger}
+    disableFocusListener={disableFocusListener}
+    disableHoverListener={disableHoverListener}
+    disableTouchListener={disableTouchListener}
+    onOpenChange={onOpenChange}
+    tooltipProps={tooltipProps}
+  >
+    {children}
+  </Tooltip>
 );
 
-export const DarkTooltip = (props: Omit<TooltipProps, 'variant'>) => (
-  <Tooltip variant="dark" {...props} />
+export const DarkTooltip = ({
+  content,
+  children,
+  placement,
+  arrow,
+  open,
+  defaultOpen,
+  delay,
+  hideDelay,
+  trigger,
+  disableFocusListener,
+  disableHoverListener,
+  disableTouchListener,
+  onOpenChange,
+  tooltipProps,
+}: Omit<TooltipProps, 'variant'>) => (
+  <Tooltip
+    variant='dark'
+    content={content}
+    placement={placement}
+    arrow={arrow}
+    open={open}
+    defaultOpen={defaultOpen}
+    delay={delay}
+    hideDelay={hideDelay}
+    trigger={trigger}
+    disableFocusListener={disableFocusListener}
+    disableHoverListener={disableHoverListener}
+    disableTouchListener={disableTouchListener}
+    onOpenChange={onOpenChange}
+    tooltipProps={tooltipProps}
+  >
+    {children}
+  </Tooltip>
 );
 
-export const LabelTooltip = (props: Omit<TooltipProps, 'variant'>) => (
-  <Tooltip variant="label" {...props} />
+export const LabelTooltip = ({
+  content,
+  children,
+  placement,
+  arrow,
+  open,
+  defaultOpen,
+  delay,
+  hideDelay,
+  trigger,
+  disableFocusListener,
+  disableHoverListener,
+  disableTouchListener,
+  onOpenChange,
+  tooltipProps,
+}: Omit<TooltipProps, 'variant'>) => (
+  <Tooltip
+    variant='label'
+    content={content}
+    placement={placement}
+    arrow={arrow}
+    open={open}
+    defaultOpen={defaultOpen}
+    delay={delay}
+    hideDelay={hideDelay}
+    trigger={trigger}
+    disableFocusListener={disableFocusListener}
+    disableHoverListener={disableHoverListener}
+    disableTouchListener={disableTouchListener}
+    onOpenChange={onOpenChange}
+    tooltipProps={tooltipProps}
+  >
+    {children}
+  </Tooltip>
 );

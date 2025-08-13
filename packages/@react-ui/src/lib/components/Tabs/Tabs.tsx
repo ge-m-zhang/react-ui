@@ -1,7 +1,11 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { createContext, forwardRef, useContext, useRef, useState } from 'react';
+import React, { createContext, forwardRef, useContext, useState } from 'react';
+
 import { cn } from '../../tools/classNames';
-import { getTabInfo, handleTabKeyboardNavigation } from '../../tools/tabNavigationHelpers';
+import {
+  getTabInfo,
+  handleTabKeyboardNavigation,
+} from '../../tools/tabNavigationHelpers';
 
 /**
  * Tab Component System
@@ -131,25 +135,56 @@ const TabContextProvider = ({
     onValueChange?.(newValue);
   };
 
-  return (
-    <TabContext.Provider value={{ value, setValue: handleValueChange, variant }}>
-      {children}
-    </TabContext.Provider>
+  const contextValue = React.useMemo(
+    () => ({ value, setValue: handleValueChange, variant }),
+    [value, variant],
   );
+
+  return (
+    <TabContext.Provider value={contextValue}>{children}</TabContext.Provider>
+  );
+};
+
+// Default props for TabContextProvider
+TabContextProvider.defaultProps = {
+  variant: 'outlined',
+  onValueChange: undefined,
 };
 
 // Individual Tab Component
 type TabBaseProps = VariantProps<typeof tabVariants>;
 
 interface TabProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'disabled' | 'onSelect'>,
+  extends Omit<
+      React.ButtonHTMLAttributes<HTMLButtonElement>,
+      'value' | 'disabled' | 'onSelect'
+    >,
     Omit<TabBaseProps, 'variant' | 'active'> {
   value: string;
   onSelect?: (value: string) => void;
+  'data-testid'?: string;
 }
 
 const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
-  ({ className, value: tabValue, onSelect, disabled, children, ...props }, ref) => {
+  (
+    {
+      className,
+      value: tabValue,
+      onSelect,
+      disabled,
+      children,
+      onClick,
+      onKeyDown,
+      onFocus,
+      onBlur,
+      id,
+      style,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'data-testid': dataTestId,
+    },
+    ref,
+  ) => {
     const { value, setValue, variant } = useContext(TabContext);
     const active = tabValue === value;
 
@@ -162,16 +197,26 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
 
     return (
       <button
+        type='button'
         ref={ref}
         className={cn(tabVariants({ variant, active, disabled }), className)}
-        onClick={handleClick}
+        onClick={(e) => {
+          handleClick();
+          onClick?.(e);
+        }}
+        onKeyDown={onKeyDown}
+        onFocus={onFocus}
+        onBlur={onBlur}
         disabled={!!disabled}
-        role="tab"
+        role='tab'
         aria-selected={active}
         aria-controls={`tabpanel-${tabValue}`}
-        id={`tab-${tabValue}`}
+        id={id ?? `tab-${tabValue}`}
         tabIndex={active ? 0 : -1}
-        {...props}
+        style={style}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        data-testid={dataTestId}
       >
         {children}
       </button>
@@ -181,29 +226,55 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
 
 TabComponent.displayName = 'Tab';
 
+// Default props for TabComponent
+TabComponent.defaultProps = {
+  onSelect: undefined,
+  'data-testid': undefined,
+};
+
 // TabList Component
 interface TabListProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical';
+  'data-testid'?: string;
 }
 
 const TabList = forwardRef<HTMLDivElement, TabListProps>(
-  ({ className, orientation = 'horizontal', children, ...props }, ref) => {
+  (
+    {
+      className,
+      orientation = 'horizontal',
+      children,
+      id,
+      style,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'data-testid': dataTestId,
+      onKeyDown: onKeyDownProp,
+    },
+    ref,
+  ) => {
     const { variant, value, setValue } = useContext(TabContext);
 
     // Handle keyboard navigation
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       const tabInfo = getTabInfo(children);
       handleTabKeyboardNavigation(event, tabInfo, value, orientation, setValue);
+      onKeyDownProp?.(event);
     };
 
     return (
       <div
         ref={ref}
         className={cn(tabListVariants({ variant, orientation }), className)}
-        role="tablist"
+        role='tablist'
         aria-orientation={orientation}
+        tabIndex={0}
         onKeyDown={handleKeyDown}
-        {...props}
+        id={id}
+        style={style}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        data-testid={dataTestId}
       >
         {children}
       </div>
@@ -213,14 +284,34 @@ const TabList = forwardRef<HTMLDivElement, TabListProps>(
 
 TabList.displayName = 'TabList';
 
+// Default props for TabList
+TabList.defaultProps = {
+  orientation: 'horizontal',
+  'data-testid': undefined,
+};
+
 // TabPanel Component
 interface TabPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
   forceMount?: boolean;
+  'data-testid'?: string;
 }
 
 const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
-  ({ className, value: panelValue, forceMount = false, children, ...props }, ref) => {
+  (
+    {
+      className,
+      value: panelValue,
+      forceMount = false,
+      children,
+      id,
+      style,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'data-testid': dataTestId,
+    },
+    ref,
+  ) => {
     const { value } = useContext(TabContext);
     const active = panelValue === value;
 
@@ -232,11 +323,13 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       <div
         ref={ref}
         className={cn('mt-4', !active && 'hidden', className)}
-        role="tabpanel"
-        aria-labelledby={`tab-${panelValue}`}
-        id={`tabpanel-${panelValue}`}
+        role='tabpanel'
+        aria-labelledby={ariaLabelledBy ?? `tab-${panelValue}`}
+        id={id ?? `tabpanel-${panelValue}`}
         tabIndex={0}
-        {...props}
+        style={style}
+        aria-label={ariaLabel}
+        data-testid={dataTestId}
       >
         {children}
       </div>
@@ -246,18 +339,52 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
 
 TabPanel.displayName = 'TabPanel';
 
+// Default props for TabPanel
+TabPanel.defaultProps = {
+  forceMount: false,
+  'data-testid': undefined,
+};
+
 // TabContent wrapper for better semantics
-const TabContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <div ref={ref} className={cn('tab-content', className)} {...props}>
-        {children}
-      </div>
-    );
-  },
+interface TabContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+  'data-testid'?: string;
+}
+
+const TabContent = forwardRef<HTMLDivElement, TabContentProps>(
+  (
+    {
+      className,
+      children,
+      id,
+      style,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'data-testid': dataTestId,
+    },
+    ref,
+  ) => (
+    <div
+      ref={ref}
+      className={cn('tab-content', className)}
+      id={id}
+      style={style}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      data-testid={dataTestId}
+    >
+      {children}
+    </div>
+  ),
 );
 
 TabContent.displayName = 'TabContent';
+
+// Default props for TabContent
+TabContent.defaultProps = {
+  className: undefined,
+  'data-testid': undefined,
+};
 
 // Main Tab export with compound components
 export const Tab = Object.assign(TabComponent, {

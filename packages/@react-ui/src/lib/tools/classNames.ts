@@ -13,6 +13,7 @@ import { twMerge } from 'tailwind-merge';
  * @param inputs - Class values to combine
  * @returns Merged class string with conflicts resolved
  */
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
+
+export { cn };
+export default cn;

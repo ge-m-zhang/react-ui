@@ -28,8 +28,13 @@ export const Centered: Story = {
     className: 'h-screen w-screen bg-gray-50',
     children: (
       <>
-        <div className="text-4xl font-bold">Centered Content</div>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded">Button</button>
+        <div className='text-4xl font-bold'>Centered Content</div>
+        <button
+          type='button'
+          className='px-4 py-2 bg-blue-500 text-white rounded'
+        >
+          Button
+        </button>
       </>
     ),
   },
@@ -44,9 +49,9 @@ export const RowWithGap: Story = {
     className: 'p-4 bg-gray-50',
     children: (
       <>
-        <div className="p-2 bg-blue-100">Item 1</div>
-        <div className="p-2 bg-blue-100">Item 2</div>
-        <div className="p-2 bg-blue-100">Item 3</div>
+        <div className='p-2 bg-blue-100'>Item 1</div>
+        <div className='p-2 bg-blue-100'>Item 2</div>
+        <div className='p-2 bg-blue-100'>Item 3</div>
       </>
     ),
   },

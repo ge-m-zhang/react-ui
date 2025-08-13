@@ -1,5 +1,12 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { createContext, forwardRef, useContext, useRef, useState } from 'react';
+import React, {
+  createContext,
+  forwardRef,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
+
 import { cn } from '../../tools/classNames';
 
 /**
@@ -214,18 +221,42 @@ const switchSliderVariants = cva(
 );
 
 // Container component
-const SwitchContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+interface SwitchContainerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  'aria-checked'?: boolean | 'mixed';
+}
+
+const SwitchContainer = forwardRef<HTMLButtonElement, SwitchContainerProps>(
+  (
+    {
+      className,
+      children,
+      onClick,
+      tabIndex,
+      onKeyDown,
+      'aria-checked': ariaChecked = false,
+    },
+    ref,
+  ) => {
     const { size, color, checked, disabled } = useContext(SwitchContext);
 
     return (
-      <div
+      <button
+        type='button'
         ref={ref}
-        className={cn(switchContainerVariants({ size, color, checked, disabled }), className)}
-        {...props}
+        className={cn(
+          switchContainerVariants({ size, color, checked, disabled }),
+          className,
+        )}
+        onClick={onClick}
+        tabIndex={tabIndex}
+        onKeyDown={onKeyDown}
+        disabled={disabled}
+        role='switch'
+        aria-checked={ariaChecked as boolean | 'mixed' | undefined}
       >
         {children}
-      </div>
+      </button>
     );
   },
 );
@@ -233,15 +264,19 @@ const SwitchContainer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
 SwitchContainer.displayName = 'SwitchContainer';
 
 // Slider component
-const SwitchSlider = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => {
+type SwitchSliderProps = React.HTMLAttributes<HTMLDivElement>;
+
+const SwitchSlider = forwardRef<HTMLDivElement, SwitchSliderProps>(
+  ({ className }, ref) => {
     const { size, checked, disabled } = useContext(SwitchContext);
 
     return (
       <div
         ref={ref}
-        className={cn(switchSliderVariants({ size, checked, disabled }), className)}
-        {...props}
+        className={cn(
+          switchSliderVariants({ size, checked, disabled }),
+          className,
+        )}
       />
     );
   },
@@ -262,7 +297,7 @@ export interface SwitchProps
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
-      className,
+      className: _className,
       size = 'medium',
       color = 'primary',
       checked: checkedProp,
@@ -270,7 +305,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       onChange,
       ...props
     },
-    ref,
+    _ref,
   ) => {
     const [internalChecked, setInternalChecked] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -278,7 +313,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     // Use controlled or uncontrolled state - pure derived state handles prop changes automatically
     const checked = checkedProp !== undefined ? checkedProp : internalChecked;
 
-    const handleSwitchClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
+    const handleSwitchClick = (
+      event: React.SyntheticEvent<HTMLButtonElement>,
+    ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -301,18 +338,21 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     };
 
     return (
-      <div className="inline-flex items-center">
+      <div className='inline-flex items-center'>
         <SwitchContext.Provider
-          value={{
-            size: size ?? 'medium',
-            color: color ?? 'primary',
-            checked: !!checked,
-            disabled: !!disabled,
-          }}
+          value={React.useMemo(
+            () => ({
+              size: size ?? 'medium',
+              color: color ?? 'primary',
+              checked: !!checked,
+              disabled: !!disabled,
+            }),
+            [size, color, checked, disabled],
+          )}
         >
           <SwitchContainer
             onClick={handleSwitchClick}
-            role="switch"
+            role='switch'
             aria-checked={!!checked}
             tabIndex={disabled ? -1 : 0}
             onKeyDown={(e) => {
@@ -323,22 +363,33 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             }}
           >
             <input
-              ref={(node) => {
-                (inputRef as React.MutableRefObject<HTMLInputElement | null>).current = node;
-                if (typeof ref === 'function') {
-                  ref(node);
-                } else if (ref) {
-                  ref.current = node;
-                }
-              }}
-              type="checkbox"
-              className="sr-only"
+              ref={inputRef}
+              type='checkbox'
+              className='sr-only'
               checked={!!checked}
               disabled={!!disabled}
               onChange={handleInputChange}
-              aria-hidden="true"
+              aria-hidden='true'
               tabIndex={-1}
-              {...props}
+              id={props.id}
+              name={props.name}
+              onBlur={props.onBlur}
+              onFocus={props.onFocus}
+              onKeyDown={props.onKeyDown}
+              onKeyUp={props.onKeyUp}
+              aria-label={
+                (props as unknown as { 'aria-label'?: string })['aria-label']
+              }
+              aria-labelledby={
+                (props as unknown as { 'aria-labelledby'?: string })[
+                  'aria-labelledby'
+                ]
+              }
+              aria-describedby={
+                (props as unknown as { 'aria-describedby'?: string })[
+                  'aria-describedby'
+                ]
+              }
             />
             <SwitchSlider />
           </SwitchContainer>

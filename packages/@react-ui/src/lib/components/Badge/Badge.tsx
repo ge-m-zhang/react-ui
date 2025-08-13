@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 /**
  * Badge Component
@@ -12,7 +12,13 @@ import React from 'react';
  * - Styled with Tailwind CSS
  */
 
-export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info';
+export type BadgeVariant =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info';
 
 export interface BadgeProps {
   children: React.ReactNode;
@@ -29,12 +35,14 @@ const variantStyles: Record<BadgeVariant, string> = {
   info: 'bg-blue-100 text-blue-800',
 };
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = 'primary', className = '' }) => {
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantStyles[variant]} ${className}`}
-    >
-      {children}
-    </span>
-  );
-};
+export const Badge = ({
+  children,
+  variant = 'primary',
+  className = '',
+}: BadgeProps) => (
+  <span
+    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantStyles[variant]} ${className}`}
+  >
+    {children}
+  </span>
+);

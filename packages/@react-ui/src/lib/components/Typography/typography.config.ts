@@ -15,7 +15,10 @@ export type TypographyVariant =
   | 'overline'; // Added for completeness
 
 // Enhanced variant mapping
-export const variantElementMap: Record<TypographyVariant, keyof JSX.IntrinsicElements> = {
+export const variantElementMap: Record<
+  TypographyVariant,
+  keyof JSX.IntrinsicElements
+> = {
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',
@@ -43,16 +46,57 @@ export const typographyVariants = cva(
           'leading-[1.1]', // Tighter for large headings
           'tracking-tight',
         ],
-        h2: ['text-3xl md:text-4xl lg:text-5xl', 'font-bold', 'leading-[1.2]', 'tracking-tight'],
-        h3: ['text-2xl md:text-3xl lg:text-4xl', 'font-bold', 'leading-[1.25]', 'tracking-tight'],
-        h4: ['text-xl md:text-2xl lg:text-3xl', 'font-bold', 'leading-[1.3]', 'tracking-tight'],
-        h5: ['text-lg md:text-xl lg:text-2xl', 'font-bold', 'leading-[1.4]', 'tracking-tight'],
-        h6: ['text-base md:text-lg lg:text-xl', 'font-bold', 'leading-[1.4]', 'tracking-tight'],
-        subtitle1: ['text-base md:text-lg', 'font-semibold', 'leading-[1.5]', 'tracking-normal'],
-        subtitle2: ['text-sm md:text-base', 'font-semibold', 'leading-[1.5]', 'tracking-normal'],
+        h2: [
+          'text-3xl md:text-4xl lg:text-5xl',
+          'font-bold',
+          'leading-[1.2]',
+          'tracking-tight',
+        ],
+        h3: [
+          'text-2xl md:text-3xl lg:text-4xl',
+          'font-bold',
+          'leading-[1.25]',
+          'tracking-tight',
+        ],
+        h4: [
+          'text-xl md:text-2xl lg:text-3xl',
+          'font-bold',
+          'leading-[1.3]',
+          'tracking-tight',
+        ],
+        h5: [
+          'text-lg md:text-xl lg:text-2xl',
+          'font-bold',
+          'leading-[1.4]',
+          'tracking-tight',
+        ],
+        h6: [
+          'text-base md:text-lg lg:text-xl',
+          'font-bold',
+          'leading-[1.4]',
+          'tracking-tight',
+        ],
+        subtitle1: [
+          'text-base md:text-lg',
+          'font-semibold',
+          'leading-[1.5]',
+          'tracking-normal',
+        ],
+        subtitle2: [
+          'text-sm md:text-base',
+          'font-semibold',
+          'leading-[1.5]',
+          'tracking-normal',
+        ],
         body1: ['text-base', 'font-normal', 'leading-[1.6]', 'tracking-normal'],
         body2: ['text-sm', 'font-normal', 'leading-[1.6]', 'tracking-normal'],
-        caption: ['text-xs', 'font-normal', 'leading-[1.4]', 'tracking-normal', 'text-gray-600'],
+        caption: [
+          'text-xs',
+          'font-normal',
+          'leading-[1.4]',
+          'tracking-normal',
+          'text-gray-600',
+        ],
         overline: [
           'text-xs',
           'font-semibold',

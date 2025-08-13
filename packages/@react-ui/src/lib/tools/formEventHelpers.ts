@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 /**
  * Form Event Helpers
@@ -67,9 +67,8 @@ export const createSyntheticCheckboxChangeEvent = (
   originalEvent: React.SyntheticEvent,
   inputElement: HTMLInputElement | null,
   checked: boolean,
-): React.ChangeEvent<HTMLInputElement> => {
-  return createSyntheticChangeEvent(originalEvent, inputElement, { checked });
-};
+): React.ChangeEvent<HTMLInputElement> =>
+  createSyntheticChangeEvent(originalEvent, inputElement, { checked });
 
 /**
  * Creates a synthetic ChangeEvent specifically for text/value inputs.
@@ -84,9 +83,8 @@ export const createSyntheticValueChangeEvent = (
   originalEvent: React.SyntheticEvent,
   inputElement: HTMLInputElement | null,
   value: string,
-): React.ChangeEvent<HTMLInputElement> => {
-  return createSyntheticChangeEvent(originalEvent, inputElement, { value });
-};
+): React.ChangeEvent<HTMLInputElement> =>
+  createSyntheticChangeEvent(originalEvent, inputElement, { value });
 
 /**
  * Creates a wheel event handler for number inputs that prevents accidental value changes.
@@ -105,13 +103,13 @@ export const createSyntheticValueChangeEvent = (
  * />
  * ```
  */
-export const createNumberInputWheelHandler = (
-  onWheel?: React.WheelEventHandler<HTMLInputElement>,
-): React.WheelEventHandler<HTMLInputElement> => {
-  return (e: React.WheelEvent<HTMLInputElement>) => {
+export const createNumberInputWheelHandler =
+  (
+    onWheel?: React.WheelEventHandler<HTMLInputElement>,
+  ): React.WheelEventHandler<HTMLInputElement> =>
+  (e: React.WheelEvent<HTMLInputElement>) => {
     // Prevent the number value from changing, but don't blur the input
     // This allows users to scroll past the input without losing focus or changing values
     e.preventDefault();
     onWheel?.(e);
   };
-};

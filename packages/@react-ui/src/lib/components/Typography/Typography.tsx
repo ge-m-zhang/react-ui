@@ -37,7 +37,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
       bold = false,
       hyperlink = false,
       strikethrough = false,
-      as,
+      as = 'span',
       className,
       children,
       ...props
@@ -45,7 +45,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     ref,
   ) => {
     // Determine the element type
-    const Element = as || variantElementMap[variant || 'body1'];
+    const Element = as ?? variantElementMap[variant ?? 'body1'];
 
     return React.createElement(
       Element,

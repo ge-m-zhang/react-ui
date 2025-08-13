@@ -1,6 +1,7 @@
 // packages/ui/src/lib/system/ThemeProvider.tsx
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import type React from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 // Theme configuration (moved to TypeScript for JS access)
 export const themeConfig = {
@@ -60,7 +61,9 @@ export const ThemeProvider = ({
   defaultTheme = 'system',
   enableSystem = true,
 }: ThemeProviderProps): React.JSX.Element => {
-  const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(defaultTheme);
+  const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(
+    defaultTheme,
+  );
   const [isDark, setIsDark] = useState(false);
 
   // Handle system theme changes
@@ -79,6 +82,8 @@ export const ThemeProvider = ({
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
+
+    return undefined;
   }, [theme, enableSystem]);
 
   // Apply theme to document
@@ -86,7 +91,8 @@ export const ThemeProvider = ({
     const root = document.documentElement;
 
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+        .matches
         ? 'dark'
         : 'light';
       root.classList.toggle('dark', systemTheme === 'dark');
@@ -108,21 +114,28 @@ export const ThemeProvider = ({
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
+    const stored = localStorage.getItem('theme') as
+      | 'light'
+      | 'dark'
+      | 'system'
+      | null;
     if (stored) {
       setThemeState(stored);
     }
   }, []);
 
-  const value: ThemeContextType = {
-    isDark,
-    toggleTheme,
-    setTheme,
-  };
+  const value: ThemeContextType = useMemo(
+    () => ({
+      isDark,
+      toggleTheme,
+      setTheme,
+    }),
+    [isDark],
+  );
 
   return (
     <ThemeContext.Provider value={value}>
-      <div className="min-h-screen bg-background text-foreground transition-colors">
+      <div className='min-h-screen bg-background text-foreground transition-colors'>
         {children}
 
         {/* Portal containers */}

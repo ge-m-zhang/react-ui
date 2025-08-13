@@ -47,7 +47,7 @@ export const findNextEnabledTab = (
   direction: 'forward' | 'backward',
 ): number => {
   let idx = startIndex;
-  for (let i = 0; i < tabInfo.length; i++) {
+  for (let i = 0; i < tabInfo.length; i += 1) {
     if (direction === 'forward') {
       idx = (idx + 1) % tabInfo.length;
     } else {
@@ -141,6 +141,8 @@ export const handleTabKeyboardNavigation = (
     case 'End':
       nextIndex = findEnabledTabAtEnd(tabInfo, false, currentIndex);
       shouldPreventDefault = true;
+      break;
+    default:
       break;
   }
 

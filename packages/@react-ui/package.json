@@ -1,15 +1,16 @@
 {
   "name": "@gmzh/react-ui",
-  "version": "0.1.4",
+  "version": "0.2.4",
   "description": "A modern React UI component library with TypeScript",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-   "url": "https://github.com/ge-m-zhang/react-ui",
+    "url": "https://github.com/ge-m-zhang/react-ui",
     "directory": "packages/@react-ui"
   },
+  "homepage": "https://storybook-react-ui.vercel.app",
   "publishConfig": {
     "access": "public",
     "keywords": [
@@ -47,9 +48,11 @@
     "dev:ts": "tsc --watch",
     "dev:css": "tailwindcss -i ./src/lib/system/globals.css -o ./dist/styles.css --watch",
     "dev:concurrent": "concurrently \"npm run dev:ts\" \"npm run dev:css\"",
-    "lint": "eslint \"**/*.ts*\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist dist-cjs"
+    "clean": "rm -rf dist dist-cjs",
+    "prepublishOnly": "npm run build",
+    "postpublish": "echo \"Successfully published @gmzh/react-ui@$(node -p \"require('./package.json').version\")\""
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
