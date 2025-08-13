@@ -1,6 +1,6 @@
 // packages/@react-ui/src/lib/tools/styleHelpers.ts
 
-import React from 'react';
+import type React from 'react';
 
 type ResizableType = 'horizontal' | 'vertical' | boolean | null;
 
@@ -11,7 +11,7 @@ type ResizableType = 'horizontal' | 'vertical' | boolean | null;
  * @param resizable - The resize configuration ('horizontal', 'vertical', true, false, or undefined)
  * @returns CSS properties object with appropriate resize styles
  */
-export const getResizeStyle = (
+const getResizeStyle = (
   autoResize: boolean,
   resizable?: ResizableType,
 ): React.CSSProperties => {
@@ -32,3 +32,6 @@ export const getResizeStyle = (
       return {};
   }
 };
+
+export { getResizeStyle };
+export default getResizeStyle;

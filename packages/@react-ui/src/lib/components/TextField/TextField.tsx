@@ -32,7 +32,8 @@ const textFieldVariants = cva(
       state: {
         default: 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20',
         error: 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
-        success: 'border-green-500 focus:border-green-500 focus:ring-green-500/20',
+        success:
+          'border-green-500 focus:border-green-500 focus:ring-green-500/20',
       },
       fullWidth: {
         true: 'w-full',
@@ -106,7 +107,10 @@ const helperTextVariants = cva('text-sm mt-1', {
 type TextFieldBaseProps = VariantProps<typeof textFieldVariants>;
 
 export interface TextFieldProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'disabled'>,
+  extends Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      'size' | 'disabled'
+    >,
     Omit<TextFieldBaseProps, 'hasSymbol'> {
   error?: string;
   helperText?: string;
@@ -148,7 +152,8 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     const errorId = useMemo(() => `${inputId}-error`, [inputId]);
 
     // Create wheel handler for number inputs to prevent accidental value changes
-    const wheelHandler = type === 'number' ? createNumberInputWheelHandler(onWheel) : onWheel;
+    const wheelHandler =
+      type === 'number' ? createNumberInputWheelHandler(onWheel) : onWheel;
 
     return (
       <div className={cn('relative', fullWidth && 'w-full', wrapperClassName)}>
@@ -156,14 +161,17 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className={cn('block text-sm font-medium text-gray-700 mb-1', hiddenLabel && 'sr-only')}
+            className={cn(
+              'block text-sm font-medium text-gray-700 mb-1',
+              hiddenLabel && 'sr-only',
+            )}
           >
             {label}
           </label>
         )}
 
         {/* Input container */}
-        <div className="relative">
+        <div className='relative'>
           {/* Symbol */}
           {symbol && (
             <div className={symbolVariants({ size })}>
@@ -189,72 +197,73 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             disabled={!!disabled}
             onWheel={wheelHandler}
             aria-invalid={error ? 'true' : 'false'}
-                      aria-describedby={
-            [error && errorId, helperText && !error && helperId].filter(Boolean).join(' ') ||
-            undefined
-          }
-          placeholder={props.placeholder}
-          defaultValue={props.defaultValue}
-          value={props.value}
-          autoComplete={props.autoComplete}
-          checked={props.checked}
-          defaultChecked={props.defaultChecked}
-          form={props.form}
-          formAction={props.formAction}
-          formEncType={props.formEncType}
-          formMethod={props.formMethod}
-          formNoValidate={props.formNoValidate}
-          formTarget={props.formTarget}
-          height={props.height}
-          list={props.list}
-          max={props.max}
-          maxLength={props.maxLength}
-          min={props.min}
-          minLength={props.minLength}
-          multiple={props.multiple}
-          name={props.name}
-          pattern={props.pattern}
-          readOnly={props.readOnly}
-          required={props.required}
-          src={props.src}
-          step={props.step}
-          width={props.width}
-          accept={props.accept}
-          alt={props.alt}
-          capture={props.capture}
-          onClick={props.onClick}
-          onFocus={props.onFocus}
-          onBlur={props.onBlur}
-          onChange={props.onChange}
-          onKeyDown={props.onKeyDown}
-          onKeyUp={props.onKeyUp}
-          onKeyPress={props.onKeyPress}
-          onInput={props.onInput}
-          onInvalid={props.onInvalid}
-          onSelect={props.onSelect}
-          onMouseDown={props.onMouseDown}
-          onMouseUp={props.onMouseUp}
-          onMouseEnter={props.onMouseEnter}
-          onMouseLeave={props.onMouseLeave}
-          onMouseMove={props.onMouseMove}
-          onMouseOver={props.onMouseOver}
-          onMouseOut={props.onMouseOut}
-          onContextMenu={props.onContextMenu}
-          onDoubleClick={props.onDoubleClick}
-          onDrag={props.onDrag}
-          onDragEnd={props.onDragEnd}
-          onDragEnter={props.onDragEnter}
-          onDragExit={props.onDragExit}
-          onDragLeave={props.onDragLeave}
-          onDragOver={props.onDragOver}
-          onDragStart={props.onDragStart}
-          onDrop={props.onDrop}
-          tabIndex={props.tabIndex}
-          role={props.role}
-          aria-label={props['aria-label']}
-          aria-labelledby={props['aria-labelledby']}
-          aria-required={props['aria-required']}
-          style={props.style}
+            aria-describedby={
+              [error && errorId, helperText && !error && helperId]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
+            placeholder={props.placeholder}
+            defaultValue={props.defaultValue}
+            value={props.value}
+            autoComplete={props.autoComplete}
+            checked={props.checked}
+            defaultChecked={props.defaultChecked}
+            form={props.form}
+            formAction={props.formAction}
+            formEncType={props.formEncType}
+            formMethod={props.formMethod}
+            formNoValidate={props.formNoValidate}
+            formTarget={props.formTarget}
+            height={props.height}
+            list={props.list}
+            max={props.max}
+            maxLength={props.maxLength}
+            min={props.min}
+            minLength={props.minLength}
+            multiple={props.multiple}
+            name={props.name}
+            pattern={props.pattern}
+            readOnly={props.readOnly}
+            required={props.required}
+            src={props.src}
+            step={props.step}
+            width={props.width}
+            accept={props.accept}
+            alt={props.alt}
+            capture={props.capture}
+            onClick={props.onClick}
+            onFocus={props.onFocus}
+            onBlur={props.onBlur}
+            onChange={props.onChange}
+            onKeyDown={props.onKeyDown}
+            onKeyUp={props.onKeyUp}
+            onKeyPress={props.onKeyPress}
+            onInput={props.onInput}
+            onInvalid={props.onInvalid}
+            onSelect={props.onSelect}
+            onMouseDown={props.onMouseDown}
+            onMouseUp={props.onMouseUp}
+            onMouseEnter={props.onMouseEnter}
+            onMouseLeave={props.onMouseLeave}
+            onMouseMove={props.onMouseMove}
+            onMouseOver={props.onMouseOver}
+            onMouseOut={props.onMouseOut}
+            onContextMenu={props.onContextMenu}
+            onDoubleClick={props.onDoubleClick}
+            onDrag={props.onDrag}
+            onDragEnd={props.onDragEnd}
+            onDragEnter={props.onDragEnter}
+            onDragExit={props.onDragExit}
+            onDragLeave={props.onDragLeave}
+            onDragOver={props.onDragOver}
+            onDragStart={props.onDragStart}
+            onDrop={props.onDrop}
+            tabIndex={props.tabIndex}
+            role={props.role}
+            aria-label={props['aria-label']}
+            aria-labelledby={props['aria-labelledby']}
+            aria-required={props['aria-required']}
+            style={props.style}
           />
         </div>
 
@@ -305,8 +314,8 @@ export function EmailField({
 }: Omit<TextFieldProps, 'type'>) {
   return (
     <TextField
-      type="email"
-      autoComplete="email"
+      type='email'
+      autoComplete='email'
       className={className}
       wrapperClassName={wrapperClassName}
       size={size}
@@ -343,8 +352,8 @@ export function PasswordField({
 }: Omit<TextFieldProps, 'type'>) {
   return (
     <TextField
-      type="password"
-      autoComplete="current-password"
+      type='password'
+      autoComplete='current-password'
       className={className}
       wrapperClassName={wrapperClassName}
       size={size}
@@ -381,7 +390,7 @@ export function NumberField({
 }: Omit<TextFieldProps, 'type'>) {
   return (
     <TextField
-      type="number"
+      type='number'
       className={className}
       wrapperClassName={wrapperClassName}
       size={size}
@@ -418,7 +427,7 @@ export function SearchField({
 }: Omit<TextFieldProps, 'type'>) {
   return (
     <TextField
-      type="search"
+      type='search'
       symbol={symbol}
       className={className}
       wrapperClassName={wrapperClassName}

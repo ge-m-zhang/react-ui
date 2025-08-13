@@ -1,6 +1,9 @@
-
 export type TempTestProps = {
   label?: string;
+};
+
+const defaultProps: Partial<TempTestProps> = {
+  label: 'TempTest',
 };
 
 export default function TempTest({ label = 'TempTest' }: TempTestProps) {
@@ -12,7 +15,8 @@ export default function TempTest({ label = 'TempTest' }: TempTestProps) {
         borderRadius: 8,
         background: '#eef2ff',
         color: '#1e40af',
-        fontFamily: 'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans',
+        fontFamily:
+          'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans',
         fontSize: 14,
         border: '1px solid #c7d2fe',
       }}
@@ -21,3 +25,5 @@ export default function TempTest({ label = 'TempTest' }: TempTestProps) {
     </div>
   );
 }
+
+TempTest.defaultProps = defaultProps;

@@ -138,14 +138,14 @@ function DefaultCheckIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
+      fill='currentColor'
+      viewBox='0 0 20 20'
+      xmlns='http://www.w3.org/2000/svg'
     >
       <path
-        fillRule="evenodd"
-        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-        clipRule="evenodd"
+        fillRule='evenodd'
+        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+        clipRule='evenodd'
       />
     </svg>
   );
@@ -160,14 +160,14 @@ function IndeterminateIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
+      fill='currentColor'
+      viewBox='0 0 20 20'
+      xmlns='http://www.w3.org/2000/svg'
     >
       <path
-        fillRule="evenodd"
-        d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-        clipRule="evenodd"
+        fillRule='evenodd'
+        d='M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
+        clipRule='evenodd'
       />
     </svg>
   );
@@ -198,7 +198,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Use controlled or uncontrolled state - pure derived state handles prop changes automatically
     const checked = checkedProp !== undefined ? checkedProp : internalChecked;
 
-    const handleCheckboxClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
+    const handleCheckboxClick = (
+      event: React.SyntheticEvent<HTMLDivElement>,
+    ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -223,12 +225,14 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // Helper function to determine which icon to show - clearer than nested ternary
     const getIconToShow = () => {
       if (indeterminate) {
-        return <IndeterminateIcon className="text-white" />;
+        return <IndeterminateIcon className='text-white' />;
       }
       if (icon) {
-        return React.cloneElement(icon as React.ReactElement, { className: 'text-white' });
+        return React.cloneElement(icon as React.ReactElement, {
+          className: 'text-white',
+        });
       }
-      return <DefaultCheckIcon className="text-white" />;
+      return <DefaultCheckIcon className='text-white' />;
     };
 
     // Helper function to get aria-checked value - clearer than nested ternary
@@ -238,7 +242,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     };
 
     return (
-      <div className="inline-flex items-center">
+      <div className='inline-flex items-center'>
         <div
           className={cn(
             checkboxVariants({
@@ -250,7 +254,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             className,
           )}
           onClick={handleCheckboxClick}
-          role="checkbox"
+          role='checkbox'
           aria-checked={getAriaChecked()}
           tabIndex={disabled ? -1 : 0}
           onKeyDown={(e) => {
@@ -262,21 +266,23 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         >
           <input
             ref={(node) => {
-              const inputElement = inputRef as React.MutableRefObject<HTMLInputElement | null>;
+              const inputElement =
+                inputRef as React.MutableRefObject<HTMLInputElement | null>;
               inputElement.current = node;
               if (typeof ref === 'function') {
                 ref(node);
               } else if (ref) {
-                const refObj = ref as React.MutableRefObject<HTMLInputElement | null>;
+                const refObj =
+                  ref as React.MutableRefObject<HTMLInputElement | null>;
                 refObj.current = node;
               }
             }}
-            type="checkbox"
-            className="sr-only"
+            type='checkbox'
+            className='sr-only'
             checked={!!checked}
             disabled={!!disabled}
             onChange={handleInputChange}
-            aria-hidden="true"
+            aria-hidden='true'
             tabIndex={-1}
             id={props.id}
             name={props.name}

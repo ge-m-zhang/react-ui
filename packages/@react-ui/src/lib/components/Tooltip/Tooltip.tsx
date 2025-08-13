@@ -44,7 +44,8 @@ const tooltipVariants = cva(
       variant: {
         light: 'bg-white text-gray-900 border border-gray-200',
         dark: 'bg-gray-900 text-white',
-        label: 'bg-white text-gray-900 border border-gray-300 shadow-xl px-3 py-2 text-base',
+        label:
+          'bg-white text-gray-900 border border-gray-300 shadow-xl px-3 py-2 text-base',
       },
       visible: {
         true: 'opacity-100',
@@ -116,7 +117,12 @@ const getTooltipPosition = (
 ) => {
   const triggerRect = trigger.getBoundingClientRect();
   const tooltipRect = tooltip.getBoundingClientRect();
-  const { innerWidth: viewportWidth, innerHeight: viewportHeight, scrollX, scrollY } = window;
+  const {
+    innerWidth: viewportWidth,
+    innerHeight: viewportHeight,
+    scrollX,
+    scrollY,
+  } = window;
 
   let top = 0;
   let left = 0;
@@ -126,7 +132,11 @@ const getTooltipPosition = (
   switch (placement) {
     case 'top':
       top = triggerRect.top + scrollY - tooltipRect.height - offset;
-      left = triggerRect.left + scrollX + triggerRect.width / 2 - tooltipRect.width / 2;
+      left =
+        triggerRect.left +
+        scrollX +
+        triggerRect.width / 2 -
+        tooltipRect.width / 2;
       break;
     case 'top-start':
       top = triggerRect.top + scrollY - tooltipRect.height - offset;
@@ -138,7 +148,11 @@ const getTooltipPosition = (
       break;
     case 'bottom':
       top = triggerRect.bottom + scrollY + offset;
-      left = triggerRect.left + scrollX + triggerRect.width / 2 - tooltipRect.width / 2;
+      left =
+        triggerRect.left +
+        scrollX +
+        triggerRect.width / 2 -
+        tooltipRect.width / 2;
       break;
     case 'bottom-start':
       top = triggerRect.bottom + scrollY + offset;
@@ -149,7 +163,11 @@ const getTooltipPosition = (
       left = triggerRect.right + scrollX - tooltipRect.width;
       break;
     case 'left':
-      top = triggerRect.top + scrollY + triggerRect.height / 2 - tooltipRect.height / 2;
+      top =
+        triggerRect.top +
+        scrollY +
+        triggerRect.height / 2 -
+        tooltipRect.height / 2;
       left = triggerRect.left + scrollX - tooltipRect.width - offset;
       break;
     case 'left-start':
@@ -161,7 +179,11 @@ const getTooltipPosition = (
       left = triggerRect.left + scrollX - tooltipRect.width - offset;
       break;
     case 'right':
-      top = triggerRect.top + scrollY + triggerRect.height / 2 - tooltipRect.height / 2;
+      top =
+        triggerRect.top +
+        scrollY +
+        triggerRect.height / 2 -
+        tooltipRect.height / 2;
       left = triggerRect.right + scrollX + offset;
       break;
     case 'right-start':
@@ -179,11 +201,17 @@ const getTooltipPosition = (
   // Keep tooltip within viewport bounds
   top = Math.max(
     VIEWPORT_MARGIN,
-    Math.min(top, viewportHeight + scrollY - tooltipRect.height - VIEWPORT_MARGIN),
+    Math.min(
+      top,
+      viewportHeight + scrollY - tooltipRect.height - VIEWPORT_MARGIN,
+    ),
   );
   left = Math.max(
     VIEWPORT_MARGIN,
-    Math.min(left, viewportWidth + scrollX - tooltipRect.width - VIEWPORT_MARGIN),
+    Math.min(
+      left,
+      viewportWidth + scrollX - tooltipRect.width - VIEWPORT_MARGIN,
+    ),
   );
 
   return { top, left };
@@ -265,7 +293,11 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     // Position tooltip
     useEffect(() => {
       if (isOpen && triggerRef.current && tooltipRef.current) {
-        const { top, left } = getTooltipPosition(triggerRef.current, tooltipRef.current, placement);
+        const { top, left } = getTooltipPosition(
+          triggerRef.current,
+          tooltipRef.current,
+          placement,
+        );
         tooltipRef.current.style.top = `${top}px`;
         tooltipRef.current.style.left = `${left}px`;
       }
@@ -327,27 +359,38 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           ReactDOM.createPortal(
             <div
               ref={(node) => {
-                (tooltipRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+                (
+                  tooltipRef as React.MutableRefObject<HTMLDivElement | null>
+                ).current = node;
                 if (typeof ref === 'function') {
                   ref(node);
                 } else if (ref && 'current' in ref) {
-                  const mutableRef = ref as React.MutableRefObject<HTMLDivElement | null>;
+                  const mutableRef =
+                    ref as React.MutableRefObject<HTMLDivElement | null>;
                   mutableRef.current = node;
                 }
               }}
               id={tooltipId}
-              role="tooltip"
+              role='tooltip'
               className={cn(tooltipVariants({ variant, visible: isOpen }))}
               style={{
                 position: 'absolute',
-                ...(tooltipProps?.style || {})
+                ...(tooltipProps?.style || {}),
               }}
               onMouseEnter={tooltipProps?.onMouseEnter}
               onMouseLeave={tooltipProps?.onMouseLeave}
-              data-testid={tooltipProps && typeof tooltipProps === 'object' && 'data-testid' in tooltipProps ? (tooltipProps as { 'data-testid'?: string })['data-testid'] : undefined}
+              data-testid={
+                tooltipProps &&
+                typeof tooltipProps === 'object' &&
+                'data-testid' in tooltipProps
+                  ? (tooltipProps as { 'data-testid'?: string })['data-testid']
+                  : undefined
+              }
             >
               {content}
-              {arrow && <div className={cn(arrowVariants({ variant, placement }))} />}
+              {arrow && (
+                <div className={cn(arrowVariants({ variant, placement }))} />
+              )}
             </div>,
             document.body,
           )}
@@ -392,8 +435,8 @@ export function LightTooltip({
   tooltipProps,
 }: Omit<TooltipProps, 'variant'>) {
   return (
-    <Tooltip 
-      variant="light" 
+    <Tooltip
+      variant='light'
       content={content}
       placement={placement}
       arrow={arrow}
@@ -430,8 +473,8 @@ export function DarkTooltip({
   tooltipProps,
 }: Omit<TooltipProps, 'variant'>) {
   return (
-    <Tooltip 
-      variant="dark" 
+    <Tooltip
+      variant='dark'
       content={content}
       placement={placement}
       arrow={arrow}
@@ -468,8 +511,8 @@ export function LabelTooltip({
   tooltipProps,
 }: Omit<TooltipProps, 'variant'>) {
   return (
-    <Tooltip 
-      variant="label" 
+    <Tooltip
+      variant='label'
       content={content}
       placement={placement}
       arrow={arrow}

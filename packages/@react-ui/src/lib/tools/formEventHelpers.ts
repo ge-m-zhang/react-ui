@@ -67,7 +67,7 @@ export const createSyntheticCheckboxChangeEvent = (
   originalEvent: React.SyntheticEvent,
   inputElement: HTMLInputElement | null,
   checked: boolean,
-): React.ChangeEvent<HTMLInputElement> => 
+): React.ChangeEvent<HTMLInputElement> =>
   createSyntheticChangeEvent(originalEvent, inputElement, { checked });
 
 /**
@@ -83,7 +83,7 @@ export const createSyntheticValueChangeEvent = (
   originalEvent: React.SyntheticEvent,
   inputElement: HTMLInputElement | null,
   value: string,
-): React.ChangeEvent<HTMLInputElement> => 
+): React.ChangeEvent<HTMLInputElement> =>
   createSyntheticChangeEvent(originalEvent, inputElement, { value });
 
 /**
@@ -103,9 +103,10 @@ export const createSyntheticValueChangeEvent = (
  * />
  * ```
  */
-export const createNumberInputWheelHandler = (
-  onWheel?: React.WheelEventHandler<HTMLInputElement>,
-): React.WheelEventHandler<HTMLInputElement> => 
+export const createNumberInputWheelHandler =
+  (
+    onWheel?: React.WheelEventHandler<HTMLInputElement>,
+  ): React.WheelEventHandler<HTMLInputElement> =>
   (e: React.WheelEvent<HTMLInputElement>) => {
     // Prevent the number value from changing, but don't blur the input
     // This allows users to scroll past the input without losing focus or changing values

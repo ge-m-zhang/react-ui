@@ -87,20 +87,49 @@ const flexVariants = cva('flex', {
 
 type FlexBaseProps = VariantProps<typeof flexVariants>;
 
-export interface FlexProps extends Omit<React.HTMLAttributes<HTMLElement>, 'as'>, FlexBaseProps {
+export interface FlexProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'as'>,
+    FlexBaseProps {
   as?: keyof JSX.IntrinsicElements;
 }
 
+const defaultProps: Partial<FlexProps> = {
+  as: 'div',
+};
+
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (
-    { className, direction, align, justify, wrap, gap, width, height, grow, shrink, as, ...props },
+    {
+      className,
+      direction,
+      align,
+      justify,
+      wrap,
+      gap,
+      width,
+      height,
+      grow,
+      shrink,
+      as,
+      ...props
+    },
     ref,
   ) => {
     const Component = as || 'div';
     const elementProps = {
       ref: ref as React.Ref<HTMLDivElement>,
       className: cn(
-        flexVariants({ direction, align, justify, wrap, gap, width, height, grow, shrink }),
+        flexVariants({
+          direction,
+          align,
+          justify,
+          wrap,
+          gap,
+          width,
+          height,
+          grow,
+          shrink,
+        }),
         className,
       ),
       ...props,
@@ -111,3 +140,4 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
 );
 
 Flex.displayName = 'Flex';
+Flex.defaultProps = defaultProps;

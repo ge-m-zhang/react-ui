@@ -16,4 +16,8 @@ export { TextField } from './lib/components/TextField/TextField';
 export { Tooltip } from './lib/components/Tooltip/Tooltip';
 export { Typography } from './lib/components/Typography/Typography';
 
-export { ThemeProvider, useTheme, themeConfig } from './lib/system/ThemeProvider';
+export {
+  ThemeProvider,
+  useTheme,
+  themeConfig,
+} from './lib/system/ThemeProvider';

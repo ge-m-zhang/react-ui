@@ -17,12 +17,7 @@
 
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        "dist/**", 
-        "dist-cjs/**",
-        "build/**", 
-        "storybook-static/**"
-      ],
+      "outputs": ["dist/**", "dist-cjs/**", "build/**", "storybook-static/**"],
       "env": ["NODE_ENV"]
     },
 

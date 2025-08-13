@@ -8,15 +8,17 @@
  * @example
  * Breadcrumb component
  */
-export const jsxJoiner = (
+const jsxJoiner = (
   list: Array<string | React.ReactNode>,
   inbetween: string | React.ReactNode,
-) => {
-  return list.reduce((prev, cur) => (
+) =>
+  list.reduce((prev, cur) => (
     <>
       {prev}
       {inbetween}
       {cur}
     </>
   ));
-};
+
+export { jsxJoiner };
+export default jsxJoiner;

@@ -1,5 +1,11 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { createContext, forwardRef, useContext, useRef, useState } from 'react';
+import React, {
+  createContext,
+  forwardRef,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 
 import { cn } from '../../tools/classNames';
 
@@ -215,27 +221,38 @@ const switchSliderVariants = cva(
 );
 
 // Container component
-interface SwitchContainerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface SwitchContainerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   'aria-checked'?: boolean | 'mixed';
 }
 
 const SwitchContainer = forwardRef<HTMLButtonElement, SwitchContainerProps>(
   (
-    { className, children, onClick, tabIndex, onKeyDown, 'aria-checked': ariaChecked },
+    {
+      className,
+      children,
+      onClick,
+      tabIndex,
+      onKeyDown,
+      'aria-checked': ariaChecked,
+    },
     ref,
   ) => {
     const { size, color, checked, disabled } = useContext(SwitchContext);
 
     return (
       <button
-        type="button"
+        type='button'
         ref={ref}
-        className={cn(switchContainerVariants({ size, color, checked, disabled }), className)}
+        className={cn(
+          switchContainerVariants({ size, color, checked, disabled }),
+          className,
+        )}
         onClick={onClick}
         tabIndex={tabIndex}
         onKeyDown={onKeyDown}
         disabled={disabled}
-        role="switch"
+        role='switch'
         aria-checked={ariaChecked as boolean | 'mixed' | undefined}
       >
         {children}
@@ -251,7 +268,7 @@ SwitchContainer.defaultProps = {
 };
 
 // Slider component
-interface SwitchSliderProps extends React.HTMLAttributes<HTMLDivElement> {}
+type SwitchSliderProps = React.HTMLAttributes<HTMLDivElement>;
 
 const SwitchSlider = forwardRef<HTMLDivElement, SwitchSliderProps>(
   ({ className }, ref) => {
@@ -260,7 +277,10 @@ const SwitchSlider = forwardRef<HTMLDivElement, SwitchSliderProps>(
     return (
       <div
         ref={ref}
-        className={cn(switchSliderVariants({ size, checked, disabled }), className)}
+        className={cn(
+          switchSliderVariants({ size, checked, disabled }),
+          className,
+        )}
       />
     );
   },
@@ -297,7 +317,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     // Use controlled or uncontrolled state - pure derived state handles prop changes automatically
     const checked = checkedProp !== undefined ? checkedProp : internalChecked;
 
-    const handleSwitchClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    const handleSwitchClick = (
+      event: React.SyntheticEvent<HTMLButtonElement>,
+    ) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -320,7 +342,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     };
 
     return (
-      <div className="inline-flex items-center">
+      <div className='inline-flex items-center'>
         <SwitchContext.Provider
           value={React.useMemo(
             () => ({
@@ -334,7 +356,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         >
           <SwitchContainer
             onClick={handleSwitchClick}
-            role="switch"
+            role='switch'
             aria-checked={!!checked}
             tabIndex={disabled ? -1 : 0}
             onKeyDown={(e) => {
@@ -346,12 +368,12 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           >
             <input
               ref={inputRef}
-              type="checkbox"
-              className="sr-only"
+              type='checkbox'
+              className='sr-only'
               checked={!!checked}
               disabled={!!disabled}
               onChange={handleInputChange}
-              aria-hidden="true"
+              aria-hidden='true'
               tabIndex={-1}
               id={props.id}
               name={props.name}
@@ -359,9 +381,19 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
               onFocus={props.onFocus}
               onKeyDown={props.onKeyDown}
               onKeyUp={props.onKeyUp}
-              aria-label={(props as unknown as { 'aria-label'?: string })['aria-label']}
-              aria-labelledby={(props as unknown as { 'aria-labelledby'?: string })['aria-labelledby']}
-              aria-describedby={(props as unknown as { 'aria-describedby'?: string })['aria-describedby']}
+              aria-label={
+                (props as unknown as { 'aria-label'?: string })['aria-label']
+              }
+              aria-labelledby={
+                (props as unknown as { 'aria-labelledby'?: string })[
+                  'aria-labelledby'
+                ]
+              }
+              aria-describedby={
+                (props as unknown as { 'aria-describedby'?: string })[
+                  'aria-describedby'
+                ]
+              }
             />
             <SwitchSlider />
           </SwitchContainer>

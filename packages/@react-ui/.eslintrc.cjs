@@ -12,11 +12,24 @@ module.exports = {
     'prettier',
   ],
   rules: {
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
     '@typescript-eslint/consistent-type-imports': 'warn',
+    // Essential compatibility fixes for TypeScript ESLint v8
+    '@typescript-eslint/lines-between-class-members': 'off',
+    '@typescript-eslint/no-throw-literal': 'off',
+    'react/prop-types': 'off',
+    // Allow named exports for better refactoring and IDE support
+    'import/prefer-default-export': 'off',
   },
   parserOptions: {
-    project: ['./tsconfig.json', './tsconfig.stories.json', './tsconfig.eslint.json'],
+    project: [
+      './tsconfig.json',
+      './tsconfig.stories.json',
+      './tsconfig.eslint.json',
+    ],
     tsconfigRootDir: __dirname,
     sourceType: 'module',
     ecmaVersion: 'latest',

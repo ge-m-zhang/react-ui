@@ -53,7 +53,9 @@ module.exports = plugin.withOptions(
 
         // Log resolved path for debugging (in development)
         if (process.env.NODE_ENV === 'development') {
-          console.log(`[react-ui/tailwind-plugin] Scanning components at: ${contentPath}`);
+          console.log(
+            `[react-ui/tailwind-plugin] Scanning components at: ${contentPath}`,
+          );
         }
 
         contentPaths = [contentPath];

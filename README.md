@@ -97,6 +97,7 @@ pnpm --filter storybook-react-ui dev
 ### Adding New Components
 
 1. **Create Component**:
+
    ```bash
    cd packages/@react-ui/src/lib/components
    mkdir MyComponent
@@ -104,6 +105,7 @@ pnpm --filter storybook-react-ui dev
    ```
 
 2. **Export Component**:
+
    ```typescript
    // packages/@react-ui/src/index.ts
    export { MyComponent } from './lib/components/MyComponent/MyComponent';
@@ -123,7 +125,7 @@ pnpm --filter @gmzh/react-ui build    # Build UI library
 pnpm --filter @gmzh/react-ui dev      # Watch mode
 pnpm --filter @gmzh/react-ui lint     # Lint package
 
-# Storybook commands  
+# Storybook commands
 pnpm --filter storybook-react-ui dev  # Start Storybook
 pnpm --filter storybook-react-ui build # Build static site
 ```
@@ -131,40 +133,50 @@ pnpm --filter storybook-react-ui build # Build static site
 ## 📋 Component Categories
 
 ### Form Controls
+
 - Button, TextField, TextArea, Select, Checkbox, Radio, Switch
 
-### Layout & Structure  
+### Layout & Structure
+
 - Box, Flex, Container, Divider, Header, Footer, Sidebar
 
 ### Navigation
+
 - Tabs, Breadcrumb, Menu, Pagination
 
 ### Feedback & Status
+
 - Alert, Badge, Toast, Spinner, Progress, Tooltip
 
 ### Overlays & Modals
+
 - Modal, Dialog, Drawer, Popover, Popper, Portal
 
 ### Data Display
+
 - Typography, Heading, Table, Card, List
 
 ### System
+
 - ThemeProvider (Dark/Light mode support)
 
 ## 🎨 Design System
 
 ### Color Palette
+
 - **Primary**: Blue variants for main actions
 - **Semantic**: Success (green), danger (red), warning (yellow)
 - **Neutrals**: Comprehensive gray scale
 - **Custom Variables**: CSS custom properties for theming
 
 ### Typography
+
 - **Font Family**: Inter (web font)
 - **Scale**: 6 heading levels + body variants
 - **Responsive**: Mobile-first typography scaling
 
 ### Spacing & Layout
+
 - **Consistent Scale**: 4px base unit system
 - **Responsive**: Mobile-first breakpoints
 - **Flex/Grid**: Modern layout utilities
@@ -178,7 +190,7 @@ import { ThemeProvider } from '@gmzh/react-ui';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system">
+    <ThemeProvider defaultTheme='system'>
       {/* Your app components */}
     </ThemeProvider>
   );
@@ -190,4 +202,3 @@ function App() {
 - [Component Documentation](./packages/@react-ui/README.md)
 - [Storybook Documentation](https://storybook-react-ui.vercel.app) - Live component showcase
 - [Storybook Demo](http://localhost:6006) (when running locally)
-

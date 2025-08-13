@@ -1,6 +1,12 @@
 import { cva } from 'class-variance-authority';
 
-export const ButtonColors = ['primary', 'secondary', 'success', 'danger', 'warning'] as const;
+export const ButtonColors = [
+  'primary',
+  'secondary',
+  'success',
+  'danger',
+  'warning',
+] as const;
 export type ButtonColor = (typeof ButtonColors)[number];
 export type ButtonVariant = 'contained' | 'outlined' | 'text';
 
@@ -69,8 +75,19 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        contained: ['text-white', 'border', 'shadow-sm', 'hover:shadow-md', 'active:shadow-inner'],
-        outlined: ['bg-white', 'border', 'hover:shadow-sm', 'active:shadow-inner'],
+        contained: [
+          'text-white',
+          'border',
+          'shadow-sm',
+          'hover:shadow-md',
+          'active:shadow-inner',
+        ],
+        outlined: [
+          'bg-white',
+          'border',
+          'hover:shadow-sm',
+          'active:shadow-inner',
+        ],
         text: [
           'bg-transparent',
           'border',

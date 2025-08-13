@@ -28,6 +28,11 @@ export interface TypographyProps
   children?: React.ReactNode;
 }
 
+const defaultProps: Partial<TypographyProps> = {
+  as: 'span',
+  children: undefined,
+};
+
 export const Typography = forwardRef<HTMLElement, TypographyProps>(
   (
     {
@@ -70,3 +75,4 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
 );
 
 Typography.displayName = 'Typography';
+Typography.defaultProps = defaultProps;

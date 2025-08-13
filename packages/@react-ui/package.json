@@ -5,7 +5,7 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-    "repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/ge-m-zhang/react-ui",
     "directory": "packages/@react-ui"
@@ -52,7 +52,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist dist-cjs",
     "prepublishOnly": "npm run build",
-     "postpublish": "echo \"Successfully published @gmzh/react-ui@$(node -p \"require('./package.json').version\")\""
+    "postpublish": "echo \"Successfully published @gmzh/react-ui@$(node -p \"require('./package.json').version\")\""
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

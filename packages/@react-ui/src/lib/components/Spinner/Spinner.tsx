@@ -76,18 +76,16 @@ export function Spinner({
   return (
     <div
       className={cn(spinnerVariants({ size, color, emptyColor }), className)}
-      role="status"
+      role='status'
       aria-label={label}
       id={id}
       title={title}
       style={style}
     >
-      <span className="sr-only">{label}</span>
+      <span className='sr-only'>{label}</span>
     </div>
   );
 }
-
-
 
 // Predefined spinner variants for common use cases
 export interface SpinnerWithTextProps extends SpinnerProps {
@@ -122,7 +120,13 @@ export function SpinnerWithText({
   };
 
   return (
-    <div className={cn('inline-flex items-center', flexDirection[position], gap[position])}>
+    <div
+      className={cn(
+        'inline-flex items-center',
+        flexDirection[position],
+        gap[position],
+      )}
+    >
       <Spinner
         className={className}
         size={size}
@@ -133,7 +137,7 @@ export function SpinnerWithText({
         title={title}
         style={style}
       />
-      <span className="text-sm text-gray-600">{text}</span>
+      <span className='text-sm text-gray-600'>{text}</span>
     </div>
   );
 }
@@ -143,10 +147,10 @@ SpinnerWithText.defaultProps = {
   position: 'right',
 };
 
-// Button spinner for loading states  
-export interface ButtonSpinnerProps extends Omit<SpinnerProps, 'size'> {}
+// Button spinner for loading states
+export type ButtonSpinnerProps = Omit<SpinnerProps, 'size'>;
 
-export function ButtonSpinner({ 
+export function ButtonSpinner({
   className,
   color,
   emptyColor,
@@ -157,7 +161,7 @@ export function ButtonSpinner({
 }: ButtonSpinnerProps) {
   return (
     <Spinner
-      size="small"
+      size='small'
       className={cn('mr-2', className)}
       color={color}
       emptyColor={emptyColor}

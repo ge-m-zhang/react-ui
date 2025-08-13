@@ -12,7 +12,13 @@ import type React from 'react';
  * - Styled with Tailwind CSS
  */
 
-export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info';
+export type BadgeVariant =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info';
 
 export interface BadgeProps {
   children: React.ReactNode;
@@ -29,7 +35,11 @@ const variantStyles: Record<BadgeVariant, string> = {
   info: 'bg-blue-100 text-blue-800',
 };
 
-export function Badge({ children, variant = 'primary', className = '' }: BadgeProps) {
+export function Badge({
+  children,
+  variant = 'primary',
+  className = '',
+}: BadgeProps) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantStyles[variant]} ${className}`}

@@ -61,7 +61,9 @@ export function ThemeProvider({
   defaultTheme = 'system',
   enableSystem = true,
 }: ThemeProviderProps): React.JSX.Element {
-  const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(defaultTheme);
+  const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(
+    defaultTheme,
+  );
   const [isDark, setIsDark] = useState(false);
 
   // Handle system theme changes
@@ -80,7 +82,7 @@ export function ThemeProvider({
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
-    
+
     return undefined;
   }, [theme, enableSystem]);
 
@@ -89,7 +91,8 @@ export function ThemeProvider({
     const root = document.documentElement;
 
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+        .matches
         ? 'dark'
         : 'light';
       root.classList.toggle('dark', systemTheme === 'dark');
@@ -111,7 +114,11 @@ export function ThemeProvider({
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
+    const stored = localStorage.getItem('theme') as
+      | 'light'
+      | 'dark'
+      | 'system'
+      | null;
     if (stored) {
       setThemeState(stored);
     }
@@ -128,7 +135,7 @@ export function ThemeProvider({
 
   return (
     <ThemeContext.Provider value={value}>
-      <div className="min-h-screen bg-background text-foreground transition-colors">
+      <div className='min-h-screen bg-background text-foreground transition-colors'>
         {children}
 
         {/* Portal containers */}
