@@ -108,7 +108,7 @@ export interface TextAreaProps
   wrapperClassName: string;
 }
 
-function TextArea({
+const TextArea = ({
   className,
   wrapperClassName,
   size,
@@ -127,13 +127,13 @@ function TextArea({
   value,
   onChange,
   ...props
-}: TextAreaProps) {
+}: TextAreaProps) => {
   // Determine state based on error prop
-  const state = error ? 'error' : stateProp || 'default';
+  const state = error ? 'error' : stateProp ?? 'default';
 
   // Generate ID if not provided
   const generatedId = useId();
-  const textareaId = id || `textarea-${generatedId}`;
+  const textareaId = id ?? `textarea-${generatedId}`;
   const helperId = useMemo(() => `${textareaId}-helper`, [textareaId]);
   const errorId = useMemo(() => `${textareaId}-error`, [textareaId]);
   const countId = useMemo(() => `${textareaId}-count`, [textareaId]);
@@ -314,14 +314,14 @@ function TextArea({
       )}
     </div>
   );
-}
+};
 
 TextArea.displayName = 'TextArea';
 
 export { TextArea };
 
 // Predefined TextArea variants for common use cases
-export function CommentTextArea({
+export const CommentTextArea = ({
   className,
   wrapperClassName,
   size,
@@ -336,35 +336,33 @@ export function CommentTextArea({
   id,
   value,
   onChange,
-}: Omit<TextAreaProps, 'placeholder'>) {
-  return (
-    <TextArea
-      placeholder='Write a comment...'
-      rows={3}
-      autoResize
-      showCharacterCount
-      maxLength={500}
-      className={className}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      resizable={resizable}
-      error={error}
-      helperText={helperText}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      id={id}
-      value={value}
-      onChange={onChange}
-    />
-  );
-}
+}: Omit<TextAreaProps, 'placeholder'>) => (
+  <TextArea
+    placeholder='Write a comment...'
+    rows={3}
+    autoResize
+    showCharacterCount
+    maxLength={500}
+    className={className}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    resizable={resizable}
+    error={error}
+    helperText={helperText}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    id={id}
+    value={value}
+    onChange={onChange}
+  />
+);
 
 CommentTextArea.displayName = 'CommentTextArea';
 
-export function MessageTextArea({
+export const MessageTextArea = ({
   className,
   wrapperClassName,
   size,
@@ -381,35 +379,33 @@ export function MessageTextArea({
   id,
   value,
   onChange,
-}: Omit<TextAreaProps, 'placeholder'>) {
-  return (
-    <TextArea
-      placeholder='Type your message...'
-      rows={4}
-      autoResize={autoResize ?? true}
-      resizable='vertical'
-      className={className}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      maxLength={maxLength}
-      showCharacterCount={showCharacterCount}
-      id={id}
-      value={value}
-      onChange={onChange}
-    />
-  );
-}
+}: Omit<TextAreaProps, 'placeholder'>) => (
+  <TextArea
+    placeholder='Type your message...'
+    rows={4}
+    autoResize={autoResize ?? true}
+    resizable='vertical'
+    className={className}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    error={error}
+    helperText={helperText}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    maxLength={maxLength}
+    showCharacterCount={showCharacterCount}
+    id={id}
+    value={value}
+    onChange={onChange}
+  />
+);
 
 MessageTextArea.displayName = 'MessageTextArea';
 
-export function CodeTextArea({
+export const CodeTextArea = ({
   className,
   wrapperClassName,
   size,
@@ -427,29 +423,27 @@ export function CodeTextArea({
   id,
   value,
   onChange,
-}: TextAreaProps) {
-  return (
-    <TextArea
-      className={cn('font-mono text-sm', className)}
-      resizable={resizable ?? true}
-      spellCheck={false}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      maxLength={maxLength}
-      showCharacterCount={showCharacterCount}
-      autoResize={autoResize}
-      id={id}
-      value={value}
-      onChange={onChange}
-    />
-  );
-}
+}: TextAreaProps) => (
+  <TextArea
+    className={cn('font-mono text-sm', className)}
+    resizable={resizable ?? true}
+    spellCheck={false}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    error={error}
+    helperText={helperText}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    maxLength={maxLength}
+    showCharacterCount={showCharacterCount}
+    autoResize={autoResize}
+    id={id}
+    value={value}
+    onChange={onChange}
+  />
+);
 
 CodeTextArea.displayName = 'CodeTextArea';

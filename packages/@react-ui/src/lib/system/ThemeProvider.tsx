@@ -56,11 +56,11 @@ interface ThemeProviderProps {
   enableSystem?: boolean;
 }
 
-export function ThemeProvider({
+export const ThemeProvider = ({
   children,
   defaultTheme = 'system',
   enableSystem = true,
-}: ThemeProviderProps): React.JSX.Element {
+}: ThemeProviderProps): React.JSX.Element => {
   const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(
     defaultTheme,
   );
@@ -150,10 +150,4 @@ export function ThemeProvider({
       </div>
     </ThemeContext.Provider>
   );
-}
-
-// Default props for ThemeProvider
-ThemeProvider.defaultProps = {
-  defaultTheme: 'system',
-  enableSystem: true,
 };

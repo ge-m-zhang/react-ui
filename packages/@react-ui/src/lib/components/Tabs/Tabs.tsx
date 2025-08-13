@@ -122,12 +122,12 @@ interface TabContextProviderProps {
   onValueChange?: (value: string) => void;
 }
 
-function TabContextProvider({
+const TabContextProvider = ({
   children,
   defaultValue,
   variant = 'outlined',
   onValueChange,
-}: TabContextProviderProps) {
+}: TabContextProviderProps) => {
   const [value, setValue] = useState(defaultValue);
 
   const handleValueChange = (newValue: string) => {
@@ -143,7 +143,7 @@ function TabContextProvider({
   return (
     <TabContext.Provider value={contextValue}>{children}</TabContext.Provider>
   );
-}
+};
 
 // Default props for TabContextProvider
 TabContextProvider.defaultProps = {
@@ -211,7 +211,7 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
         role='tab'
         aria-selected={active}
         aria-controls={`tabpanel-${tabValue}`}
-        id={id || `tab-${tabValue}`}
+        id={id ?? `tab-${tabValue}`}
         tabIndex={active ? 0 : -1}
         style={style}
         aria-label={ariaLabel}
@@ -324,8 +324,8 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
         ref={ref}
         className={cn('mt-4', !active && 'hidden', className)}
         role='tabpanel'
-        aria-labelledby={ariaLabelledBy || `tab-${panelValue}`}
-        id={id || `tabpanel-${panelValue}`}
+        aria-labelledby={ariaLabelledBy ?? `tab-${panelValue}`}
+        id={id ?? `tabpanel-${panelValue}`}
         tabIndex={0}
         style={style}
         aria-label={ariaLabel}

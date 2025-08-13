@@ -375,7 +375,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
               className={cn(tooltipVariants({ variant, visible: isOpen }))}
               style={{
                 position: 'absolute',
-                ...(tooltipProps?.style || {}),
+                ...(tooltipProps?.style ?? {}),
               }}
               onMouseEnter={tooltipProps?.onMouseEnter}
               onMouseLeave={tooltipProps?.onMouseLeave}
@@ -401,24 +401,8 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
 Tooltip.displayName = 'Tooltip';
 
-// Default props for Tooltip
-Tooltip.defaultProps = {
-  placement: 'top',
-  arrow: false,
-  open: undefined,
-  defaultOpen: false,
-  delay: 0,
-  hideDelay: 0,
-  trigger: 'hover',
-  disableFocusListener: false,
-  disableHoverListener: false,
-  disableTouchListener: false,
-  onOpenChange: undefined,
-  tooltipProps: undefined,
-};
-
 // Convenience components
-export function LightTooltip({
+export const LightTooltip = ({
   content,
   children,
   placement,
@@ -433,30 +417,28 @@ export function LightTooltip({
   disableTouchListener,
   onOpenChange,
   tooltipProps,
-}: Omit<TooltipProps, 'variant'>) {
-  return (
-    <Tooltip
-      variant='light'
-      content={content}
-      placement={placement}
-      arrow={arrow}
-      open={open}
-      defaultOpen={defaultOpen}
-      delay={delay}
-      hideDelay={hideDelay}
-      trigger={trigger}
-      disableFocusListener={disableFocusListener}
-      disableHoverListener={disableHoverListener}
-      disableTouchListener={disableTouchListener}
-      onOpenChange={onOpenChange}
-      tooltipProps={tooltipProps}
-    >
-      {children}
-    </Tooltip>
-  );
-}
+}: Omit<TooltipProps, 'variant'>) => (
+  <Tooltip
+    variant='light'
+    content={content}
+    placement={placement}
+    arrow={arrow}
+    open={open}
+    defaultOpen={defaultOpen}
+    delay={delay}
+    hideDelay={hideDelay}
+    trigger={trigger}
+    disableFocusListener={disableFocusListener}
+    disableHoverListener={disableHoverListener}
+    disableTouchListener={disableTouchListener}
+    onOpenChange={onOpenChange}
+    tooltipProps={tooltipProps}
+  >
+    {children}
+  </Tooltip>
+);
 
-export function DarkTooltip({
+export const DarkTooltip = ({
   content,
   children,
   placement,
@@ -471,30 +453,28 @@ export function DarkTooltip({
   disableTouchListener,
   onOpenChange,
   tooltipProps,
-}: Omit<TooltipProps, 'variant'>) {
-  return (
-    <Tooltip
-      variant='dark'
-      content={content}
-      placement={placement}
-      arrow={arrow}
-      open={open}
-      defaultOpen={defaultOpen}
-      delay={delay}
-      hideDelay={hideDelay}
-      trigger={trigger}
-      disableFocusListener={disableFocusListener}
-      disableHoverListener={disableHoverListener}
-      disableTouchListener={disableTouchListener}
-      onOpenChange={onOpenChange}
-      tooltipProps={tooltipProps}
-    >
-      {children}
-    </Tooltip>
-  );
-}
+}: Omit<TooltipProps, 'variant'>) => (
+  <Tooltip
+    variant='dark'
+    content={content}
+    placement={placement}
+    arrow={arrow}
+    open={open}
+    defaultOpen={defaultOpen}
+    delay={delay}
+    hideDelay={hideDelay}
+    trigger={trigger}
+    disableFocusListener={disableFocusListener}
+    disableHoverListener={disableHoverListener}
+    disableTouchListener={disableTouchListener}
+    onOpenChange={onOpenChange}
+    tooltipProps={tooltipProps}
+  >
+    {children}
+  </Tooltip>
+);
 
-export function LabelTooltip({
+export const LabelTooltip = ({
   content,
   children,
   placement,
@@ -509,25 +489,23 @@ export function LabelTooltip({
   disableTouchListener,
   onOpenChange,
   tooltipProps,
-}: Omit<TooltipProps, 'variant'>) {
-  return (
-    <Tooltip
-      variant='label'
-      content={content}
-      placement={placement}
-      arrow={arrow}
-      open={open}
-      defaultOpen={defaultOpen}
-      delay={delay}
-      hideDelay={hideDelay}
-      trigger={trigger}
-      disableFocusListener={disableFocusListener}
-      disableHoverListener={disableHoverListener}
-      disableTouchListener={disableTouchListener}
-      onOpenChange={onOpenChange}
-      tooltipProps={tooltipProps}
-    >
-      {children}
-    </Tooltip>
-  );
-}
+}: Omit<TooltipProps, 'variant'>) => (
+  <Tooltip
+    variant='label'
+    content={content}
+    placement={placement}
+    arrow={arrow}
+    open={open}
+    defaultOpen={defaultOpen}
+    delay={delay}
+    hideDelay={hideDelay}
+    trigger={trigger}
+    disableFocusListener={disableFocusListener}
+    disableHoverListener={disableHoverListener}
+    disableTouchListener={disableTouchListener}
+    onOpenChange={onOpenChange}
+    tooltipProps={tooltipProps}
+  >
+    {children}
+  </Tooltip>
+);

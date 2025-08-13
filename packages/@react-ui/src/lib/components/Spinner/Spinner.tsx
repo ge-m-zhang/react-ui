@@ -63,7 +63,7 @@ export interface SpinnerProps
   label: string;
 }
 
-export function Spinner({
+export const Spinner = ({
   className,
   size,
   color,
@@ -72,20 +72,18 @@ export function Spinner({
   id,
   title,
   style,
-}: SpinnerProps) {
-  return (
-    <div
-      className={cn(spinnerVariants({ size, color, emptyColor }), className)}
-      role='status'
-      aria-label={label}
-      id={id}
-      title={title}
-      style={style}
-    >
-      <span className='sr-only'>{label}</span>
-    </div>
-  );
-}
+}: SpinnerProps) => (
+  <div
+    className={cn(spinnerVariants({ size, color, emptyColor }), className)}
+    role='status'
+    aria-label={label}
+    id={id}
+    title={title}
+    style={style}
+  >
+    <span className='sr-only'>{label}</span>
+  </div>
+);
 
 // Predefined spinner variants for common use cases
 export interface SpinnerWithTextProps extends SpinnerProps {
@@ -93,7 +91,7 @@ export interface SpinnerWithTextProps extends SpinnerProps {
   position?: 'left' | 'right' | 'top' | 'bottom';
 }
 
-export function SpinnerWithText({
+export const SpinnerWithText = ({
   text = 'Loading...',
   position = 'right',
   className,
@@ -104,7 +102,7 @@ export function SpinnerWithText({
   id,
   title,
   style,
-}: SpinnerWithTextProps) {
+}: SpinnerWithTextProps) => {
   const flexDirection = {
     left: 'flex-row-reverse',
     right: 'flex-row',
@@ -140,7 +138,7 @@ export function SpinnerWithText({
       <span className='text-sm text-gray-600'>{text}</span>
     </div>
   );
-}
+};
 
 SpinnerWithText.defaultProps = {
   text: 'Loading...',
@@ -150,7 +148,7 @@ SpinnerWithText.defaultProps = {
 // Button spinner for loading states
 export type ButtonSpinnerProps = Omit<SpinnerProps, 'size'>;
 
-export function ButtonSpinner({
+export const ButtonSpinner = ({
   className,
   color,
   emptyColor,
@@ -158,20 +156,18 @@ export function ButtonSpinner({
   id,
   title,
   style,
-}: ButtonSpinnerProps) {
-  return (
-    <Spinner
-      size='small'
-      className={cn('mr-2', className)}
-      color={color}
-      emptyColor={emptyColor}
-      label={label}
-      id={id}
-      title={title}
-      style={style}
-    />
-  );
-}
+}: ButtonSpinnerProps) => (
+  <Spinner
+    size='small'
+    className={cn('mr-2', className)}
+    color={color}
+    emptyColor={emptyColor}
+    label={label}
+    id={id}
+    title={title}
+    style={style}
+  />
+);
 
 ButtonSpinner.defaultProps = {
   label: 'Loading',

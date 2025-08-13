@@ -142,12 +142,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     ref,
   ) => {
     // Determine state based on error prop
-    const state = error ? 'error' : stateProp || 'default';
+    const state = error ? 'error' : stateProp ?? 'default';
     const hasSymbol = Boolean(symbol);
 
     // Generate ID if not provided
     const generatedId = useId();
-    const inputId = id || `textfield-${generatedId}`;
+    const inputId = id ?? `textfield-${generatedId}`;
     const helperId = useMemo(() => `${inputId}-helper`, [inputId]);
     const errorId = useMemo(() => `${inputId}-error`, [inputId]);
 
@@ -287,17 +287,8 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 
 TextField.displayName = 'TextField';
 
-TextField.defaultProps = {
-  error: undefined,
-  helperText: undefined,
-  symbol: undefined,
-  label: undefined,
-  hiddenLabel: false,
-  wrapperClassName: undefined,
-};
-
 // Predefined TextField variants for common use cases
-export function EmailField({
+export const EmailField = ({
   className,
   wrapperClassName,
   size,
@@ -311,31 +302,29 @@ export function EmailField({
   hiddenLabel,
   id,
   onWheel,
-}: Omit<TextFieldProps, 'type'>) {
-  return (
-    <TextField
-      type='email'
-      autoComplete='email'
-      className={className}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      symbol={symbol}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      id={id}
-      onWheel={onWheel}
-    />
-  );
-}
+}: Omit<TextFieldProps, 'type'>) => (
+  <TextField
+    type='email'
+    autoComplete='email'
+    className={className}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    error={error}
+    helperText={helperText}
+    symbol={symbol}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    id={id}
+    onWheel={onWheel}
+  />
+);
 
 EmailField.displayName = 'EmailField';
 
-export function PasswordField({
+export const PasswordField = ({
   className,
   wrapperClassName,
   size,
@@ -349,31 +338,29 @@ export function PasswordField({
   hiddenLabel,
   id,
   onWheel,
-}: Omit<TextFieldProps, 'type'>) {
-  return (
-    <TextField
-      type='password'
-      autoComplete='current-password'
-      className={className}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      symbol={symbol}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      id={id}
-      onWheel={onWheel}
-    />
-  );
-}
+}: Omit<TextFieldProps, 'type'>) => (
+  <TextField
+    type='password'
+    autoComplete='current-password'
+    className={className}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    error={error}
+    helperText={helperText}
+    symbol={symbol}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    id={id}
+    onWheel={onWheel}
+  />
+);
 
 PasswordField.displayName = 'PasswordField';
 
-export function NumberField({
+export const NumberField = ({
   className,
   wrapperClassName,
   size,
@@ -387,30 +374,28 @@ export function NumberField({
   hiddenLabel,
   id,
   onWheel,
-}: Omit<TextFieldProps, 'type'>) {
-  return (
-    <TextField
-      type='number'
-      className={className}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      symbol={symbol}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      id={id}
-      onWheel={onWheel}
-    />
-  );
-}
+}: Omit<TextFieldProps, 'type'>) => (
+  <TextField
+    type='number'
+    className={className}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    error={error}
+    helperText={helperText}
+    symbol={symbol}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    id={id}
+    onWheel={onWheel}
+  />
+);
 
 NumberField.displayName = 'NumberField';
 
-export function SearchField({
+export const SearchField = ({
   symbol = '🔍',
   className,
   wrapperClassName,
@@ -424,25 +409,23 @@ export function SearchField({
   hiddenLabel,
   id,
   onWheel,
-}: Omit<TextFieldProps, 'type'>) {
-  return (
-    <TextField
-      type='search'
-      symbol={symbol}
-      className={className}
-      wrapperClassName={wrapperClassName}
-      size={size}
-      state={state}
-      fullWidth={fullWidth}
-      disabled={disabled}
-      error={error}
-      helperText={helperText}
-      label={label}
-      hiddenLabel={hiddenLabel}
-      id={id}
-      onWheel={onWheel}
-    />
-  );
-}
+}: Omit<TextFieldProps, 'type'>) => (
+  <TextField
+    type='search'
+    symbol={symbol}
+    className={className}
+    wrapperClassName={wrapperClassName}
+    size={size}
+    state={state}
+    fullWidth={fullWidth}
+    disabled={disabled}
+    error={error}
+    helperText={helperText}
+    label={label}
+    hiddenLabel={hiddenLabel}
+    id={id}
+    onWheel={onWheel}
+  />
+);
 
 SearchField.displayName = 'SearchField';

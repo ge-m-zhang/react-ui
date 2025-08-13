@@ -234,7 +234,7 @@ const SwitchContainer = forwardRef<HTMLButtonElement, SwitchContainerProps>(
       onClick,
       tabIndex,
       onKeyDown,
-      'aria-checked': ariaChecked,
+      'aria-checked': ariaChecked = false,
     },
     ref,
   ) => {
@@ -262,10 +262,6 @@ const SwitchContainer = forwardRef<HTMLButtonElement, SwitchContainerProps>(
 );
 
 SwitchContainer.displayName = 'SwitchContainer';
-
-SwitchContainer.defaultProps = {
-  'aria-checked': false,
-};
 
 // Slider component
 type SwitchSliderProps = React.HTMLAttributes<HTMLDivElement>;

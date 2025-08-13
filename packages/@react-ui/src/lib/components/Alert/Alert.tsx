@@ -26,22 +26,15 @@ const variantStyles: Record<AlertVariant, string> = {
   info: 'bg-blue-100 text-blue-800 border-blue-200',
 };
 
-export function Alert({
+export const Alert = ({
   children,
   variant = 'info',
   className = '',
-}: AlertProps) {
-  return (
-    <div
-      className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`}
-      role='alert'
-    >
-      {children}
-    </div>
-  );
-}
-
-Alert.defaultProps = {
-  variant: 'info',
-  className: '',
-};
+}: AlertProps) => (
+  <div
+    className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`}
+    role='alert'
+  >
+    {children}
+  </div>
+);

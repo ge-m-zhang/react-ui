@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import TempTest from './TempTest';
+import { TempTest } from './TempTest';
 
 const meta: Meta<typeof TempTest> = {
   title: 'Dev/TempTest',

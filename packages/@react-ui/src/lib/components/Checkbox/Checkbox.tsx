@@ -134,44 +134,40 @@ export interface CheckboxProps
 }
 
 // Default check icon
-function DefaultCheckIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill='currentColor'
-      viewBox='0 0 20 20'
-      xmlns='http://www.w3.org/2000/svg'
-    >
-      <path
-        fillRule='evenodd'
-        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
-        clipRule='evenodd'
-      />
-    </svg>
-  );
-}
+const DefaultCheckIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill='currentColor'
+    viewBox='0 0 20 20'
+    xmlns='http://www.w3.org/2000/svg'
+  >
+    <path
+      fillRule='evenodd'
+      d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+      clipRule='evenodd'
+    />
+  </svg>
+);
 
 DefaultCheckIcon.defaultProps = {
   className: '',
 };
 
 // Indeterminate icon
-function IndeterminateIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill='currentColor'
-      viewBox='0 0 20 20'
-      xmlns='http://www.w3.org/2000/svg'
-    >
-      <path
-        fillRule='evenodd'
-        d='M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
-        clipRule='evenodd'
-      />
-    </svg>
-  );
-}
+const IndeterminateIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill='currentColor'
+    viewBox='0 0 20 20'
+    xmlns='http://www.w3.org/2000/svg'
+  >
+    <path
+      fillRule='evenodd'
+      d='M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
+      clipRule='evenodd'
+    />
+  </svg>
+);
 
 IndeterminateIcon.defaultProps = {
   className: '',
@@ -248,7 +244,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             checkboxVariants({
               size,
               color,
-              checked: checked || indeterminate,
+              checked: checked ?? indeterminate,
               disabled,
             }),
             className,
@@ -301,7 +297,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             className={cn(
               checkboxIconVariants({
                 size,
-                visible: checked || indeterminate,
+                visible: checked ?? indeterminate,
               }),
             )}
           >

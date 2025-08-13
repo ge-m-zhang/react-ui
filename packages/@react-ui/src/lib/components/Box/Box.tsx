@@ -151,12 +151,12 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       rounded,
       shadow,
       position,
-      as,
+      as = 'div',
       ...props
     },
     ref,
   ) => {
-    const Component = as || 'div';
+    const Component = as ?? 'div';
     const elementProps = {
       ref,
       className: cn(
@@ -182,8 +182,5 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
 );
 
 Box.displayName = 'Box';
-Box.defaultProps = {
-  as: 'div',
-};
 
 export type { BoxBaseProps };

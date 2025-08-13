@@ -35,21 +35,14 @@ const variantStyles: Record<BadgeVariant, string> = {
   info: 'bg-blue-100 text-blue-800',
 };
 
-export function Badge({
+export const Badge = ({
   children,
   variant = 'primary',
   className = '',
-}: BadgeProps) {
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantStyles[variant]} ${className}`}
-    >
-      {children}
-    </span>
-  );
-}
-
-Badge.defaultProps = {
-  variant: 'primary',
-  className: '',
-};
+}: BadgeProps) => (
+  <span
+    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantStyles[variant]} ${className}`}
+  >
+    {children}
+  </span>
+);

@@ -93,10 +93,6 @@ export interface FlexProps
   as?: keyof JSX.IntrinsicElements;
 }
 
-const defaultProps: Partial<FlexProps> = {
-  as: 'div',
-};
-
 export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (
     {
@@ -110,12 +106,12 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
       height,
       grow,
       shrink,
-      as,
+      as = 'div',
       ...props
     },
     ref,
   ) => {
-    const Component = as || 'div';
+    const Component = as ?? 'div';
     const elementProps = {
       ref: ref as React.Ref<HTMLDivElement>,
       className: cn(
@@ -140,4 +136,3 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
 );
 
 Flex.displayName = 'Flex';
-Flex.defaultProps = defaultProps;

@@ -28,11 +28,6 @@ export interface TypographyProps
   children?: React.ReactNode;
 }
 
-const defaultProps: Partial<TypographyProps> = {
-  as: 'span',
-  children: undefined,
-};
-
 export const Typography = forwardRef<HTMLElement, TypographyProps>(
   (
     {
@@ -42,7 +37,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
       bold = false,
       hyperlink = false,
       strikethrough = false,
-      as,
+      as = 'span',
       className,
       children,
       ...props
@@ -50,7 +45,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     ref,
   ) => {
     // Determine the element type
-    const Element = as || variantElementMap[variant || 'body1'];
+    const Element = as ?? variantElementMap[variant ?? 'body1'];
 
     return React.createElement(
       Element,
@@ -75,4 +70,3 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
 );
 
 Typography.displayName = 'Typography';
-Typography.defaultProps = defaultProps;
