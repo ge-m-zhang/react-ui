@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TextArea, CommentTextArea, MessageTextArea, CodeTextArea } from './TextArea';
 import { useState } from 'react';
+import { TextArea, CodeTextArea } from './TextArea';
 
 const meta = {
   title: 'components/textarea',
@@ -47,6 +47,13 @@ export const Default: Story = {
   args: {
     placeholder: 'Enter your message...',
     rows: 4,
+    error: '',
+    helperText: '',
+    label: '',
+    hiddenLabel: true,
+    showCharacterCount: false,
+    autoResize: false,
+    wrapperClassName: '',
   },
 };
 
@@ -67,12 +74,19 @@ export const SimpleResizeTest: Story = {
         <div>
           <h4 className="font-semibold mb-3 text-center">🔵 Both Directions</h4>
           <TextArea
-            resizable={true}
+            resizable
             placeholder={`Drag me BOTH ways! ↕️↔️
 
 Try dragging the corner handle in any direction.`}
             rows={4}
             className="w-full border-2 border-blue-400"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-blue-600 mt-2 text-center">resizable={true}</p>
         </div>
@@ -86,6 +100,13 @@ Try dragging the corner handle in any direction.`}
 Horizontal dragging should be disabled."
             rows={4}
             className="w-full border-2 border-green-400"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-green-600 mt-2 text-center">resizable="vertical"</p>
         </div>
@@ -99,6 +120,13 @@ Horizontal dragging should be disabled."
 Vertical dragging should be disabled."
             rows={4}
             className="w-full border-2 border-orange-400"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-orange-600 mt-2 text-center">resizable="horizontal"</p>
         </div>
@@ -144,6 +172,13 @@ export const DragAndResize: Story = {
             placeholder="Drag the bottom-right corner vertically"
             rows={3}
             className="border-2 border-blue-200"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-gray-500 mt-1">Most common - drag up/down only</p>
         </div>
@@ -155,6 +190,13 @@ export const DragAndResize: Story = {
             placeholder="Drag the bottom-right corner horizontally"
             rows={3}
             className="border-2 border-green-200"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-gray-500 mt-1">Drag left/right only</p>
         </div>
@@ -168,10 +210,17 @@ export const DragAndResize: Story = {
             ↕️↔️ Both Directions
           </label>
           <TextArea
-            resizable={true}
+            resizable
             placeholder="Drag both ways! Maximum flexibility"
             rows={3}
             className="border-2 border-purple-200"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-gray-500 mt-1">Drag any direction</p>
         </div>
@@ -183,6 +232,13 @@ export const DragAndResize: Story = {
             placeholder="Fixed size - no dragging allowed"
             rows={3}
             className="border-2 border-red-200"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
           <p className="text-xs text-gray-500 mt-1">Fixed size, no resize handle</p>
         </div>
@@ -207,6 +263,12 @@ export const ContainerFlexibility: Story = {
               fullWidth
               placeholder="I take the full width of this container"
               helperText="fullWidth={true}"
+              error=""
+              label=""
+              hiddenLabel
+              showCharacterCount={false}
+              autoResize={false}
+              wrapperClassName=""
             />
           </div>
 
@@ -216,6 +278,12 @@ export const ContainerFlexibility: Story = {
               fullWidth
               placeholder="I adapt to this wider container"
               helperText="fullWidth={true} - Same component, different container"
+              error=""
+              label=""
+              hiddenLabel
+              showCharacterCount={false}
+              autoResize={false}
+              wrapperClassName=""
             />
           </div>
 
@@ -225,6 +293,12 @@ export const ContainerFlexibility: Story = {
               fullWidth
               placeholder="I fit this narrow container"
               helperText="fullWidth={true} - Responsive to any container"
+              error=""
+              label=""
+              hiddenLabel
+              showCharacterCount={false}
+              autoResize={false}
+              wrapperClassName=""
             />
           </div>
         </div>
@@ -244,6 +318,11 @@ Keep typing more content and I'll expand!
 Perfect for chat messages, comments, or any growing text content."
             helperText="autoResize={true} + fullWidth={true}"
             className="border-2 border-orange-200"
+            error=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            wrapperClassName=""
           />
         </div>
       </div>
@@ -265,10 +344,16 @@ export const CombinedFeatures: Story = {
           </label>
           <TextArea
             fullWidth
-            resizable={true}
+            resizable
             placeholder="I take full width AND you can drag me both ways!"
             helperText="Perfect for forms where users need maximum flexibility"
             className="border-2 border-blue-200"
+            error=""
+            label=""
+            hiddenLabel
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
         </div>
 
@@ -284,6 +369,10 @@ export const CombinedFeatures: Story = {
             placeholder="I grow automatically AND show character count. Perfect for social media posts or comments!"
             helperText="Smart sizing with user feedback"
             className="border-2 border-green-200"
+            error=""
+            label=""
+            hiddenLabel
+            wrapperClassName=""
           />
         </div>
 
@@ -300,6 +389,13 @@ function example() {
   return 'Full width with horizontal drag';
 }"
             className="border-2 border-purple-200"
+            error=""
+            helperText=""
+            label=""
+            hiddenLabel={true}
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
         </div>
       </div>
@@ -352,6 +448,12 @@ export const ResponsiveContainer: Story = {
             placeholder={`I'm ${containerSize} and flexible! Change the container size above to see me adapt.`}
             helperText="fullWidth makes me responsive to any container size"
             rows={4}
+            error=""
+            label=""
+            hiddenLabel={true}
+            showCharacterCount={false}
+            autoResize={false}
+            wrapperClassName=""
           />
         </div>
 
