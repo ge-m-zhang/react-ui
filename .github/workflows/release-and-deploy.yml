@@ -62,12 +62,14 @@ jobs:
       - name: Bump versions
         id: version
         run: |
+          # Bump UI package version
           cd packages/@react-ui
-          NEW_VERSION=$(npm version ${{ inputs.version }} --no-git-tag-version)
+          NEW_VERSION=$(pnpm version ${{ inputs.version }} --no-git-tag-version)
           echo "ui_version=${NEW_VERSION#v}" >> $GITHUB_OUTPUT
           cd ../..
 
-          ROOT_VERSION=$(npm version ${{ inputs.version }} --no-git-tag-version)
+          # Bump root package version
+          ROOT_VERSION=$(pnpm version ${{ inputs.version }} --no-git-tag-version)
           echo "root_version=${ROOT_VERSION#v}" >> $GITHUB_OUTPUT
 
       - name: Commit and tag
@@ -104,15 +106,15 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.version.outputs.ui_version }}
-          name: "@gmzh/react-ui v${{ steps.version.outputs.ui_version }}"
+          name: '@gmzh/react-ui v${{ steps.version.outputs.ui_version }}'
           body: |
             ## @gmzh/react-ui v${{ steps.version.outputs.ui_version }}
-            
+
             Install:
             ```bash
             npm i @gmzh/react-ui@${{ steps.version.outputs.ui_version }}
             ```
-            
+
             Docs: https://storybook-react-ui.vercel.app
             npm: https://www.npmjs.com/package/@gmzh/react-ui
             Repo: https://github.com/${{ github.repository }}
