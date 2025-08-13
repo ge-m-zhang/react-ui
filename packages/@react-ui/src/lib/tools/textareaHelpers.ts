@@ -20,15 +20,16 @@ export const performTextareaResize = (
   textarea: HTMLTextAreaElement,
   scrollHeightRef: React.MutableRefObject<number | null>,
 ): void => {
-  const textareaClone = textarea;
-  textareaClone.style.height = 'auto';
+  // eslint-disable-next-line no-param-reassign
+  textarea.style.height = 'auto';
   const newScrollHeight = textarea.scrollHeight;
 
   // Only update if scrollHeight changed
-  const scrollHeightRefClone = scrollHeightRef;
-  if (scrollHeightRefClone.current !== newScrollHeight) {
-    textareaClone.style.height = `${newScrollHeight}px`;
-    scrollHeightRefClone.current = newScrollHeight;
+  if (scrollHeightRef.current !== newScrollHeight) {
+    // eslint-disable-next-line no-param-reassign
+    textarea.style.height = `${newScrollHeight}px`;
+    // eslint-disable-next-line no-param-reassign
+    scrollHeightRef.current = newScrollHeight;
   }
 };
 
@@ -88,7 +89,7 @@ export const useTextareaResize = (): {
 
   // Create debounced resize function
   const createDebouncedResize = useCallback(
-    (delay: number = 16) =>
+    (delay = 16) =>
       (textarea: HTMLTextAreaElement) => {
         if (debounceTimeoutRef.current) {
           clearTimeout(debounceTimeoutRef.current);
