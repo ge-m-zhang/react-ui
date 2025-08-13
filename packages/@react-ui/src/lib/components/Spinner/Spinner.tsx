@@ -60,7 +60,7 @@ export interface SpinnerProps
   /**
    * Custom label for screen readers
    */
-  label: string;
+  label?: string;
 }
 
 export const Spinner = ({

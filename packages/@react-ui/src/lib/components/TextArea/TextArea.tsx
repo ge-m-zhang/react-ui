@@ -98,14 +98,14 @@ export interface TextAreaProps
       'size' | 'disabled'
     >,
     TextAreaBaseProps {
-  error: string;
-  helperText: string;
-  label: string;
-  hiddenLabel: boolean;
+  error?: string;
+  helperText?: string;
+  label?: string;
+  hiddenLabel?: boolean;
   maxLength: number | undefined;
-  showCharacterCount: boolean;
-  autoResize: boolean;
-  wrapperClassName: string;
+  showCharacterCount?: boolean;
+  autoResize?: boolean;
+  wrapperClassName?: string;
 }
 
 const TextArea = ({
