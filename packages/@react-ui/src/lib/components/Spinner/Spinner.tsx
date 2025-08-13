@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef } from 'react';
+import type React from 'react';
+
 import { cn } from '../../tools/classNames';
 
 /**
@@ -59,36 +60,53 @@ export interface SpinnerProps
   /**
    * Custom label for screen readers
    */
-  label?: string;
+  label: string;
 }
 
-export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ className, size, color, emptyColor, label = 'Loading...', ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn(spinnerVariants({ size, color, emptyColor }), className)}
-        role="status"
-        aria-label={label}
-        {...props}
-      >
-        <span className="sr-only">{label}</span>
-      </div>
-    );
-  },
-);
+export function Spinner({
+  className,
+  size,
+  color,
+  emptyColor,
+  label = 'Loading...',
+  id,
+  title,
+  style,
+}: SpinnerProps) {
+  return (
+    <div
+      className={cn(spinnerVariants({ size, color, emptyColor }), className)}
+      role="status"
+      aria-label={label}
+      id={id}
+      title={title}
+      style={style}
+    >
+      <span className="sr-only">{label}</span>
+    </div>
+  );
+}
 
-Spinner.displayName = 'Spinner';
+
 
 // Predefined spinner variants for common use cases
-export const SpinnerWithText = ({
-  text = 'Loading...',
-  position = 'right',
-  ...spinnerProps
-}: SpinnerProps & {
+export interface SpinnerWithTextProps extends SpinnerProps {
   text?: string;
   position?: 'left' | 'right' | 'top' | 'bottom';
-}) => {
+}
+
+export function SpinnerWithText({
+  text = 'Loading...',
+  position = 'right',
+  className,
+  size,
+  color,
+  emptyColor,
+  label = 'Loading...',
+  id,
+  title,
+  style,
+}: SpinnerWithTextProps) {
   const flexDirection = {
     left: 'flex-row-reverse',
     right: 'flex-row',
@@ -105,13 +123,52 @@ export const SpinnerWithText = ({
 
   return (
     <div className={cn('inline-flex items-center', flexDirection[position], gap[position])}>
-      <Spinner {...spinnerProps} />
+      <Spinner
+        className={className}
+        size={size}
+        color={color}
+        emptyColor={emptyColor}
+        label={label}
+        id={id}
+        title={title}
+        style={style}
+      />
       <span className="text-sm text-gray-600">{text}</span>
     </div>
   );
+}
+
+SpinnerWithText.defaultProps = {
+  text: 'Loading...',
+  position: 'right',
 };
 
-// Button spinner for loading states
-export const ButtonSpinner = ({ className, ...props }: Omit<SpinnerProps, 'size'>) => {
-  return <Spinner size="small" className={cn('mr-2', className)} label="Loading" {...props} />;
+// Button spinner for loading states  
+export interface ButtonSpinnerProps extends Omit<SpinnerProps, 'size'> {}
+
+export function ButtonSpinner({ 
+  className,
+  color,
+  emptyColor,
+  label = 'Loading',
+  id,
+  title,
+  style,
+}: ButtonSpinnerProps) {
+  return (
+    <Spinner
+      size="small"
+      className={cn('mr-2', className)}
+      color={color}
+      emptyColor={emptyColor}
+      label={label}
+      id={id}
+      title={title}
+      style={style}
+    />
+  );
+}
+
+ButtonSpinner.defaultProps = {
+  label: 'Loading',
 };

@@ -1,6 +1,7 @@
 // packages/ui/src/lib/components/Button/Button.tsx
-import { forwardRef } from 'react';
 import { type VariantProps } from 'class-variance-authority';
+import { forwardRef } from 'react';
+
 import { cn } from '../../tools/classNames';
 import { buttonVariants } from './button.config';
 
@@ -35,13 +36,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       variant,
-      size,
+      size: buttonSize,
       color,
       fullWidth,
-      startIcon,
-      endIcon,
-      loading,
-      loadingText,
+      asChild: _asChild = false,
+      startIcon = null,
+      endIcon = null,
+      loading = false,
+      loadingText = 'Loading...',
       children,
       disabled,
       ...props
@@ -63,16 +65,65 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     };
 
+    const {
+      id,
+      name,
+      value,
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onMouseDown,
+      onMouseUp,
+      onFocus,
+      onBlur,
+      onKeyDown,
+      onKeyUp,
+      title,
+      role,
+      tabIndex,
+      form,
+      formAction,
+      formMethod,
+      formNoValidate,
+      formTarget,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+    } = props;
+
     return (
       <button
         ref={ref}
+        type="button"
         className={cn(
-          buttonVariants({ variant, size, color, fullWidth }),
-          getGapClass(size),
+          buttonVariants({ variant, size: buttonSize, color, fullWidth }),
+          getGapClass(buttonSize),
           className,
         )}
         disabled={disabled || loading}
-        {...props}
+        id={id}
+        name={name}
+        value={value}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+        title={title}
+        role={role}
+        tabIndex={tabIndex}
+        form={form}
+        formAction={formAction}
+        formMethod={formMethod}
+        formNoValidate={formNoValidate}
+        formTarget={formTarget}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
       >
         {loading ? (
           <>
@@ -111,3 +162,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
+
+Button.defaultProps = {
+  asChild: false,
+  startIcon: null,
+  endIcon: null,
+  loading: false,
+  loadingText: 'Loading...',
+};

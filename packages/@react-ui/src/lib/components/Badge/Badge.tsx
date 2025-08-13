@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 /**
  * Badge Component
@@ -29,7 +29,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   info: 'bg-blue-100 text-blue-800',
 };
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = 'primary', className = '' }) => {
+export function Badge({ children, variant = 'primary', className = '' }: BadgeProps) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantStyles[variant]} ${className}`}
@@ -37,4 +37,9 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = 'primary', cla
       {children}
     </span>
   );
+}
+
+Badge.defaultProps = {
+  variant: 'primary',
+  className: '',
 };

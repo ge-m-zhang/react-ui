@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useCallback, useEffect, useId, useMemo, useRef } from 'react';
+import type React from 'react';
+import { useEffect, useId, useMemo, useRef } from 'react';
 import { cn } from '../../tools/classNames';
 import { getResizeStyle } from '../../tools/styleHelpers';
 
@@ -93,40 +94,36 @@ type TextAreaBaseProps = VariantProps<typeof textAreaVariants>;
 export interface TextAreaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size' | 'disabled'>,
     TextAreaBaseProps {
-  error?: string;
-  helperText?: string;
-  label?: string;
-  hiddenLabel?: boolean;
-  maxLength?: number;
-  showCharacterCount?: boolean;
-  autoResize?: boolean;
-  wrapperClassName?: string;
+  error: string;
+  helperText: string;
+  label: string;
+  hiddenLabel: boolean;
+  maxLength: number | undefined;
+  showCharacterCount: boolean;
+  autoResize: boolean;
+  wrapperClassName: string;
 }
 
-export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  (
-    {
-      className,
-      wrapperClassName,
-      size,
-      state: stateProp,
-      fullWidth,
-      disabled,
-      resizable,
-      error,
-      helperText,
-      label,
-      hiddenLabel = false,
-      maxLength,
-      showCharacterCount = false,
-      autoResize = false,
-      id,
-      value,
-      onChange,
-      ...props
-    },
-    ref,
-  ) => {
+function TextArea({
+  className,
+  wrapperClassName,
+  size,
+  state: stateProp,
+  fullWidth,
+  disabled,
+  resizable,
+  error,
+  helperText,
+  label,
+  hiddenLabel,
+  maxLength,
+  showCharacterCount,
+  autoResize,
+  id,
+  value,
+  onChange,
+  ...props
+}: TextAreaProps) {
     // Determine state based on error prop
     const state = error ? 'error' : stateProp || 'default';
 
@@ -142,30 +139,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const isNearLimit = maxLength && currentLength / maxLength > 0.8;
     const isOverLimit = maxLength && currentLength > maxLength;
 
-    const characterCountState = isOverLimit ? 'error' : isNearLimit ? 'warning' : 'default';
+    let characterCountState: 'default' | 'warning' | 'error' = 'default';
+    if (isOverLimit) {
+      characterCountState = 'error';
+    } else if (isNearLimit) {
+      characterCountState = 'warning';
+    }
 
-    // Local ref for internal auto-resize functionality - works with any external ref type
+    // Local ref for internal auto-resize functionality
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
-
-    // Combined ref handler that forwards to external ref and stores locally
-    const combinedRef = useCallback(
-      (element: HTMLTextAreaElement | null) => {
-        // Store element in our internal ref for auto-resize functionality
-        internalRef.current = element;
-
-        // Forward to external ref (handle both RefObject and callback refs)
-        if (ref) {
-          if (typeof ref === 'function') {
-            // Callback ref
-            ref(element);
-          } else if (typeof ref === 'object' && ref !== null && 'current' in ref) {
-            // RefObject
-            (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = element;
-          }
-        }
-      },
-      [ref],
-    );
 
     const debouncedResize = useMemo(() => {
       let timeoutId: ReturnType<typeof setTimeout>;
@@ -175,22 +157,22 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         timeoutId = setTimeout(() => {
           if (element) {
             // Reset height to auto to get the correct scrollHeight
-            element.style.height = 'auto';
-            element.style.height = `${element.scrollHeight}px`;
+            const elementToResize = element;
+            elementToResize.style.height = 'auto';
+            elementToResize.style.height = `${elementToResize.scrollHeight}px`;
           }
         }, DEBOUNCE_DELAY);
       };
     }, []);
 
     // Direct resize function for immediate use (non-debounced)
-    const performResize = useMemo(() => {
-      return (element: HTMLTextAreaElement) => {
+    const performResize = useMemo(() => (element: HTMLTextAreaElement) => {
         if (element) {
-          element.style.height = 'auto';
-          element.style.height = `${element.scrollHeight}px`;
+          const elementToResize = element;
+          elementToResize.style.height = 'auto';
+          elementToResize.style.height = `${elementToResize.scrollHeight}px`;
         }
-      };
-    }, []);
+      }, []);
 
     // Auto-resize functionality - optimized to avoid unnecessary DOM updates
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -221,7 +203,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         {/* Textarea */}
         <textarea
-          ref={combinedRef}
+          ref={internalRef}
           id={textareaId}
           className={cn(
             textAreaVariants({
@@ -234,9 +216,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             autoResize && 'overflow-hidden',
             className,
           )}
-          style={{
+      style={{
             // Fallback for resize if Tailwind classes don't work
-            ...getResizeStyle(autoResize, resizable),
+            ...getResizeStyle(!!autoResize, resizable),
             ...props.style,
           }}
           disabled={!!disabled}
@@ -249,7 +231,47 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               .filter(Boolean)
               .join(' ') || undefined
           }
-          {...props}
+          placeholder={props.placeholder}
+          rows={props.rows}
+          cols={props.cols}
+          name={props.name}
+          required={props.required}
+          readOnly={props.readOnly}
+          autoComplete={props.autoComplete}
+          spellCheck={props.spellCheck}
+          wrap={props.wrap}
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
+          onKeyDown={props.onKeyDown}
+          onKeyUp={props.onKeyUp}
+          onKeyPress={props.onKeyPress}
+          onSelect={props.onSelect}
+          onInput={props.onInput}
+          onInvalid={props.onInvalid}
+          onScroll={props.onScroll}
+          onClick={props.onClick}
+          onDoubleClick={props.onDoubleClick}
+          onMouseDown={props.onMouseDown}
+          onMouseUp={props.onMouseUp}
+          onMouseEnter={props.onMouseEnter}
+          onMouseLeave={props.onMouseLeave}
+          onMouseMove={props.onMouseMove}
+          onMouseOver={props.onMouseOver}
+          onMouseOut={props.onMouseOut}
+          onContextMenu={props.onContextMenu}
+          onDrag={props.onDrag}
+          onDragEnd={props.onDragEnd}
+          onDragEnter={props.onDragEnter}
+          onDragExit={props.onDragExit}
+          onDragLeave={props.onDragLeave}
+          onDragOver={props.onDragOver}
+          onDragStart={props.onDragStart}
+          onDrop={props.onDrop}
+          tabIndex={props.tabIndex}
+          role={props.role}
+          aria-label={props['aria-label']}
+          aria-labelledby={props['aria-labelledby']}
+          aria-required={props['aria-required']}
         />
 
         {/* Error message */}
@@ -275,53 +297,142 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         )}
       </div>
     );
-  },
-);
+  }
 
 TextArea.displayName = 'TextArea';
 
+export { TextArea };
+
 // Predefined TextArea variants for common use cases
-export const CommentTextArea = forwardRef<HTMLTextAreaElement, Omit<TextAreaProps, 'placeholder'>>(
-  (props, ref) => (
+export function CommentTextArea({
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  resizable,
+  error,
+  helperText,
+  label,
+  hiddenLabel,
+  id,
+  value,
+  onChange,
+}: Omit<TextAreaProps, 'placeholder'>) {
+  return (
     <TextArea
-      ref={ref}
       placeholder="Write a comment..."
       rows={3}
       autoResize
       showCharacterCount
       maxLength={500}
-      {...props}
+      className={className}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      resizable={resizable}
+      error={error}
+      helperText={helperText}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      id={id}
+      value={value}
+      onChange={onChange}
     />
-  ),
-);
+  );
+}
 
 CommentTextArea.displayName = 'CommentTextArea';
 
-export const MessageTextArea = forwardRef<HTMLTextAreaElement, Omit<TextAreaProps, 'placeholder'>>(
-  (props, ref) => (
+export function MessageTextArea({
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  error = '',
+  helperText = '',
+  label = '',
+  hiddenLabel = false,
+  maxLength,
+  showCharacterCount = false,
+  autoResize = false,
+  id,
+  value,
+  onChange,
+}: Omit<TextAreaProps, 'placeholder'>) {
+  return (
     <TextArea
-      ref={ref}
       placeholder="Type your message..."
       rows={4}
-      autoResize
+      autoResize={autoResize ?? true}
       resizable="vertical"
-      {...props}
+      className={className}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      error={error}
+      helperText={helperText}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      maxLength={maxLength}
+      showCharacterCount={showCharacterCount}
+      id={id}
+      value={value}
+      onChange={onChange}
     />
-  ),
-);
+  );
+}
 
 MessageTextArea.displayName = 'MessageTextArea';
 
-export const CodeTextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, ...props }, ref) => (
+export function CodeTextArea({
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  resizable,
+  error,
+  helperText,
+  label,
+  hiddenLabel,
+  maxLength,
+  showCharacterCount,
+  autoResize,
+  id,
+  value,
+  onChange,
+}: TextAreaProps) {
+  return (
     <TextArea
-      ref={ref}
       className={cn('font-mono text-sm', className)}
-      resizable={true}
+      resizable={resizable ?? true}
       spellCheck={false}
-      {...props}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      error={error}
+      helperText={helperText}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      maxLength={maxLength}
+      showCharacterCount={showCharacterCount}
+      autoResize={autoResize}
+      id={id}
+      value={value}
+      onChange={onChange}
     />
-  ),
-);
+  );
+}
 
 CodeTextArea.displayName = 'CodeTextArea';

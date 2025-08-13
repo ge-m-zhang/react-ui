@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { cn } from '../../tools/classNames';
+import React, { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+
+import { cn } from '../../tools/classNames';
 
 /**
  * Tooltip Component
@@ -115,10 +116,7 @@ const getTooltipPosition = (
 ) => {
   const triggerRect = trigger.getBoundingClientRect();
   const tooltipRect = tooltip.getBoundingClientRect();
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-  const scrollX = window.scrollX;
-  const scrollY = window.scrollY;
+  const { innerWidth: viewportWidth, innerHeight: viewportHeight, scrollX, scrollY } = window;
 
   let top = 0;
   let left = 0;
@@ -173,6 +171,8 @@ const getTooltipPosition = (
     case 'right-end':
       top = triggerRect.bottom + scrollY - tooltipRect.height;
       left = triggerRect.right + scrollX + offset;
+      break;
+    default:
       break;
   }
 
@@ -289,7 +289,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     }, []);
 
     if (!mounted) {
-      return <>{children}</>;
+      return children as React.JSX.Element;
     }
 
     const triggerHandlers: React.HTMLAttributes<HTMLElement> = {};
@@ -330,15 +330,21 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                 (tooltipRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
                 if (typeof ref === 'function') {
                   ref(node);
-                } else if (ref) {
-                  ref.current = node;
+                } else if (ref && 'current' in ref) {
+                  const mutableRef = ref as React.MutableRefObject<HTMLDivElement | null>;
+                  mutableRef.current = node;
                 }
               }}
               id={tooltipId}
               role="tooltip"
               className={cn(tooltipVariants({ variant, visible: isOpen }))}
-              style={{ position: 'absolute' }}
-              {...tooltipProps}
+              style={{
+                position: 'absolute',
+                ...(tooltipProps?.style || {})
+              }}
+              onMouseEnter={tooltipProps?.onMouseEnter}
+              onMouseLeave={tooltipProps?.onMouseLeave}
+              data-testid={tooltipProps && typeof tooltipProps === 'object' && 'data-testid' in tooltipProps ? (tooltipProps as { 'data-testid'?: string })['data-testid'] : undefined}
             >
               {content}
               {arrow && <div className={cn(arrowVariants({ variant, placement }))} />}
@@ -352,15 +358,133 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
 Tooltip.displayName = 'Tooltip';
 
+// Default props for Tooltip
+Tooltip.defaultProps = {
+  placement: 'top',
+  arrow: false,
+  open: undefined,
+  defaultOpen: false,
+  delay: 0,
+  hideDelay: 0,
+  trigger: 'hover',
+  disableFocusListener: false,
+  disableHoverListener: false,
+  disableTouchListener: false,
+  onOpenChange: undefined,
+  tooltipProps: undefined,
+};
+
 // Convenience components
-export const LightTooltip = (props: Omit<TooltipProps, 'variant'>) => (
-  <Tooltip variant="light" {...props} />
-);
+export function LightTooltip({
+  content,
+  children,
+  placement,
+  arrow,
+  open,
+  defaultOpen,
+  delay,
+  hideDelay,
+  trigger,
+  disableFocusListener,
+  disableHoverListener,
+  disableTouchListener,
+  onOpenChange,
+  tooltipProps,
+}: Omit<TooltipProps, 'variant'>) {
+  return (
+    <Tooltip 
+      variant="light" 
+      content={content}
+      placement={placement}
+      arrow={arrow}
+      open={open}
+      defaultOpen={defaultOpen}
+      delay={delay}
+      hideDelay={hideDelay}
+      trigger={trigger}
+      disableFocusListener={disableFocusListener}
+      disableHoverListener={disableHoverListener}
+      disableTouchListener={disableTouchListener}
+      onOpenChange={onOpenChange}
+      tooltipProps={tooltipProps}
+    >
+      {children}
+    </Tooltip>
+  );
+}
 
-export const DarkTooltip = (props: Omit<TooltipProps, 'variant'>) => (
-  <Tooltip variant="dark" {...props} />
-);
+export function DarkTooltip({
+  content,
+  children,
+  placement,
+  arrow,
+  open,
+  defaultOpen,
+  delay,
+  hideDelay,
+  trigger,
+  disableFocusListener,
+  disableHoverListener,
+  disableTouchListener,
+  onOpenChange,
+  tooltipProps,
+}: Omit<TooltipProps, 'variant'>) {
+  return (
+    <Tooltip 
+      variant="dark" 
+      content={content}
+      placement={placement}
+      arrow={arrow}
+      open={open}
+      defaultOpen={defaultOpen}
+      delay={delay}
+      hideDelay={hideDelay}
+      trigger={trigger}
+      disableFocusListener={disableFocusListener}
+      disableHoverListener={disableHoverListener}
+      disableTouchListener={disableTouchListener}
+      onOpenChange={onOpenChange}
+      tooltipProps={tooltipProps}
+    >
+      {children}
+    </Tooltip>
+  );
+}
 
-export const LabelTooltip = (props: Omit<TooltipProps, 'variant'>) => (
-  <Tooltip variant="label" {...props} />
-);
+export function LabelTooltip({
+  content,
+  children,
+  placement,
+  arrow,
+  open,
+  defaultOpen,
+  delay,
+  hideDelay,
+  trigger,
+  disableFocusListener,
+  disableHoverListener,
+  disableTouchListener,
+  onOpenChange,
+  tooltipProps,
+}: Omit<TooltipProps, 'variant'>) {
+  return (
+    <Tooltip 
+      variant="label" 
+      content={content}
+      placement={placement}
+      arrow={arrow}
+      open={open}
+      defaultOpen={defaultOpen}
+      delay={delay}
+      hideDelay={hideDelay}
+      trigger={trigger}
+      disableFocusListener={disableFocusListener}
+      disableHoverListener={disableHoverListener}
+      disableTouchListener={disableTouchListener}
+      onOpenChange={onOpenChange}
+      tooltipProps={tooltipProps}
+    >
+      {children}
+    </Tooltip>
+  );
+}

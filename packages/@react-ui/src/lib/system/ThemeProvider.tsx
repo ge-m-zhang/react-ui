@@ -1,6 +1,7 @@
 // packages/ui/src/lib/system/ThemeProvider.tsx
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import type React from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 // Theme configuration (moved to TypeScript for JS access)
 export const themeConfig = {
@@ -55,11 +56,11 @@ interface ThemeProviderProps {
   enableSystem?: boolean;
 }
 
-export const ThemeProvider = ({
+export function ThemeProvider({
   children,
   defaultTheme = 'system',
   enableSystem = true,
-}: ThemeProviderProps): React.JSX.Element => {
+}: ThemeProviderProps): React.JSX.Element {
   const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(defaultTheme);
   const [isDark, setIsDark] = useState(false);
 
@@ -79,6 +80,8 @@ export const ThemeProvider = ({
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
+    
+    return undefined;
   }, [theme, enableSystem]);
 
   // Apply theme to document
@@ -114,11 +117,14 @@ export const ThemeProvider = ({
     }
   }, []);
 
-  const value: ThemeContextType = {
-    isDark,
-    toggleTheme,
-    setTheme,
-  };
+  const value: ThemeContextType = useMemo(
+    () => ({
+      isDark,
+      toggleTheme,
+      setTheme,
+    }),
+    [isDark],
+  );
 
   return (
     <ThemeContext.Provider value={value}>
@@ -137,4 +143,10 @@ export const ThemeProvider = ({
       </div>
     </ThemeContext.Provider>
   );
+}
+
+// Default props for ThemeProvider
+ThemeProvider.defaultProps = {
+  defaultTheme: 'system',
+  enableSystem: true,
 };

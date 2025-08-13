@@ -142,6 +142,8 @@ export const handleTabKeyboardNavigation = (
       nextIndex = findEnabledTabAtEnd(tabInfo, false, currentIndex);
       shouldPreventDefault = true;
       break;
+    default:
+      break;
   }
 
   if (shouldPreventDefault && nextIndex !== currentIndex) {

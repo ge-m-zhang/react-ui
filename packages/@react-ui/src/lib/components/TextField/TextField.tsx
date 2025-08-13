@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useId, useMemo } from 'react';
+import type React from 'react';
+import { forwardRef, useId, useMemo } from 'react';
 import { cn } from '../../tools/classNames';
 import { createNumberInputWheelHandler } from '../../tools/formEventHelpers';
 
@@ -188,11 +189,72 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             disabled={!!disabled}
             onWheel={wheelHandler}
             aria-invalid={error ? 'true' : 'false'}
-            aria-describedby={
-              [error && errorId, helperText && !error && helperId].filter(Boolean).join(' ') ||
-              undefined
-            }
-            {...props}
+                      aria-describedby={
+            [error && errorId, helperText && !error && helperId].filter(Boolean).join(' ') ||
+            undefined
+          }
+          placeholder={props.placeholder}
+          defaultValue={props.defaultValue}
+          value={props.value}
+          autoComplete={props.autoComplete}
+          checked={props.checked}
+          defaultChecked={props.defaultChecked}
+          form={props.form}
+          formAction={props.formAction}
+          formEncType={props.formEncType}
+          formMethod={props.formMethod}
+          formNoValidate={props.formNoValidate}
+          formTarget={props.formTarget}
+          height={props.height}
+          list={props.list}
+          max={props.max}
+          maxLength={props.maxLength}
+          min={props.min}
+          minLength={props.minLength}
+          multiple={props.multiple}
+          name={props.name}
+          pattern={props.pattern}
+          readOnly={props.readOnly}
+          required={props.required}
+          src={props.src}
+          step={props.step}
+          width={props.width}
+          accept={props.accept}
+          alt={props.alt}
+          capture={props.capture}
+          onClick={props.onClick}
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
+          onChange={props.onChange}
+          onKeyDown={props.onKeyDown}
+          onKeyUp={props.onKeyUp}
+          onKeyPress={props.onKeyPress}
+          onInput={props.onInput}
+          onInvalid={props.onInvalid}
+          onSelect={props.onSelect}
+          onMouseDown={props.onMouseDown}
+          onMouseUp={props.onMouseUp}
+          onMouseEnter={props.onMouseEnter}
+          onMouseLeave={props.onMouseLeave}
+          onMouseMove={props.onMouseMove}
+          onMouseOver={props.onMouseOver}
+          onMouseOut={props.onMouseOut}
+          onContextMenu={props.onContextMenu}
+          onDoubleClick={props.onDoubleClick}
+          onDrag={props.onDrag}
+          onDragEnd={props.onDragEnd}
+          onDragEnter={props.onDragEnter}
+          onDragExit={props.onDragExit}
+          onDragLeave={props.onDragLeave}
+          onDragOver={props.onDragOver}
+          onDragStart={props.onDragStart}
+          onDrop={props.onDrop}
+          tabIndex={props.tabIndex}
+          role={props.role}
+          aria-label={props['aria-label']}
+          aria-labelledby={props['aria-labelledby']}
+          aria-required={props['aria-required']}
+          style={props.style}
           />
         </div>
 
@@ -216,31 +278,162 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 
 TextField.displayName = 'TextField';
 
+TextField.defaultProps = {
+  error: undefined,
+  helperText: undefined,
+  symbol: undefined,
+  label: undefined,
+  hiddenLabel: false,
+  wrapperClassName: undefined,
+};
+
 // Predefined TextField variants for common use cases
-export const EmailField = forwardRef<HTMLInputElement, Omit<TextFieldProps, 'type'>>(
-  (props, ref) => <TextField ref={ref} type="email" autoComplete="email" {...props} />,
-);
+export function EmailField({
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  error,
+  helperText,
+  symbol,
+  label,
+  hiddenLabel,
+  id,
+  onWheel,
+}: Omit<TextFieldProps, 'type'>) {
+  return (
+    <TextField
+      type="email"
+      autoComplete="email"
+      className={className}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      error={error}
+      helperText={helperText}
+      symbol={symbol}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      id={id}
+      onWheel={onWheel}
+    />
+  );
+}
 
 EmailField.displayName = 'EmailField';
 
-export const PasswordField = forwardRef<HTMLInputElement, Omit<TextFieldProps, 'type'>>(
-  (props, ref) => (
-    <TextField ref={ref} type="password" autoComplete="current-password" {...props} />
-  ),
-);
+export function PasswordField({
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  error,
+  helperText,
+  symbol,
+  label,
+  hiddenLabel,
+  id,
+  onWheel,
+}: Omit<TextFieldProps, 'type'>) {
+  return (
+    <TextField
+      type="password"
+      autoComplete="current-password"
+      className={className}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      error={error}
+      helperText={helperText}
+      symbol={symbol}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      id={id}
+      onWheel={onWheel}
+    />
+  );
+}
 
 PasswordField.displayName = 'PasswordField';
 
-export const NumberField = forwardRef<HTMLInputElement, Omit<TextFieldProps, 'type'>>(
-  (props, ref) => <TextField ref={ref} type="number" {...props} />,
-);
+export function NumberField({
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  error,
+  helperText,
+  symbol,
+  label,
+  hiddenLabel,
+  id,
+  onWheel,
+}: Omit<TextFieldProps, 'type'>) {
+  return (
+    <TextField
+      type="number"
+      className={className}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      error={error}
+      helperText={helperText}
+      symbol={symbol}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      id={id}
+      onWheel={onWheel}
+    />
+  );
+}
 
 NumberField.displayName = 'NumberField';
 
-export const SearchField = forwardRef<HTMLInputElement, Omit<TextFieldProps, 'type'>>(
-  ({ symbol = '🔍', ...props }, ref) => (
-    <TextField ref={ref} type="search" symbol={symbol} {...props} />
-  ),
-);
+export function SearchField({
+  symbol = '🔍',
+  className,
+  wrapperClassName,
+  size,
+  state,
+  fullWidth,
+  disabled,
+  error,
+  helperText,
+  label,
+  hiddenLabel,
+  id,
+  onWheel,
+}: Omit<TextFieldProps, 'type'>) {
+  return (
+    <TextField
+      type="search"
+      symbol={symbol}
+      className={className}
+      wrapperClassName={wrapperClassName}
+      size={size}
+      state={state}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      error={error}
+      helperText={helperText}
+      label={label}
+      hiddenLabel={hiddenLabel}
+      id={id}
+      onWheel={onWheel}
+    />
+  );
+}
 
 SearchField.displayName = 'SearchField';
