@@ -3,10 +3,6 @@
   "version": "0.2.4",
   "private": true,
   "author": "GMZhang",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "start": "turbo run start --parallel",
     "start:dev": "turbo run start:dev --parallel",
