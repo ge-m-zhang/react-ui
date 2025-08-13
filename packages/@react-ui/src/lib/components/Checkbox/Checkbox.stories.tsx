@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Checkbox } from './Checkbox';
 import { useState } from 'react';
+import { Checkbox } from './Checkbox';
 
 const meta = {
   title: 'components/checkbox',
@@ -114,20 +114,20 @@ export const States: Story = {
 export const WithLabels: Story = {
   render: () => (
     <div className="flex flex-col gap-4 p-4">
-      <label className="flex items-center gap-3 cursor-pointer">
+      <div className="flex items-center gap-3 cursor-pointer">
         <Checkbox defaultChecked />
         <span className="text-sm font-medium text-gray-700">
           I agree to the terms and conditions
         </span>
-      </label>
-      <label className="flex items-center gap-3 cursor-pointer">
+      </div>
+      <div className="flex items-center gap-3 cursor-pointer">
         <Checkbox color="success" defaultChecked />
         <span className="text-sm font-medium text-gray-700">Subscribe to newsletter</span>
-      </label>
-      <label className="flex items-center gap-3 cursor-pointer">
+      </div>
+      <div className="flex items-center gap-3 cursor-pointer">
         <Checkbox color="danger" />
         <span className="text-sm font-medium text-gray-700">Enable debug mode</span>
-      </label>
+      </div>
     </div>
   ),
 };
@@ -142,6 +142,7 @@ export const Controlled: Story = {
         <div className="text-center">
           <p className="text-sm text-gray-600">Checkbox is {checked ? 'checked' : 'unchecked'}</p>
           <button
+            type="button"
             className="mt-2 px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={() => setChecked(!checked)}
           >
@@ -205,27 +206,27 @@ export const IndeterminateExample: Story = {
 
     return (
       <div className="space-y-3 p-4">
-        <label className="flex items-center gap-3 cursor-pointer">
+        <div className="flex items-center gap-3 cursor-pointer">
           <Checkbox
             checked={isAllChecked}
             indeterminate={isIndeterminate}
             onChange={(e) => handleAllChange(e.target.checked)}
           />
           <span className="font-medium text-gray-700">Select All</span>
-        </label>
+        </div>
         <div className="ml-6 space-y-2">
-          <label className="flex items-center gap-3 cursor-pointer">
+          <div className="flex items-center gap-3 cursor-pointer">
             <Checkbox checked={items.item1} onChange={handleItemChange('item1')} />
             <span className="text-gray-700">Item 1</span>
-          </label>
-          <label className="flex items-center gap-3 cursor-pointer">
+          </div>
+          <div className="flex items-center gap-3 cursor-pointer">
             <Checkbox checked={items.item2} onChange={handleItemChange('item2')} />
             <span className="text-gray-700">Item 2</span>
-          </label>
-          <label className="flex items-center gap-3 cursor-pointer">
+          </div>
+          <div className="flex items-center gap-3 cursor-pointer">
             <Checkbox checked={items.item3} onChange={handleItemChange('item3')} />
             <span className="text-gray-700">Item 3</span>
-          </label>
+          </div>
         </div>
         <div className="mt-4 p-3 bg-gray-100 rounded text-sm">
           <strong>Status:</strong> {checkedCount} of {Object.keys(items).length} selected
@@ -257,7 +258,7 @@ export const FormExample: Story = {
       setErrors(newErrors);
 
       if (Object.keys(newErrors).length === 0) {
-        alert('Form submitted successfully!');
+        // Form submitted successfully - in a real app, you would submit the data here
       }
     };
 
@@ -281,8 +282,9 @@ export const FormExample: Story = {
         <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-md">
           <div className="space-y-4">
             <div>
-              <label className="flex items-start gap-3 cursor-pointer">
+              <label htmlFor="form-terms-checkbox" className="flex items-start gap-3 cursor-pointer">
                 <Checkbox
+                  id="form-terms-checkbox"
                   color={errors.terms ? 'danger' : 'primary'}
                   checked={formData.terms}
                   onChange={handleCheckboxChange('terms')}
@@ -296,32 +298,32 @@ export const FormExample: Story = {
               </label>
             </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <div className="flex items-center gap-3 cursor-pointer">
               <Checkbox
                 color="success"
                 checked={formData.newsletter}
                 onChange={handleCheckboxChange('newsletter')}
               />
               <span className="text-sm text-gray-700">Subscribe to newsletter</span>
-            </label>
+            </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <div className="flex items-center gap-3 cursor-pointer">
               <Checkbox
                 color="warning"
                 checked={formData.marketing}
                 onChange={handleCheckboxChange('marketing')}
               />
               <span className="text-sm text-gray-700">Receive marketing emails</span>
-            </label>
+            </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <div className="flex items-center gap-3 cursor-pointer">
               <Checkbox
                 color="secondary"
                 checked={formData.notifications}
                 onChange={handleCheckboxChange('notifications')}
               />
               <span className="text-sm text-gray-700">Enable push notifications</span>
-            </label>
+            </div>
           </div>
 
           <button

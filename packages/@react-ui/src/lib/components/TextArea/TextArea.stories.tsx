@@ -51,6 +51,7 @@ export const Default: Story = {
     helperText: '',
     label: '',
     hiddenLabel: true,
+    maxLength: undefined,
     showCharacterCount: false,
     autoResize: false,
     wrapperClassName: '',
@@ -60,6 +61,16 @@ export const Default: Story = {
 // ⚡ SIMPLE RESIZE TEST - Clean examples that should work
 export const SimpleResizeTest: Story = {
   name: '⚡ Simple Resize Test',
+  args: {
+    error: '',
+    helperText: '',
+    label: '',
+    hiddenLabel: true,
+    maxLength: undefined,
+    showCharacterCount: false,
+    autoResize: false,
+    wrapperClassName: '',
+  },
   render: () => (
     <div className="space-y-6 w-full max-w-3xl">
       <div className="bg-green-100 border border-green-300 rounded p-4">
@@ -84,6 +95,7 @@ Try dragging the corner handle in any direction.`}
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -104,11 +116,12 @@ Horizontal dragging should be disabled."
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
           />
-          <p className="text-xs text-green-600 mt-2 text-center">resizable="vertical"</p>
+          <p className="text-xs text-green-600 mt-2 text-center">resizable=&quot;vertical&quot;</p>
         </div>
 
         <div>
@@ -124,11 +137,12 @@ Vertical dragging should be disabled."
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
           />
-          <p className="text-xs text-orange-600 mt-2 text-center">resizable="horizontal"</p>
+          <p className="text-xs text-orange-600 mt-2 text-center">resizable=&quot;horizontal&quot;</p>
         </div>
       </div>
 
@@ -158,15 +172,25 @@ Vertical dragging should be disabled."
 // 🎯 DRAG & RESIZE DEMO - Shows all resize options
 export const DragAndResize: Story = {
   name: '🎯 Drag & Resize Options',
+  args: {
+    error: '',
+    helperText: '',
+    label: '',
+    hiddenLabel: true,
+    maxLength: undefined,
+    showCharacterCount: false,
+    autoResize: false,
+    wrapperClassName: '',
+  },
   render: () => (
     <div className="grid grid-cols-2 gap-6 w-full max-w-4xl">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Resize Options</h3>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="block text-sm font-medium text-gray-700 mb-2">
             ↕️ Vertical Only (Default)
-          </label>
+          </div>
           <TextArea
             resizable="vertical"
             placeholder="Drag the bottom-right corner vertically"
@@ -176,6 +200,7 @@ export const DragAndResize: Story = {
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -184,7 +209,7 @@ export const DragAndResize: Story = {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">↔️ Horizontal Only</label>
+          <div className="block text-sm font-medium text-gray-700 mb-2">↔️ Horizontal Only</div>
           <TextArea
             resizable="horizontal"
             placeholder="Drag the bottom-right corner horizontally"
@@ -194,6 +219,7 @@ export const DragAndResize: Story = {
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -206,9 +232,9 @@ export const DragAndResize: Story = {
         <h3 className="text-lg font-semibold">More Options</h3>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="block text-sm font-medium text-gray-700 mb-2">
             ↕️↔️ Both Directions
-          </label>
+          </div>
           <TextArea
             resizable
             placeholder="Drag both ways! Maximum flexibility"
@@ -218,6 +244,7 @@ export const DragAndResize: Story = {
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -226,7 +253,7 @@ export const DragAndResize: Story = {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">🚫 Not Resizable</label>
+          <div className="block text-sm font-medium text-gray-700 mb-2">🚫 Not Resizable</div>
           <TextArea
             resizable={false}
             placeholder="Fixed size - no dragging allowed"
@@ -236,6 +263,7 @@ export const DragAndResize: Story = {
             helperText=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -250,6 +278,16 @@ export const DragAndResize: Story = {
 // 📏 CONTAINER FLEXIBILITY DEMO
 export const ContainerFlexibility: Story = {
   name: '📏 Container Flexibility',
+  args: {
+    error: '',
+    helperText: '',
+    label: '',
+    hiddenLabel: true,
+    maxLength: undefined,
+    showCharacterCount: false,
+    autoResize: false,
+    wrapperClassName: '',
+  },
   render: () => (
     <div className="space-y-8 w-full">
       <div>
@@ -266,6 +304,7 @@ export const ContainerFlexibility: Story = {
               error=""
               label=""
               hiddenLabel
+              maxLength={undefined}
               showCharacterCount={false}
               autoResize={false}
               wrapperClassName=""
@@ -281,6 +320,7 @@ export const ContainerFlexibility: Story = {
               error=""
               label=""
               hiddenLabel
+              maxLength={undefined}
               showCharacterCount={false}
               autoResize={false}
               wrapperClassName=""
@@ -296,6 +336,7 @@ export const ContainerFlexibility: Story = {
               error=""
               label=""
               hiddenLabel
+              maxLength={undefined}
               showCharacterCount={false}
               autoResize={false}
               wrapperClassName=""
@@ -321,6 +362,7 @@ Perfect for chat messages, comments, or any growing text content."
             error=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             wrapperClassName=""
           />
@@ -333,15 +375,25 @@ Perfect for chat messages, comments, or any growing text content."
 // 🔄 COMBINATION DEMO - Best of both worlds
 export const CombinedFeatures: Story = {
   name: '🔄 Combined Features',
+  args: {
+    error: '',
+    helperText: '',
+    label: '',
+    hiddenLabel: true,
+    maxLength: undefined,
+    showCharacterCount: false,
+    autoResize: false,
+    wrapperClassName: '',
+  },
   render: () => (
     <div className="space-y-6 w-full max-w-2xl">
       <h3 className="text-lg font-semibold">Flexible + Draggable TextAreas</h3>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="block text-sm font-medium text-gray-700 mb-2">
             Full Width + Both Directions Resizable
-          </label>
+          </div>
           <TextArea
             fullWidth
             resizable
@@ -351,6 +403,7 @@ export const CombinedFeatures: Story = {
             error=""
             label=""
             hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -358,9 +411,9 @@ export const CombinedFeatures: Story = {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="block text-sm font-medium text-gray-700 mb-2">
             Auto-Resize + Full Width + Character Count
-          </label>
+          </div>
           <TextArea
             autoResize
             fullWidth
@@ -377,9 +430,9 @@ export const CombinedFeatures: Story = {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="block text-sm font-medium text-gray-700 mb-2">
             Code Editor Style (Full Width + Horizontal Resize)
-          </label>
+          </div>
           <CodeTextArea
             fullWidth
             resizable="horizontal"
@@ -392,7 +445,8 @@ function example() {
             error=""
             helperText=""
             label=""
-            hiddenLabel={true}
+            hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""
@@ -406,6 +460,16 @@ function example() {
 // 📱 RESPONSIVE CONTAINER DEMO
 export const ResponsiveContainer: Story = {
   name: '📱 Responsive Container',
+  args: {
+    error: '',
+    helperText: '',
+    label: '',
+    hiddenLabel: true,
+    maxLength: undefined,
+    showCharacterCount: false,
+    autoResize: false,
+    wrapperClassName: '',
+  },
   render: () => {
     const [containerSize, setContainerSize] = useState<'small' | 'medium' | 'large'>('medium');
 
@@ -423,6 +487,7 @@ export const ResponsiveContainer: Story = {
             {(['small', 'medium', 'large'] as const).map((size) => (
               <button
                 key={size}
+                type="button"
                 onClick={() => setContainerSize(size)}
                 className={`px-3 py-1 text-sm rounded ${
                   containerSize === size
@@ -450,7 +515,8 @@ export const ResponsiveContainer: Story = {
             rows={4}
             error=""
             label=""
-            hiddenLabel={true}
+            hiddenLabel
+            maxLength={undefined}
             showCharacterCount={false}
             autoResize={false}
             wrapperClassName=""

@@ -180,5 +180,8 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
 );
 
 Box.displayName = 'Box';
+Box.defaultProps = {
+  as: 'div',
+};
 
 export type { BoxBaseProps };

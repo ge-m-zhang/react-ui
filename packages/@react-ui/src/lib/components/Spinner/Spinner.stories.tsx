@@ -37,18 +37,21 @@ export const Default: Story = {
 };
 
 export const Sizes: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="flex items-center gap-8">
       <div className="flex flex-col items-center gap-2">
-        <Spinner size="small" />
+        <Spinner size="small" label="Loading..." />
         <span className="text-sm text-gray-600">Small</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner size="medium" />
+        <Spinner size="medium" label="Loading..." />
         <span className="text-sm text-gray-600">Medium</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner size="large" />
+        <Spinner size="large" label="Loading..." />
         <span className="text-sm text-gray-600">Large</span>
       </div>
     </div>
@@ -56,30 +59,33 @@ export const Sizes: Story = {
 };
 
 export const Colors: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="flex flex-wrap gap-6">
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="primary" />
+        <Spinner color="primary" label="Loading..." />
         <span className="text-sm text-gray-600">Primary</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="secondary" />
+        <Spinner color="secondary" label="Loading..." />
         <span className="text-sm text-gray-600">Secondary</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="success" />
+        <Spinner color="success" label="Loading..." />
         <span className="text-sm text-gray-600">Success</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="danger" />
+        <Spinner color="danger" label="Loading..." />
         <span className="text-sm text-gray-600">Danger</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="warning" />
+        <Spinner color="warning" label="Loading..." />
         <span className="text-sm text-gray-600">Warning</span>
       </div>
       <div className="flex flex-col items-center gap-2 p-4 bg-gray-800 rounded">
-        <Spinner color="white" />
+        <Spinner color="white" label="Loading..." />
         <span className="text-sm text-white">White</span>
       </div>
     </div>
@@ -87,22 +93,25 @@ export const Colors: Story = {
 };
 
 export const WithEmptyColor: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="flex flex-wrap gap-6">
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="primary" emptyColor="primary" />
+        <Spinner color="primary" emptyColor="primary" label="Loading..." />
         <span className="text-sm text-gray-600">With Empty Color</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="success" emptyColor="success" />
+        <Spinner color="success" emptyColor="success" label="Loading..." />
         <span className="text-sm text-gray-600">Success Empty</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="danger" emptyColor="danger" />
+        <Spinner color="danger" emptyColor="danger" label="Loading..." />
         <span className="text-sm text-gray-600">Danger Empty</span>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="primary" emptyColor="transparent" />
+        <Spinner color="primary" emptyColor="transparent" label="Loading..." />
         <span className="text-sm text-gray-600">Transparent Empty</span>
       </div>
     </div>
@@ -110,20 +119,27 @@ export const WithEmptyColor: Story = {
 };
 
 export const WithText: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="flex flex-col gap-6">
-      <SpinnerWithText text="Loading..." position="right" />
-      <SpinnerWithText text="Please wait..." position="left" color="success" />
-      <SpinnerWithText text="Processing..." position="top" color="warning" />
-      <SpinnerWithText text="Saving changes..." position="bottom" color="danger" />
+      <SpinnerWithText text="Loading..." position="right" label="Loading..." />
+      <SpinnerWithText text="Please wait..." position="left" color="success" label="Loading..." />
+      <SpinnerWithText text="Processing..." position="top" color="warning" label="Loading..." />
+      <SpinnerWithText text="Saving changes..." position="bottom" color="danger" label="Loading..." />
     </div>
   ),
 };
 
 export const ButtonSpinners: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="flex flex-col gap-4">
       <button
+        type="button"
         className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
         disabled
       >
@@ -131,6 +147,7 @@ export const ButtonSpinners: Story = {
         Loading...
       </button>
       <button
+        type="button"
         className="inline-flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
         disabled
       >
@@ -138,6 +155,7 @@ export const ButtonSpinners: Story = {
         Saving...
       </button>
       <button
+        type="button"
         className="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
         disabled
       >
@@ -149,13 +167,16 @@ export const ButtonSpinners: Story = {
 };
 
 export const LoadingStates: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="grid grid-cols-2 gap-6 p-6">
       {/* Card Loading */}
       <div className="p-6 bg-white rounded-lg border border-gray-200">
         <div className="flex items-center justify-center h-32">
           <div className="text-center">
-            <Spinner size="large" color="primary" />
+            <Spinner size="large" color="primary" label="Loading..." />
             <p className="mt-4 text-sm text-gray-600">Loading content...</p>
           </div>
         </div>
@@ -168,7 +189,7 @@ export const LoadingStates: Story = {
           <div className="flex items-center justify-between">
             <span>Name:</span>
             <span className="flex items-center gap-2">
-              <Spinner size="small" />
+              <Spinner size="small" label="Loading..." />
               Loading...
             </span>
           </div>
@@ -190,10 +211,11 @@ export const LoadingStates: Story = {
             disabled
           />
           <button
+            type="button"
             className="w-full flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50"
             disabled
           >
-            <Spinner size="small" color="white" className="mr-2" />
+            <Spinner size="small" color="white" className="mr-2" label="Loading..." />
             Submitting...
           </button>
         </div>
@@ -202,7 +224,7 @@ export const LoadingStates: Story = {
       {/* Page Loading */}
       <div className="p-6 bg-gray-50 rounded-lg">
         <div className="flex flex-col items-center justify-center h-32">
-          <Spinner size="large" color="primary" emptyColor="primary" />
+          <Spinner size="large" color="primary" emptyColor="primary" label="Loading..." />
           <p className="mt-4 text-sm text-gray-600">Loading page...</p>
         </div>
       </div>
@@ -211,6 +233,9 @@ export const LoadingStates: Story = {
 };
 
 export const CustomLabels: Story = {
+  args: {
+    label: 'Loading...',
+  },
   render: () => (
     <div className="flex flex-col gap-4">
       <Spinner label="Fetching user data" />

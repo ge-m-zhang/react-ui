@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TextField, EmailField, PasswordField, NumberField, SearchField } from './TextField';
 import { useState } from 'react';
+import { TextField, EmailField, PasswordField, NumberField, SearchField } from './TextField';
 
 const meta = {
   title: 'components/textfield',
@@ -44,15 +44,15 @@ export const Sizes: Story = {
   render: () => (
     <div className="space-y-4 w-full max-w-md">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Small</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Small</div>
         <TextField size="small" placeholder="Small input" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Medium</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Medium</div>
         <TextField size="medium" placeholder="Medium input" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Large</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Large</div>
         <TextField size="large" placeholder="Large input" />
       </div>
     </div>
@@ -63,11 +63,11 @@ export const States: Story = {
   render: () => (
     <div className="space-y-4 w-full max-w-md">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Default</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Default</div>
         <TextField placeholder="Default state" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Success</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Success</div>
         <TextField
           state="success"
           placeholder="Success state"
@@ -75,11 +75,11 @@ export const States: Story = {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Error</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Error</div>
         <TextField placeholder="Error state" error="This field is required" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Disabled</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Disabled</div>
         <TextField disabled placeholder="Disabled input" value="This input is disabled" />
       </div>
     </div>
@@ -90,11 +90,11 @@ export const WithSymbols: Story = {
   render: () => (
     <div className="space-y-4 w-full max-w-md">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Text Symbol</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Text Symbol</div>
         <TextField symbol="$" placeholder="0.00" type="number" helperText="Enter amount in USD" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Icon Symbol</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Icon Symbol</div>
         <TextField
           symbol={
             <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
@@ -109,7 +109,7 @@ export const WithSymbols: Story = {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Emoji Symbol</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Emoji Symbol</div>
         <TextField symbol="📧" type="email" placeholder="your@email.com" />
       </div>
     </div>
@@ -145,31 +145,31 @@ export const InputTypes: Story = {
   render: () => (
     <div className="space-y-4 w-full max-w-md">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Text</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Text</div>
         <TextField type="text" placeholder="Text input" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Email</div>
         <TextField type="email" placeholder="email@example.com" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Password</div>
         <TextField type="password" placeholder="Enter password" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Number</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Number</div>
         <TextField type="number" placeholder="123" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Search</div>
         <TextField type="search" placeholder="Search..." />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Tel</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Tel</div>
         <TextField type="tel" placeholder="+1 (555) 123-4567" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">URL</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">URL</div>
         <TextField type="url" placeholder="https://example.com" />
       </div>
     </div>
@@ -180,19 +180,19 @@ export const ConvenienceComponents: Story = {
   render: () => (
     <div className="space-y-6 w-full max-w-md">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Email Field</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Email Field</div>
         <EmailField placeholder="your@email.com" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Password Field</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Password Field</div>
         <PasswordField placeholder="Enter password" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Number Field</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Number Field</div>
         <NumberField placeholder="Enter number" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Search Field</label>
+        <div className="block text-sm font-medium text-gray-700 mb-2">Search Field</div>
         <SearchField placeholder="Search..." />
       </div>
     </div>
@@ -220,7 +220,7 @@ export const Interactive: Story = {
     return (
       <div className="space-y-6 w-full max-w-md">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Controlled Input</label>
+          <div className="block text-sm font-medium text-gray-700 mb-2">Controlled Input</div>
           <TextField
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -230,9 +230,9 @@ export const Interactive: Story = {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="block text-sm font-medium text-gray-700 mb-2">
             Password with Toggle
-          </label>
+          </div>
           <div className="relative">
             <TextField
               type={showPassword ? 'text' : 'password'}
@@ -306,7 +306,7 @@ export const FormExample: Story = {
       setErrors(newErrors);
 
       if (Object.keys(newErrors).length === 0) {
-        alert('Form submitted successfully!');
+        // Form submitted successfully - in a real app, you would submit the data here
       }
     };
 

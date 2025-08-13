@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Switch } from './Switch';
 import { useState } from 'react';
+import { Switch } from './Switch';
 
 const meta = {
   title: 'components/switch',
@@ -114,6 +114,7 @@ export const Controlled: Story = {
         <div className="text-center">
           <p className="text-sm text-gray-600">Switch is {checked ? 'ON' : 'OFF'}</p>
           <button
+            type="button"
             className="mt-2 px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={() => setChecked(!checked)}
           >
@@ -128,18 +129,18 @@ export const Controlled: Story = {
 export const WithLabels: Story = {
   render: () => (
     <div className="flex flex-col gap-4 p-4">
-      <label className="flex items-center gap-3 cursor-pointer">
+      <div className="flex items-center gap-3 cursor-pointer">
         <Switch defaultChecked />
         <span className="text-sm font-medium text-gray-700">Enable notifications</span>
-      </label>
-      <label className="flex items-center gap-3 cursor-pointer">
+      </div>
+      <div className="flex items-center gap-3 cursor-pointer">
         <Switch color="success" defaultChecked />
         <span className="text-sm font-medium text-gray-700">Auto-save changes</span>
-      </label>
-      <label className="flex items-center gap-3 cursor-pointer">
+      </div>
+      <div className="flex items-center gap-3 cursor-pointer">
         <Switch color="danger" />
         <span className="text-sm font-medium text-gray-700">Debug mode</span>
-      </label>
+      </div>
     </div>
   ),
 };
