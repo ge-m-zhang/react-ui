@@ -62,15 +62,16 @@ jobs:
       - name: Bump versions
         id: version
         run: |
-          # Bump UI package version
+          # Update UI package version using npm directly
           cd packages/@react-ui
-          NEW_VERSION=$(pnpm version ${{ inputs.version }} --no-git-tag-version)
-          echo "ui_version=${NEW_VERSION#v}" >> $GITHUB_OUTPUT
+          npm version ${{ inputs.version }} --no-git-tag-version --allow-same-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "ui_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           cd ../..
 
-          # Bump root package version
-          ROOT_VERSION=$(pnpm version ${{ inputs.version }} --no-git-tag-version)
-          echo "root_version=${ROOT_VERSION#v}" >> $GITHUB_OUTPUT
+          # Update root package version to match
+          npm pkg set version=$NEW_VERSION
+          echo "root_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit and tag
         run: |
