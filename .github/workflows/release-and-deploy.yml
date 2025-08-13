@@ -69,13 +69,14 @@ jobs:
           echo "ui_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           cd ../..
 
-          # Update root package version using simple node script
+          # Update root package version using the captured NEW_VERSION variable
+          export NEW_VERSION
           node -e "
             const fs = require('fs');
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            pkg.version = '$NEW_VERSION';
+            pkg.version = process.env.NEW_VERSION;
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-          "
+          " 
           echo "root_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit and tag
@@ -85,7 +86,7 @@ jobs:
           git tag "v${{ steps.version.outputs.ui_version }}"
 
       - name: Validate publish (dry-run)
-        run: pnpm --filter @gmzh/react-ui publish --dry-run
+        run: pnpm --filter @gmzh/react-ui publish --dry-run --no-git-checks
 
       - name: Publish to npm
         run: pnpm --filter @gmzh/react-ui publish --no-git-checks
