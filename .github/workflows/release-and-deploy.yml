@@ -83,12 +83,13 @@ jobs:
       - name: Validate publish (dry-run)
         run: |
           cd packages/@react-ui
+          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
           pnpm publish --dry-run --no-git-checks
 
       - name: Publish to npm
         run: |
           cd packages/@react-ui
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
           pnpm publish --no-git-checks
 
       - name: Wait for npm propagation
