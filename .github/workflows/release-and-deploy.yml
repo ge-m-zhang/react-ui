@@ -69,8 +69,15 @@ jobs:
 
       - name: Commit and tag
         run: |
-          git add .
-          git commit -m "chore: release @gmzh/react-ui v${{ steps.version.outputs.ui_version }}"
+          # Check if there are any changes to commit
+          if git diff --staged --quiet && git diff --quiet; then
+            echo "No changes to commit, skipping commit step"
+          else
+            git add .
+            git commit -m "chore: release @gmzh/react-ui v${{ steps.version.outputs.ui_version }}"
+          fi
+
+          # Always create the tag (even if no commit was made)
           git tag "v${{ steps.version.outputs.ui_version }}"
 
       - name: Validate publish (dry-run)
@@ -81,9 +88,8 @@ jobs:
       - name: Publish to npm
         run: |
           cd packages/@react-ui
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           pnpm publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Wait for npm propagation
         run: |

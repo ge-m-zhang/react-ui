@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof TempTest>;
 
 export const Default: Story = {
-  args: { label: 'TempTest: default' },
+  args: { label: 'TempTest: default, this is to test the workflow!' },
 };
 
 export const CustomText: Story = {
