@@ -1,6 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import {
-  isProduction,
   isDevelopment,
   getStoriesPath,
   getPackageAlias,
