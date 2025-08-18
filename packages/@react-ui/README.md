@@ -162,27 +162,19 @@ function Dashboard() {
 
 ### Form Controls
 
-Button, TextField, TextArea, Input, Select, Checkbox, Radio, Switch
+Button, Checkbox, Switch, TextArea, TextField
 
 ### Layout & Structure
 
-Box, Flex, Container, Header, Footer, Sidebar, Divider, Typography
+Box, Flex, Typography
 
 ### Navigation
 
-Tabs, Breadcrumb, Menu, Pagination
+Tabs
 
 ### Feedback & Status
 
-Alert, Badge, Toast, ToastWrapper, Spinner, Progress, Tooltip
-
-### Overlays & Modals
-
-Modal, Dialog, Drawer, Popover, Popper, Portal
-
-### Data Display
-
-Card, Table, List, Heading
+Alert, Badge, Spinner, Tooltip
 
 ### System
 

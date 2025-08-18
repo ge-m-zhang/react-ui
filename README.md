@@ -132,35 +132,27 @@ pnpm --filter storybook-react-ui dev  # Start Storybook
 pnpm --filter storybook-react-ui build # Build static site
 ```
 
-## 📋 Component Categories
+## 📋 Available Components
 
 ### Form Controls
 
-- Button, TextField, TextArea, Select, Checkbox, Radio, Switch
+Button, Checkbox, Switch, TextArea, TextField
 
 ### Layout & Structure
 
-- Box, Flex, Container, Divider, Header, Footer, Sidebar
+Box, Flex, Typography
 
 ### Navigation
 
-- Tabs, Breadcrumb, Menu, Pagination
+Tabs
 
 ### Feedback & Status
 
-- Alert, Badge, Toast, Spinner, Progress, Tooltip
-
-### Overlays & Modals
-
-- Modal, Dialog, Drawer, Popover, Popper, Portal
-
-### Data Display
-
-- Typography, Heading, Table, Card, List
+Alert, Badge, Spinner, Tooltip
 
 ### System
 
-- ThemeProvider (Dark/Light mode support)
+ThemeProvider
 
 ## 🎨 Design System
 
