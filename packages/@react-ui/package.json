@@ -1,6 +1,7 @@
 {
   "name": "@gmzh/react-ui",
-  "version": "0.2.4",
+  "license": "MIT",    
+  "version": "0.2.5",
   "description": "A modern React UI component library with TypeScript",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

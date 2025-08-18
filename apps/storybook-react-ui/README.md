@@ -55,3 +55,9 @@ When adding new components:
 1. Create component files in `@react-ui/src/lib/components`
 2. Add corresponding stories in the component directory
 3. Update the component showcase in `src/Component.tsx` if needed
+
+## 📄 License
+
+MIT License
+
+This Storybook application is part of the React UI Monorepo and is licensed under the MIT License. See the main repository for full license details.
