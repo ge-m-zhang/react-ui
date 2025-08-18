@@ -1,17 +1,14 @@
 import type { StorybookConfig } from '@storybook/react-vite';
-import path from 'path';
+import {
+  isDevelopment,
+  getStoriesPath,
+  getPackageAlias,
+} from './environment.mts';
 
 // !https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated
 
 const config: StorybookConfig = {
-  stories: [
-    // consume stories from the installed @gmzh/react-ui package
-    `${path.resolve(
-      __dirname,
-      '../node_modules/@gmzh/react-ui/dist/lib/components',
-    )}/**/*.stories.@(js|jsx|ts|tsx|mjs|cjs)`,
-    // No local stories; only render package stories
-  ],
+  stories: [getStoriesPath()],
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-links',
@@ -26,7 +23,25 @@ const config: StorybookConfig = {
   },
   viteFinal: async (config) => {
     const { mergeConfig } = await import('vite');
-    return mergeConfig(config, {});
+
+    return mergeConfig(config, {
+      resolve: {
+        alias: getPackageAlias(),
+      },
+      // Allow file system access to the packages directory in development
+      server: isDevelopment
+        ? {
+            fs: {
+              allow: ['..', '../..', '../../packages'],
+            },
+          }
+        : undefined,
+      // Include workspace packages in dependency optimization for development
+      optimizeDeps: {
+        include: ['react', 'react-dom'],
+        exclude: isDevelopment ? ['@gmzh/react-ui'] : [],
+      },
+    });
   },
 };
 
