@@ -5,14 +5,16 @@
   "author": "GMZhang",
   "license": "MIT",
   "scripts": {
-    "dev": "storybook dev -p 6006",
-    "build": "storybook build --output-dir dist",
+    "dev": "NODE_ENV=development storybook dev -p 6006",
+    "dev:prod": "NODE_ENV=production storybook dev -p 6006",
+    "build": "NODE_ENV=production storybook build --output-dir dist",
+    "build:dev": "NODE_ENV=development storybook build --output-dir dist",
     "lint": "eslint . --ext .ts,.tsx",
     "preview": "storybook preview",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@gmzh/react-ui": "latest",
+    "@gmzh/react-ui": "0.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
