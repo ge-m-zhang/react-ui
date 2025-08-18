@@ -3,6 +3,7 @@
   "version": "0.2.6",
   "private": true,
   "author": "GMZhang",
+  "license": "MIT",
   "scripts": {
     "start": "turbo run start --parallel",
     "start:dev": "turbo run start:dev --parallel",
