@@ -128,7 +128,6 @@ export const selectOptionVariants = cva(
     'cursor-pointer',
     'transition-colors',
     'duration-150',
-    'hover:bg-gray-100',
     'focus:bg-gray-100',
     'focus:outline-none',
   ],
@@ -139,8 +138,8 @@ export const selectOptionVariants = cva(
         false: 'text-gray-900',
       },
       disabled: {
-        true: 'text-gray-400 cursor-not-allowed hover:bg-transparent',
-        false: '',
+        true: 'text-gray-400 cursor-not-allowed',
+        false: 'hover:bg-gray-100',
       },
     },
     defaultVariants: {

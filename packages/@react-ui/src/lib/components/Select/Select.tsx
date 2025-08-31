@@ -130,11 +130,17 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     // Navigation keys that should be handled by the combobox
     const NAVIGATION_KEYS = [
       'Enter',
-      ' ',
+      'Space',
       'ArrowDown',
       'ArrowUp',
       'Escape',
     ] as const;
+
+    // Type guard to check if a key is a navigation key
+    const isNavigationKey = (
+      key: string,
+    ): key is (typeof NAVIGATION_KEYS)[number] =>
+      NAVIGATION_KEYS.includes(key as (typeof NAVIGATION_KEYS)[number]);
 
     // Determine state based on error/success props
     let state: SelectState = 'default';
@@ -158,6 +164,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     // Get display value - this is the key fix
     const displayValue = selectedOption?.label ?? placeholder;
+
+    // Memoized function to get selected option index - O(1) performance optimization
+    const selectedOptionIndex = useMemo(() => {
+      if (!value) return 0;
+      const index = options.findIndex((opt) => opt.value === value);
+      return index >= 0 ? index : 0;
+    }, [value, options]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -184,13 +197,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
         switch (key) {
           case 'Enter':
-          case ' ':
+          case 'Space':
             if (!isOpen) {
               setIsOpen(true);
-              // O(n) lookup here is acceptable since it's only for initial focus positioning
-              setFocusedIndex(
-                value ? options.findIndex((opt) => opt.value === value) : 0,
-              );
+              // Use memoized selected option index for O(1) performance
+              setFocusedIndex(selectedOptionIndex);
             } else if (focusedIndex >= 0) {
               const focusedOption = options[focusedIndex];
               if (focusedOption && !focusedOption.disabled) {
@@ -207,10 +218,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           case 'ArrowDown':
             if (!isOpen) {
               setIsOpen(true);
-              // O(n) lookup here is acceptable since it's only for initial focus positioning
-              setFocusedIndex(
-                value ? options.findIndex((opt) => opt.value === value) : 0,
-              );
+              // Use memoized selected option index for O(1) performance
+              setFocusedIndex(selectedOptionIndex);
             } else {
               const nextIndex = Math.min(focusedIndex + 1, options.length - 1);
               setFocusedIndex(nextIndex);
@@ -222,10 +231,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           case 'ArrowUp':
             if (!isOpen) {
               setIsOpen(true);
-              // O(n) lookup here is acceptable since it's only for initial focus positioning
-              setFocusedIndex(
-                value ? options.findIndex((opt) => opt.value === value) : 0,
-              );
+              // Use memoized selected option index for O(1) performance
+              setFocusedIndex(selectedOptionIndex);
             } else {
               const prevIndex = Math.max(focusedIndex - 1, 0);
               setFocusedIndex(prevIndex);
@@ -239,15 +246,21 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             break;
         }
       },
-      [disabled, isOpen, value, options, onChange, focusedIndex],
+      [disabled, isOpen, selectedOptionIndex, options, onChange, focusedIndex],
     );
 
     // Main keyboard handler for the combobox
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent) => {
-        if ((NAVIGATION_KEYS as readonly string[]).includes(event.key)) {
+        // Map actual event key to our descriptive key names
+        const keyMap: Record<string, string> = {
+          ' ': 'Space',
+        };
+        const mappedKey = keyMap[event.key] || event.key;
+
+        if (isNavigationKey(mappedKey)) {
           event.preventDefault();
-          handleNavigationKey(event.key);
+          handleNavigationKey(mappedKey);
         }
       },
       [handleNavigationKey],
@@ -267,13 +280,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       if (!disabled) {
         setIsOpen(!isOpen);
         if (!isOpen) {
-          // O(n) lookup here is acceptable since it's only for initial focus positioning
-          setFocusedIndex(
-            value ? options.findIndex((opt) => opt.value === value) : 0,
-          );
+          // Use memoized selected option index for O(1) performance
+          setFocusedIndex(selectedOptionIndex);
         }
       }
-    }, [disabled, isOpen, value, options]);
+    }, [disabled, isOpen, selectedOptionIndex]);
 
     const handleMouseEnter = useCallback((e: React.MouseEvent) => {
       const index = parseInt(
@@ -364,12 +375,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 onClick={handleOptionClickEvent}
                 onMouseEnter={handleMouseEnter}
                 onKeyDown={(e) => {
+                  // Map actual event key to our descriptive key names
+                  const keyMap: Record<string, string> = {
+                    ' ': 'Space',
+                  };
+                  const mappedKey = keyMap[e.key] || e.key;
+
                   // Delegate navigation keys to the shared handler
-                  if ((NAVIGATION_KEYS as readonly string[]).includes(e.key)) {
+                  if (isNavigationKey(mappedKey)) {
                     e.preventDefault();
                     e.stopPropagation();
                     // Use the shared navigation logic instead of synthetic events
-                    handleNavigationKey(e.key);
+                    handleNavigationKey(mappedKey);
                   }
                 }}
               >
