@@ -340,11 +340,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const handleMouseEnter = useCallback(
       (e: React.MouseEvent) => {
         const indexStr = (e.currentTarget as HTMLElement).dataset.index;
-        if (typeof indexStr === 'string' && /^\d+$/.test(indexStr)) {
-          const index = parseInt(indexStr, 10);
-          if (index < options.length) {
-            setFocusedIndex(index);
-          }
+        const index = parseInt(indexStr ?? '', 10);
+        if (!Number.isNaN(index) && index >= 0 && index < options.length) {
+          setFocusedIndex(index);
         }
       },
       [options.length],
@@ -389,10 +387,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             aria-haspopup='listbox'
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
-            aria-describedby={
-              [ariaDescribedBy, helperTextId].filter(Boolean).join(' ') ||
-              undefined
-            }
+            aria-describedby={[ariaDescribedBy, helperTextId]
+              .filter(Boolean)
+              .join(' ')}
             tabIndex={disabled ? -1 : 0}
             className={cn(
               selectVariants({ size, state, fullWidth, disabled }),
