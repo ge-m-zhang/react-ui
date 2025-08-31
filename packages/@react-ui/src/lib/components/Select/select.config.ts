@@ -114,6 +114,14 @@ export const selectDropdownVariants = cva(
 
 export const selectOptionVariants = cva(
   [
+    // Button reset styles for accessibility compliance
+    // These ensure button elements behave like the original div options
+    'w-full',
+    'text-left',
+    'border-none',
+    'bg-transparent',
+    'p-0',
+    // Original option styles
     'px-3',
     'py-2',
     'text-sm',

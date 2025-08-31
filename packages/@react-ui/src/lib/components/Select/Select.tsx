@@ -126,6 +126,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const dropdownId = `${id}-dropdown`;
     const helperTextId = helperText ? `${id}-helper` : undefined;
 
+    // Define navigation keys once at the component level
+    // Navigation keys that should be handled by the combobox
+    const NAVIGATION_KEYS = [
+      'Enter',
+      ' ',
+      'ArrowDown',
+      'ArrowUp',
+      'Escape',
+    ] as const;
+
     // Determine state based on error/success props
     let state: SelectState = 'default';
     if (error) {
@@ -167,14 +177,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     }, []);
 
     // Handle all keyboard navigation for the combobox - Wrapped in useCallback to prevent unnecessary re-renders
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent) => {
+    // Shared keyboard navigation logic that can be called from different contexts
+    const handleNavigationKey = useCallback(
+      (key: string) => {
         if (disabled) return;
 
-        switch (event.key) {
+        switch (key) {
           case 'Enter':
           case ' ':
-            event.preventDefault();
             if (!isOpen) {
               setIsOpen(true);
               // O(n) lookup here is acceptable since it's only for initial focus positioning
@@ -195,7 +205,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             setFocusedIndex(-1);
             break;
           case 'ArrowDown':
-            event.preventDefault();
             if (!isOpen) {
               setIsOpen(true);
               // O(n) lookup here is acceptable since it's only for initial focus positioning
@@ -211,7 +220,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             }
             break;
           case 'ArrowUp':
-            event.preventDefault();
             if (!isOpen) {
               setIsOpen(true);
               // O(n) lookup here is acceptable since it's only for initial focus positioning
@@ -232,6 +240,17 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         }
       },
       [disabled, isOpen, value, options, onChange, focusedIndex],
+    );
+
+    // Main keyboard handler for the combobox
+    const handleKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        if ((NAVIGATION_KEYS as readonly string[]).includes(event.key)) {
+          event.preventDefault();
+          handleNavigationKey(event.key);
+        }
+      },
+      [handleNavigationKey],
     );
 
     const handleOptionClick = useCallback(
@@ -341,28 +360,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                     disabled: option.disabled,
                   }),
                   focusedIndex === index && !option.disabled && 'bg-gray-100',
-                  // Ensure button styling is consistent with div styling
-                  'w-full text-left border-none bg-transparent p-0 cursor-pointer',
-                  option.disabled && 'cursor-not-allowed',
                 )}
                 onClick={handleOptionClickEvent}
                 onMouseEnter={handleMouseEnter}
                 onKeyDown={(e) => {
-                  // Prevent default button behavior and let parent handle navigation
-                  if (
-                    ['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Escape'].includes(
-                      e.key,
-                    )
-                  ) {
+                  // Delegate navigation keys to the shared handler
+                  if ((NAVIGATION_KEYS as readonly string[]).includes(e.key)) {
                     e.preventDefault();
                     e.stopPropagation();
-                    // Forward the event to the parent combobox for consistent navigation
-                    const syntheticEvent = {
-                      ...e,
-                      currentTarget: selectRef.current,
-                      target: selectRef.current,
-                    } as React.KeyboardEvent;
-                    handleKeyDown(syntheticEvent);
+                    // Use the shared navigation logic instead of synthetic events
+                    handleNavigationKey(e.key);
                   }
                 }}
               >
