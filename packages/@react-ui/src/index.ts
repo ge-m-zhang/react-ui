@@ -6,6 +6,7 @@ export { Badge } from './lib/components/Badge/Badge';
 export { Box } from './lib/components/Box/Box';
 export { Checkbox } from './lib/components/Checkbox/Checkbox';
 export { Flex } from './lib/components/Flex/Flex';
+export { Select } from './lib/components/Select/Select';
 
 export { Spinner } from './lib/components/Spinner/Spinner';
 export { Switch } from './lib/components/Switch/Switch';
