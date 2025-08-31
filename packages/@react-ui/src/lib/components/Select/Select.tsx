@@ -18,16 +18,17 @@ import {
  *
  * A customizable select dropdown component with accessibility support.
  * Built with accessibility in mind and styled with Tailwind CSS.
+ * Follows proper ARIA combobox patterns with centralized keyboard navigation.
  *
  * @features
  * - Multiple sizes: small, medium, large
  * - Error and success states
  * - Helper text support
  * - Full width option
- * - Accessible with proper ARIA attributes
+ * - Accessible with proper ARIA combobox attributes
  * - Disabled state styling
  * - Custom placeholder support
- * - Keyboard navigation
+ * - Centralized keyboard navigation (Enter, Space, Arrow keys, Escape)
  * - Performance optimized with useCallback for event handlers
  */
 
@@ -145,7 +146,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Handle keyboard navigation - Wrapped in useCallback to prevent unnecessary re-renders
+    // Handle all keyboard navigation for the combobox - Wrapped in useCallback to prevent unnecessary re-renders
     const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
       if (disabled) return;
 
@@ -221,17 +222,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       }
     }, [disabled, isOpen, value, options]);
 
-    const handleOptionKeyDown = useCallback((e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const optionValue = (e.currentTarget as HTMLElement).dataset.value;
-        const option = options.find(opt => opt.value === optionValue);
-        if (option) {
-          handleOptionClick(option);
-        }
-      }
-    }, [handleOptionClick, options]);
-
     const handleMouseEnter = useCallback((e: React.MouseEvent) => {
       const index = parseInt((e.currentTarget as HTMLElement).dataset.index ?? '0', 10);
       setFocusedIndex(index);
@@ -291,13 +281,15 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             aria-label='Options'
           >
             {options.map((option, index) => (
+              // Following proper ARIA combobox pattern: options are not individually focusable,
+              // the parent combobox handles all keyboard navigation
+              // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus
               <div
                 key={option.value}
                 ref={(el) => {
                   optionRefs.current[index] = el;
                 }}
                 role='option'
-                tabIndex={option.disabled ? -1 : 0}
                 aria-selected={option.value === value}
                 data-value={option.value}
                 data-index={index}
@@ -309,7 +301,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                   focusedIndex === index && !option.disabled && 'bg-gray-100',
                 )}
                 onClick={handleOptionClickEvent}
-                onKeyDown={handleOptionKeyDown}
                 onMouseEnter={handleMouseEnter}
               >
                 {option.label}
