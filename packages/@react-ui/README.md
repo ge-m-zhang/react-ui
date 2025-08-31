@@ -33,9 +33,9 @@ Perfect for new projects or if you don't have Tailwind CSS:
 ```tsx
 // 1. Import styles once at your app entry point
 import '@gmzh/react-ui/styles';
-import { ThemeProvider, Button, TextField } from '@gmzh/react-ui';
+import { ThemeProvider, Button, TextField, Select } from '@gmzh/react-ui';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider defaultTheme='system'>
       <div className='p-6'>
@@ -46,7 +46,7 @@ function App() {
       </div>
     </ThemeProvider>
   );
-}
+};
 ```
 
 **What you get:**
@@ -82,9 +82,9 @@ export default config;
 ```tsx
 // Import styles and use with your existing Tailwind classes
 import '@gmzh/react-ui/styles';
-import { ThemeProvider, Button, TextField } from '@gmzh/react-ui';
+import { ThemeProvider, Button, TextField, Select } from '@gmzh/react-ui';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider defaultTheme='system'>
       <div className='min-h-screen bg-gray-50 dark:bg-gray-900 p-6'>
@@ -99,7 +99,7 @@ function App() {
       </div>
     </ThemeProvider>
   );
-}
+};
 ```
 
 ## 🚀 Quick Examples
@@ -107,30 +107,47 @@ function App() {
 ### Basic Usage
 
 ```tsx
-import { ThemeProvider, Button, TextField, Alert } from '@gmzh/react-ui';
+import { ThemeProvider, Button, TextField, Select, Alert } from '@gmzh/react-ui';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider>
       <div className='p-6 space-y-4'>
         <Button variant='contained'>Click me</Button>
         <TextField label='Name' placeholder='Enter your name' />
+        <Select 
+          label='Status' 
+          placeholder='Select status'
+          options={[
+            { value: 'pending', label: 'Pending' },
+            { value: 'completed', label: 'Completed' }
+          ]} 
+        />
         <Alert variant='success'>Success message!</Alert>
       </div>
     </ThemeProvider>
   );
-}
+};
 ```
 
 ### Simple Form
 
 ```tsx
-import { TextField, Button, Checkbox } from '@gmzh/react-ui';
+import { TextField, Select, Button, Checkbox } from '@gmzh/react-ui';
 
-function ContactForm() {
+const ContactForm = () => {
   return (
     <form className='space-y-4'>
       <TextField label='Email' type='email' required />
+      <Select 
+        label='Priority' 
+        placeholder='Select priority'
+        options={[
+          { value: 'low', label: 'Low' },
+          { value: 'medium', label: 'Medium' },
+          { value: 'high', label: 'High' }
+        ]} 
+      />
       <TextField label='Message' multiline rows={3} />
       <Checkbox>I agree to the terms</Checkbox>
       <Button type='submit' variant='contained'>
@@ -138,7 +155,7 @@ function ContactForm() {
       </Button>
     </form>
   );
-}
+};
 ```
 
 ### Layout Example
@@ -146,7 +163,7 @@ function ContactForm() {
 ```tsx
 import { Box, Typography, Card } from '@gmzh/react-ui';
 
-function Dashboard() {
+const Dashboard = () => {
   return (
     <Box padding='lg'>
       <Typography variant='h2'>Dashboard</Typography>
@@ -155,14 +172,14 @@ function Dashboard() {
       </Card>
     </Box>
   );
-}
+};
 ```
 
 ## 📋 Available Components
 
 ### Form Controls
 
-Button, Checkbox, Switch, TextArea, TextField
+Button, Checkbox, Select, Switch, TextArea, TextField
 
 ### Layout & Structure
 
@@ -188,19 +205,19 @@ Automatic dark mode with system preference detection:
 import { ThemeProvider, useTheme } from '@gmzh/react-ui';
 
 // Setup (components auto-support dark mode)
-function App() {
+const App = () => {
   return (
     <ThemeProvider defaultTheme='system'>
       <YourComponents />
     </ThemeProvider>
   );
-}
+};
 
 // Theme toggle
-function ThemeToggle() {
+const ThemeToggle = () => {
   const { toggleTheme } = useTheme();
   return <Button onClick={toggleTheme}>Toggle Theme</Button>;
-}
+};
 ```
 
 **Options:** `light` | `dark` | `system` (default)
