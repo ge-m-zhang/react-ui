@@ -270,6 +270,23 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       [handleNavigationKey],
     );
 
+    // Reusable keyboard handler for option elements
+    const handleOptionKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        // Map actual event key to our descriptive key names
+        const mappedKey = KEY_MAP[event.key] || event.key;
+
+        // Delegate navigation keys to the shared handler
+        if (isNavigationKey(mappedKey)) {
+          event.preventDefault();
+          event.stopPropagation();
+          // Use the shared navigation logic instead of synthetic events
+          handleNavigationKey(mappedKey);
+        }
+      },
+      [handleNavigationKey],
+    );
+
     const handleOptionClick = useCallback(
       (option: SelectOption) => {
         if (option.disabled) return;
@@ -380,18 +397,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 )}
                 onClick={handleOptionClickEvent}
                 onMouseEnter={handleMouseEnter}
-                onKeyDown={(e) => {
-                  // Map actual event key to our descriptive key names
-                  const mappedKey = KEY_MAP[e.key] || e.key;
-
-                  // Delegate navigation keys to the shared handler
-                  if (isNavigationKey(mappedKey)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // Use the shared navigation logic instead of synthetic events
-                    handleNavigationKey(mappedKey);
-                  }
-                }}
+                onKeyDown={handleOptionKeyDown}
               >
                 {option.label}
               </button>
