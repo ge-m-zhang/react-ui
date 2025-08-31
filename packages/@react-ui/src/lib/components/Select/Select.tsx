@@ -1,6 +1,14 @@
 import { type VariantProps } from 'class-variance-authority';
 import type React from 'react';
-import { forwardRef, useId, useState, useRef, useEffect, useCallback } from 'react';
+import {
+  forwardRef,
+  useId,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 
 import { cn } from '../../tools/classNames';
 import {
@@ -126,8 +134,20 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       state = 'success';
     }
 
-    // Find selected option
-    const selectedOption = options.find((option) => option.value === value);
+    // Create a map for O(1) option lookups - performance optimization for large lists
+    const optionsMap = useMemo(
+      () => new Map(options.map((option) => [option.value, option])),
+      [options],
+    );
+
+    // Find selected option - O(1) lookup instead of O(n)
+    const selectedOption = useMemo(
+      () => (value ? optionsMap.get(value) : undefined),
+      [optionsMap, value],
+    );
+
+    // Get display value - this is the key fix
+    const displayValue = selectedOption?.label ?? placeholder;
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -147,74 +167,88 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     }, []);
 
     // Handle all keyboard navigation for the combobox - Wrapped in useCallback to prevent unnecessary re-renders
-    const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-      if (disabled) return;
+    const handleKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        if (disabled) return;
 
-      switch (event.key) {
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            setFocusedIndex(
-              value ? options.findIndex((opt) => opt.value === value) : 0,
-            );
-          } else if (focusedIndex >= 0) {
-            const focusedOption = options[focusedIndex];
-            if (focusedOption && !focusedOption.disabled) {
-              onChange?.(focusedOption.value);
-              setIsOpen(false);
-              setFocusedIndex(-1);
+        switch (event.key) {
+          case 'Enter':
+          case ' ':
+            event.preventDefault();
+            if (!isOpen) {
+              setIsOpen(true);
+              // O(n) lookup here is acceptable since it's only for initial focus positioning
+              setFocusedIndex(
+                value ? options.findIndex((opt) => opt.value === value) : 0,
+              );
+            } else if (focusedIndex >= 0) {
+              const focusedOption = options[focusedIndex];
+              if (focusedOption && !focusedOption.disabled) {
+                onChange?.(focusedOption.value);
+                setIsOpen(false);
+                setFocusedIndex(-1);
+              }
             }
-          }
-          break;
-        case 'Escape':
-          setIsOpen(false);
-          setFocusedIndex(-1);
-          break;
-        case 'ArrowDown':
-          event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            setFocusedIndex(
-              value ? options.findIndex((opt) => opt.value === value) : 0,
-            );
-          } else {
-            const nextIndex = Math.min(focusedIndex + 1, options.length - 1);
-            setFocusedIndex(nextIndex);
-            optionRefs.current[nextIndex]?.scrollIntoView({ block: 'nearest' });
-          }
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            setFocusedIndex(
-              value ? options.findIndex((opt) => opt.value === value) : 0,
-            );
-          } else {
-            const prevIndex = Math.max(focusedIndex - 1, 0);
-            setFocusedIndex(prevIndex);
-            optionRefs.current[prevIndex]?.scrollIntoView({ block: 'nearest' });
-          }
-          break;
-        default:
-          // Do nothing for other keys
-          break;
-      }
-    }, [disabled, isOpen, value, options, onChange, focusedIndex]);
+            break;
+          case 'Escape':
+            setIsOpen(false);
+            setFocusedIndex(-1);
+            break;
+          case 'ArrowDown':
+            event.preventDefault();
+            if (!isOpen) {
+              setIsOpen(true);
+              // O(n) lookup here is acceptable since it's only for initial focus positioning
+              setFocusedIndex(
+                value ? options.findIndex((opt) => opt.value === value) : 0,
+              );
+            } else {
+              const nextIndex = Math.min(focusedIndex + 1, options.length - 1);
+              setFocusedIndex(nextIndex);
+              optionRefs.current[nextIndex]?.scrollIntoView({
+                block: 'nearest',
+              });
+            }
+            break;
+          case 'ArrowUp':
+            event.preventDefault();
+            if (!isOpen) {
+              setIsOpen(true);
+              // O(n) lookup here is acceptable since it's only for initial focus positioning
+              setFocusedIndex(
+                value ? options.findIndex((opt) => opt.value === value) : 0,
+              );
+            } else {
+              const prevIndex = Math.max(focusedIndex - 1, 0);
+              setFocusedIndex(prevIndex);
+              optionRefs.current[prevIndex]?.scrollIntoView({
+                block: 'nearest',
+              });
+            }
+            break;
+          default:
+            // Do nothing for other keys
+            break;
+        }
+      },
+      [disabled, isOpen, value, options, onChange, focusedIndex],
+    );
 
-    const handleOptionClick = useCallback((option: SelectOption) => {
-      if (option.disabled) return;
-      onChange?.(option.value);
-      setIsOpen(false);
-      setFocusedIndex(-1);
-    }, [onChange]);
+    const handleOptionClick = useCallback(
+      (option: SelectOption) => {
+        if (option.disabled) return;
+        onChange?.(option.value);
+        setIsOpen(false);
+        setFocusedIndex(-1);
+      },
+      [onChange],
+    );
 
     const handleSelectClick = useCallback(() => {
       if (!disabled) {
         setIsOpen(!isOpen);
         if (!isOpen) {
+          // O(n) lookup here is acceptable since it's only for initial focus positioning
           setFocusedIndex(
             value ? options.findIndex((opt) => opt.value === value) : 0,
           );
@@ -223,17 +257,28 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     }, [disabled, isOpen, value, options]);
 
     const handleMouseEnter = useCallback((e: React.MouseEvent) => {
-      const index = parseInt((e.currentTarget as HTMLElement).dataset.index ?? '0', 10);
+      const index = parseInt(
+        (e.currentTarget as HTMLElement).dataset.index ?? '0',
+        10,
+      );
       setFocusedIndex(index);
     }, []);
 
-    const handleOptionClickEvent = useCallback((e: React.MouseEvent) => {
-      const optionValue = (e.currentTarget as HTMLElement).dataset.value;
-      const option = options.find(opt => opt.value === optionValue);
-      if (option) {
-        handleOptionClick(option);
-      }
-    }, [handleOptionClick, options]);
+    const handleOptionClickEvent = useCallback(
+      (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const optionValue = (e.currentTarget as HTMLElement).dataset.value;
+        // O(1) lookup using the options map
+        const option = optionValue ? optionsMap.get(optionValue) : undefined;
+
+        if (option) {
+          handleOptionClick(option);
+        }
+      },
+      [handleOptionClick, optionsMap],
+    );
 
     return (
       <div className={cn('relative', fullWidth ? 'w-full' : 'w-auto')}>
@@ -265,9 +310,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             onClick={handleSelectClick}
             onKeyDown={handleKeyDown}
           >
-            <span className='block truncate'>
-              {selectedOption ? selectedOption.label : placeholder}
-            </span>
+            <span className='block truncate'>{displayValue}</span>
             <ChevronDownIcon
               className={selectChevronVariants({ size, isOpen })}
             />

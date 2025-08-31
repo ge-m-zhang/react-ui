@@ -43,6 +43,17 @@ export const Default: Story = {
     options: statusOptions,
     placeholder: 'Select status',
   },
+  render: (args) => {
+    const [value, setValue] = useState<string>('');
+    return (
+      <Select
+        options={args.options}
+        placeholder={args.placeholder}
+        value={value}
+        onChange={setValue}
+      />
+    );
+  },
 };
 
 export const WithHelperText: Story = {
@@ -52,8 +63,20 @@ export const WithHelperText: Story = {
     placeholder: 'Select status',
     helperText: 'Choose from the available status options',
   },
+  render: (args) => {
+    const [value, setValue] = useState<string>('');
+    return (
+      <Select
+        options={args.options}
+        label={args.label}
+        placeholder={args.placeholder}
+        helperText={args.helperText}
+        value={value}
+        onChange={setValue}
+      />
+    );
+  },
 };
-
 
 export const WithDisabledOptions: Story = {
   args: {
@@ -62,9 +85,20 @@ export const WithDisabledOptions: Story = {
     placeholder: 'Choose a country',
     helperText: 'Some options may be disabled',
   },
+  render: (args) => {
+    const [value, setValue] = useState<string>('');
+    return (
+      <Select
+        options={args.options}
+        label={args.label}
+        placeholder={args.placeholder}
+        helperText={args.helperText}
+        value={value}
+        onChange={setValue}
+      />
+    );
+  },
 };
-
-
 
 // Interactive example with state management
 export const Interactive: Story = {
@@ -113,28 +147,40 @@ export const AllSizes: Story = {
     options: statusOptions,
     placeholder: 'Select status',
   },
-  render: () => (
-    <div className='space-y-4'>
-      <Select
-        options={statusOptions}
-        label='Small Size'
-        placeholder='Select status'
-        size='small'
-      />
-      <Select
-        options={statusOptions}
-        label='Medium Size (Default)'
-        placeholder='Select status'
-        size='medium'
-      />
-      <Select
-        options={statusOptions}
-        label='Large Size'
-        placeholder='Select status'
-        size='large'
-      />
-    </div>
-  ),
+  render: () => {
+    const [smallValue, setSmallValue] = useState<string>('');
+    const [mediumValue, setMediumValue] = useState<string>('');
+    const [largeValue, setLargeValue] = useState<string>('');
+
+    return (
+      <div className='space-y-4'>
+        <Select
+          options={statusOptions}
+          label='Small Size'
+          placeholder='Select status'
+          size='small'
+          value={smallValue}
+          onChange={setSmallValue}
+        />
+        <Select
+          options={statusOptions}
+          label='Medium Size (Default)'
+          placeholder='Select status'
+          size='medium'
+          value={mediumValue}
+          onChange={setMediumValue}
+        />
+        <Select
+          options={statusOptions}
+          label='Large Size'
+          placeholder='Select status'
+          size='large'
+          value={largeValue}
+          onChange={setLargeValue}
+        />
+      </div>
+    );
+  },
 };
 
 export const AllStates: Story = {
@@ -142,35 +188,50 @@ export const AllStates: Story = {
     options: statusOptions,
     placeholder: 'Select status',
   },
-  render: () => (
-    <div className='space-y-4'>
-      <Select
-        options={statusOptions}
-        label='Default State'
-        placeholder='Select status'
-        helperText='This is a normal select'
-      />
-      <Select
-        options={statusOptions}
-        label='Error State'
-        placeholder='Select status'
-        error
-        helperText='This field has an error'
-      />
-      <Select
-        options={statusOptions}
-        label='Success State'
-        placeholder='Select status'
-        success
-        helperText='This field is valid'
-      />
-      <Select
-        options={statusOptions}
-        label='Disabled State'
-        placeholder='Select status'
-        disabled
-        helperText='This field is disabled'
-      />
-    </div>
-  ),
+  render: () => {
+    const [defaultValue, setDefaultValue] = useState<string>('');
+    const [errorValue, setErrorValue] = useState<string>('');
+    const [successValue, setSuccessValue] = useState<string>('');
+    const [disabledValue, setDisabledValue] = useState<string>('');
+
+    return (
+      <div className='space-y-4'>
+        <Select
+          options={statusOptions}
+          label='Default State'
+          placeholder='Select status'
+          helperText='This is a normal select'
+          value={defaultValue}
+          onChange={setDefaultValue}
+        />
+        <Select
+          options={statusOptions}
+          label='Error State'
+          placeholder='Select status'
+          error
+          helperText='This field has an error'
+          value={errorValue}
+          onChange={setErrorValue}
+        />
+        <Select
+          options={statusOptions}
+          label='Success State'
+          placeholder='Select status'
+          success
+          helperText='This field is valid'
+          value={successValue}
+          onChange={setSuccessValue}
+        />
+        <Select
+          options={statusOptions}
+          label='Disabled State'
+          placeholder='Select status'
+          disabled
+          helperText='This field is disabled'
+          value={disabledValue}
+          onChange={setDisabledValue}
+        />
+      </div>
+    );
+  },
 };
