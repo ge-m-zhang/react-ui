@@ -155,22 +155,19 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       state = 'success';
     }
 
-    // Create a map for O(1) option lookups - performance optimization for large lists
-    const optionsMap = useMemo(
-      () => new Map(options.map((option) => [option.value, option])),
+    // Create a comprehensive map for O(1) lookups - stores both option and index
+    const optionsLookup = useMemo(
+      () =>
+        new Map(
+          options.map((option, index) => [option.value, { option, index }]),
+        ),
       [options],
     );
 
-    // Create a map for O(1) option index lookups - performance optimization for large lists
-    const optionsIndexMap = useMemo(
-      () => new Map(options.map((option, index) => [option.value, index])),
-      [options],
-    );
-
-    // Find selected option - O(1) lookup instead of O(n)
+    // Find selected option - O(1) lookup
     const selectedOption = useMemo(
-      () => (value ? optionsMap.get(value) : undefined),
-      [optionsMap, value],
+      () => (value ? optionsLookup.get(value)?.option : undefined),
+      [optionsLookup, value],
     );
 
     // Get display value - this is the key fix
@@ -179,8 +176,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     // Memoized function to get selected option index - O(1) performance optimization
     const selectedOptionIndex = useMemo(() => {
       if (!value) return 0;
-      return optionsIndexMap.get(value) ?? 0;
-    }, [value, optionsIndexMap]);
+      return optionsLookup.get(value)?.index ?? 0;
+    }, [value, optionsLookup]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -308,13 +305,15 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
         const optionValue = (e.currentTarget as HTMLElement).dataset.value;
         // O(1) lookup using the options map
-        const option = optionValue ? optionsMap.get(optionValue) : undefined;
+        const option = optionValue
+          ? optionsLookup.get(optionValue)?.option
+          : undefined;
 
         if (option) {
           handleOptionClick(option);
         }
       },
-      [handleOptionClick, optionsMap],
+      [handleOptionClick, optionsLookup],
     );
 
     return (
