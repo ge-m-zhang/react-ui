@@ -124,7 +124,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const generatedId = useId();
     const id = providedId ?? generatedId;
     const dropdownId = `${id}-dropdown`;
-    const helperTextId = helperText ? `${id}-helper` : undefined;
+    const helperTextId = `${id}-helper`;
 
     // Define navigation keys once at the component level
     // Navigation keys that should be handled by the combobox
@@ -156,6 +156,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     }
 
     // Create a comprehensive map for O(1) lookups - stores both option and index
+    // Memoized because it involves looping and creates objects for props
     const optionsLookup = useMemo(
       () =>
         new Map(
@@ -164,20 +165,22 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       [options],
     );
 
-    // Find selected option - O(1) lookup
-    const selectedOption = useMemo(
-      () => (value ? optionsLookup.get(value)?.option : undefined),
-      [optionsLookup, value],
-    );
+    // Find selected option - O(1) lookup (simple operation, no memoization needed)
+    const selectedOption = value ? optionsLookup.get(value)?.option : undefined;
 
-    // Get display value - this is the key fix
+    // Get display value - simple property access + nullish coalescing
     const displayValue = selectedOption?.label ?? placeholder;
 
-    // Memoized function to get selected option index - O(1) performance optimization
-    const selectedOptionIndex = useMemo(() => {
-      if (!value) return 0;
+    // Helper to find the appropriate initial focus index when opening dropdown
+    const getInitialFocusIndex = useCallback(() => {
+      if (!value) {
+        const firstEnabledIndex = options.findIndex(
+          (option) => !option.disabled,
+        );
+        return firstEnabledIndex !== -1 ? firstEnabledIndex : -1;
+      }
       return optionsLookup.get(value)?.index ?? 0;
-    }, [value, optionsLookup]);
+    }, [value, optionsLookup, options]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -207,8 +210,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           case 'Space':
             if (!isOpen) {
               setIsOpen(true);
-              // Use memoized selected option index for O(1) performance
-              setFocusedIndex(selectedOptionIndex);
+              setFocusedIndex(getInitialFocusIndex());
             } else if (focusedIndex >= 0) {
               const focusedOption = options[focusedIndex];
               if (focusedOption && !focusedOption.disabled) {
@@ -225,8 +227,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           case 'ArrowDown':
             if (!isOpen) {
               setIsOpen(true);
-              // Use memoized selected option index for O(1) performance
-              setFocusedIndex(selectedOptionIndex);
+              setFocusedIndex(getInitialFocusIndex());
             } else {
               const nextIndex = Math.min(focusedIndex + 1, options.length - 1);
               setFocusedIndex(nextIndex);
@@ -238,8 +239,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           case 'ArrowUp':
             if (!isOpen) {
               setIsOpen(true);
-              // Use memoized selected option index for O(1) performance
-              setFocusedIndex(selectedOptionIndex);
+              setFocusedIndex(getInitialFocusIndex());
             } else {
               const prevIndex = Math.max(focusedIndex - 1, 0);
               setFocusedIndex(prevIndex);
@@ -253,7 +253,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             break;
         }
       },
-      [disabled, isOpen, selectedOptionIndex, options, onChange, focusedIndex],
+      [disabled, isOpen, getInitialFocusIndex, options, onChange, focusedIndex],
     );
 
     // Main keyboard handler for the combobox
@@ -301,11 +301,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       if (!disabled) {
         setIsOpen(!isOpen);
         if (!isOpen) {
-          // Use memoized selected option index for O(1) performance
-          setFocusedIndex(selectedOptionIndex);
+          setFocusedIndex(getInitialFocusIndex());
         }
       }
-    }, [disabled, isOpen, selectedOptionIndex]);
+    }, [disabled, isOpen, getInitialFocusIndex]);
 
     const handleMouseEnter = useCallback((e: React.MouseEvent) => {
       const index = parseInt(
@@ -354,7 +353,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             aria-haspopup='listbox'
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
-            aria-describedby={ariaDescribedBy ?? helperTextId}
+            aria-describedby={
+              [ariaDescribedBy, helperTextId].filter(Boolean).join(' ') ||
+              undefined
+            }
             tabIndex={disabled ? -1 : 0}
             className={cn(
               selectVariants({ size, state, fullWidth, disabled }),
