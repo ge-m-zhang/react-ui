@@ -136,6 +136,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       'Escape',
     ] as const;
 
+    // Map actual event keys to descriptive key names - shared constant
+    const KEY_MAP: Record<string, string> = {
+      ' ': 'Space',
+    };
+
     // Type guard to check if a key is a navigation key
     const isNavigationKey = (
       key: string,
@@ -156,6 +161,12 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       [options],
     );
 
+    // Create a map for O(1) option index lookups - performance optimization for large lists
+    const optionsIndexMap = useMemo(
+      () => new Map(options.map((option, index) => [option.value, index])),
+      [options],
+    );
+
     // Find selected option - O(1) lookup instead of O(n)
     const selectedOption = useMemo(
       () => (value ? optionsMap.get(value) : undefined),
@@ -168,9 +179,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     // Memoized function to get selected option index - O(1) performance optimization
     const selectedOptionIndex = useMemo(() => {
       if (!value) return 0;
-      const index = options.findIndex((opt) => opt.value === value);
-      return index >= 0 ? index : 0;
-    }, [value, options]);
+      return optionsIndexMap.get(value) ?? 0;
+    }, [value, optionsIndexMap]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -253,10 +263,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent) => {
         // Map actual event key to our descriptive key names
-        const keyMap: Record<string, string> = {
-          ' ': 'Space',
-        };
-        const mappedKey = keyMap[event.key] || event.key;
+        const mappedKey = KEY_MAP[event.key] || event.key;
 
         if (isNavigationKey(mappedKey)) {
           event.preventDefault();
@@ -376,10 +383,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 onMouseEnter={handleMouseEnter}
                 onKeyDown={(e) => {
                   // Map actual event key to our descriptive key names
-                  const keyMap: Record<string, string> = {
-                    ' ': 'Space',
-                  };
-                  const mappedKey = keyMap[e.key] || e.key;
+                  const mappedKey = KEY_MAP[e.key] || e.key;
 
                   // Delegate navigation keys to the shared handler
                   if (isNavigationKey(mappedKey)) {
