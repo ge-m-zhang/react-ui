@@ -1,6 +1,6 @@
 import { type VariantProps } from 'class-variance-authority';
 import type React from 'react';
-import { forwardRef, useId, useState, useRef, useEffect } from 'react';
+import { forwardRef, useId, useState, useRef, useEffect, useCallback } from 'react';
 
 import { cn } from '../../tools/classNames';
 import {
@@ -28,6 +28,7 @@ import {
  * - Disabled state styling
  * - Custom placeholder support
  * - Keyboard navigation
+ * - Performance optimized with useCallback for event handlers
  */
 
 export interface SelectOption {
@@ -144,9 +145,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // TODO: Performance optimization - Add useCallback for event handlers to prevent unnecessary re-renders
-    // Handle keyboard navigation
-    const handleKeyDown = (event: React.KeyboardEvent) => {
+    // Handle keyboard navigation - Wrapped in useCallback to prevent unnecessary re-renders
+    const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
       if (disabled) return;
 
       switch (event.key) {
@@ -201,16 +201,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           // Do nothing for other keys
           break;
       }
-    };
+    }, [disabled, isOpen, value, options, onChange, focusedIndex]);
 
-    const handleOptionClick = (option: SelectOption) => {
+    const handleOptionClick = useCallback((option: SelectOption) => {
       if (option.disabled) return;
       onChange?.(option.value);
       setIsOpen(false);
       setFocusedIndex(-1);
-    };
+    }, [onChange]);
 
-    const handleSelectClick = () => {
+    const handleSelectClick = useCallback(() => {
       if (!disabled) {
         setIsOpen(!isOpen);
         if (!isOpen) {
@@ -219,7 +219,31 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           );
         }
       }
-    };
+    }, [disabled, isOpen, value, options]);
+
+    const handleOptionKeyDown = useCallback((e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const optionValue = (e.currentTarget as HTMLElement).dataset.value;
+        const option = options.find(opt => opt.value === optionValue);
+        if (option) {
+          handleOptionClick(option);
+        }
+      }
+    }, [handleOptionClick, options]);
+
+    const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+      const index = parseInt((e.currentTarget as HTMLElement).dataset.index ?? '0', 10);
+      setFocusedIndex(index);
+    }, []);
+
+    const handleOptionClickEvent = useCallback((e: React.MouseEvent) => {
+      const optionValue = (e.currentTarget as HTMLElement).dataset.value;
+      const option = options.find(opt => opt.value === optionValue);
+      if (option) {
+        handleOptionClick(option);
+      }
+    }, [handleOptionClick, options]);
 
     return (
       <div className={cn('relative', fullWidth ? 'w-full' : 'w-auto')}>
@@ -275,6 +299,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 role='option'
                 tabIndex={option.disabled ? -1 : 0}
                 aria-selected={option.value === value}
+                data-value={option.value}
+                data-index={index}
                 className={cn(
                   selectOptionVariants({
                     selected: option.value === value,
@@ -282,14 +308,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                   }),
                   focusedIndex === index && !option.disabled && 'bg-gray-100',
                 )}
-                onClick={() => handleOptionClick(option)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleOptionClick(option);
-                  }
-                }}
-                onMouseEnter={() => setFocusedIndex(index)}
+                onClick={handleOptionClickEvent}
+                onKeyDown={handleOptionKeyDown}
+                onMouseEnter={handleMouseEnter}
               >
                 {option.label}
               </div>
