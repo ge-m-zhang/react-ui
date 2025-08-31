@@ -93,6 +93,27 @@ const ChevronDownIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+// Define navigation keys at module level to avoid recreation on every render
+// Navigation keys that should be handled by the combobox
+const NAVIGATION_KEYS = [
+  'Enter',
+  'Space',
+  'ArrowDown',
+  'ArrowUp',
+  'Escape',
+] as const;
+
+// Map actual event keys to descriptive key names - shared constant
+const KEY_MAP: Record<string, string> = {
+  ' ': 'Space',
+};
+
+// Type guard to check if a key is a navigation key
+const isNavigationKey = (
+  key: string,
+): key is (typeof NAVIGATION_KEYS)[number] =>
+  NAVIGATION_KEYS.includes(key as (typeof NAVIGATION_KEYS)[number]);
+
 export const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
@@ -125,27 +146,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const id = providedId ?? generatedId;
     const dropdownId = `${id}-dropdown`;
     const helperTextId = `${id}-helper`;
-
-    // Define navigation keys once at the component level
-    // Navigation keys that should be handled by the combobox
-    const NAVIGATION_KEYS = [
-      'Enter',
-      'Space',
-      'ArrowDown',
-      'ArrowUp',
-      'Escape',
-    ] as const;
-
-    // Map actual event keys to descriptive key names - shared constant
-    const KEY_MAP: Record<string, string> = {
-      ' ': 'Space',
-    };
-
-    // Type guard to check if a key is a navigation key
-    const isNavigationKey = (
-      key: string,
-    ): key is (typeof NAVIGATION_KEYS)[number] =>
-      NAVIGATION_KEYS.includes(key as (typeof NAVIGATION_KEYS)[number]);
 
     // Determine state based on error/success props
     let state: SelectState = 'default';
