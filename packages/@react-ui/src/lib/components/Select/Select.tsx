@@ -114,6 +114,35 @@ const isNavigationKey = (
 ): key is (typeof NAVIGATION_KEYS)[number] =>
   NAVIGATION_KEYS.includes(key as (typeof NAVIGATION_KEYS)[number]);
 
+// Helper functions to find next/previous enabled options
+const findNextEnabledIndex = (
+  options: SelectOption[],
+  currentIndex: number,
+): number => {
+  for (let i = currentIndex + 1; i < options.length; i += 1) {
+    if (!options[i].disabled) return i;
+  }
+  // If no enabled option found after current, wrap to beginning
+  for (let i = 0; i <= currentIndex; i += 1) {
+    if (!options[i].disabled) return i;
+  }
+  return currentIndex; // Fallback if all options are disabled
+};
+
+const findPreviousEnabledIndex = (
+  options: SelectOption[],
+  currentIndex: number,
+): number => {
+  for (let i = currentIndex - 1; i >= 0; i -= 1) {
+    if (!options[i].disabled) return i;
+  }
+  // If no enabled option found before current, wrap to end
+  for (let i = options.length - 1; i >= currentIndex; i -= 1) {
+    if (!options[i].disabled) return i;
+  }
+  return currentIndex; // Fallback if all options are disabled
+};
+
 export const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
@@ -229,7 +258,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
               setIsOpen(true);
               setFocusedIndex(getInitialFocusIndex());
             } else {
-              const nextIndex = Math.min(focusedIndex + 1, options.length - 1);
+              const nextIndex = findNextEnabledIndex(options, focusedIndex);
               setFocusedIndex(nextIndex);
               optionRefs.current[nextIndex]?.scrollIntoView({
                 block: 'nearest',
@@ -241,7 +270,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
               setIsOpen(true);
               setFocusedIndex(getInitialFocusIndex());
             } else {
-              const prevIndex = Math.max(focusedIndex - 1, 0);
+              const prevIndex = findPreviousEnabledIndex(options, focusedIndex);
               setFocusedIndex(prevIndex);
               optionRefs.current[prevIndex]?.scrollIntoView({
                 block: 'nearest',
