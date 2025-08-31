@@ -119,28 +119,30 @@ const findNextEnabledIndex = (
   options: SelectOption[],
   currentIndex: number,
 ): number => {
-  for (let i = currentIndex + 1; i < options.length; i += 1) {
-    if (!options[i].disabled) return i;
-  }
-  // If no enabled option found after current, wrap to beginning
-  for (let i = 0; i <= currentIndex; i += 1) {
-    if (!options[i].disabled) return i;
-  }
-  return currentIndex; // Fallback if all options are disabled
+  if (options.length === 0) return currentIndex;
+
+  // Create array of indices starting from next position
+  const indices = Array.from(
+    { length: options.length },
+    (_, i) => (currentIndex + i + 1) % options.length,
+  );
+
+  return indices.find((i) => !options[i].disabled) ?? currentIndex;
 };
 
 const findPreviousEnabledIndex = (
   options: SelectOption[],
   currentIndex: number,
 ): number => {
-  for (let i = currentIndex - 1; i >= 0; i -= 1) {
-    if (!options[i].disabled) return i;
-  }
-  // If no enabled option found before current, wrap to end
-  for (let i = options.length - 1; i >= currentIndex; i -= 1) {
-    if (!options[i].disabled) return i;
-  }
-  return currentIndex; // Fallback if all options are disabled
+  if (options.length === 0) return currentIndex;
+
+  // Create array of indices starting from previous position
+  const indices = Array.from(
+    { length: options.length },
+    (_, i) => (currentIndex - i - 1 + options.length) % options.length,
+  );
+
+  return indices.find((i) => !options[i].disabled) ?? currentIndex;
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(
@@ -335,13 +337,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       }
     }, [disabled, isOpen, getInitialFocusIndex]);
 
-    const handleMouseEnter = useCallback((e: React.MouseEvent) => {
-      const index = parseInt(
-        (e.currentTarget as HTMLElement).dataset.index ?? '0',
-        10,
-      );
-      setFocusedIndex(index);
-    }, []);
+    const handleMouseEnter = useCallback(
+      (e: React.MouseEvent) => {
+        const indexStr = (e.currentTarget as HTMLElement).dataset.index;
+        if (typeof indexStr === 'string' && /^\d+$/.test(indexStr)) {
+          const index = parseInt(indexStr, 10);
+          if (index < options.length) {
+            setFocusedIndex(index);
+          }
+        }
+      },
+      [options.length],
+    );
 
     const handleOptionClickEvent = useCallback(
       (e: React.MouseEvent) => {
