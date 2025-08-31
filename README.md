@@ -136,7 +136,7 @@ pnpm --filter storybook-react-ui build # Build static site
 
 ### Form Controls
 
-Button, Checkbox, Switch, TextArea, TextField
+Button, Checkbox, Select, Switch, TextArea, TextField
 
 ### Layout & Structure
 
@@ -182,13 +182,13 @@ Built-in dark/light mode with system preference detection:
 ```tsx
 import { ThemeProvider } from '@gmzh/react-ui';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider defaultTheme='system'>
       {/* Your app components */}
     </ThemeProvider>
   );
-}
+};
 ```
 
 ## 📚 Resources
