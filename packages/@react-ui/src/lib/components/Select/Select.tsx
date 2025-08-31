@@ -120,7 +120,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const selectRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const generatedId = useId();
     const id = providedId ?? generatedId;
     const dropdownId = `${id}-dropdown`;
@@ -324,30 +324,50 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             aria-label='Options'
           >
             {options.map((option, index) => (
-              // Following proper ARIA combobox pattern: options are not individually focusable,
-              // the parent combobox handles all keyboard navigation
-              // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus
-              <div
+              <button
                 key={option.value}
                 ref={(el) => {
                   optionRefs.current[index] = el;
                 }}
+                type='button'
                 role='option'
                 aria-selected={option.value === value}
                 data-value={option.value}
                 data-index={index}
+                disabled={option.disabled}
                 className={cn(
                   selectOptionVariants({
                     selected: option.value === value,
                     disabled: option.disabled,
                   }),
                   focusedIndex === index && !option.disabled && 'bg-gray-100',
+                  // Ensure button styling is consistent with div styling
+                  'w-full text-left border-none bg-transparent p-0 cursor-pointer',
+                  option.disabled && 'cursor-not-allowed',
                 )}
                 onClick={handleOptionClickEvent}
                 onMouseEnter={handleMouseEnter}
+                onKeyDown={(e) => {
+                  // Prevent default button behavior and let parent handle navigation
+                  if (
+                    ['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Escape'].includes(
+                      e.key,
+                    )
+                  ) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Forward the event to the parent combobox for consistent navigation
+                    const syntheticEvent = {
+                      ...e,
+                      currentTarget: selectRef.current,
+                      target: selectRef.current,
+                    } as React.KeyboardEvent;
+                    handleKeyDown(syntheticEvent);
+                  }
+                }}
               >
                 {option.label}
-              </div>
+              </button>
             ))}
             {options.length === 0 && (
               <div className='px-3 py-2 text-sm text-gray-500'>
