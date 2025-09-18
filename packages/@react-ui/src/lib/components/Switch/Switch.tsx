@@ -332,13 +332,8 @@ export const Switch = ({
       <SwitchContext.Provider
         value={React.useMemo(
           () => ({
-            size: (size ?? 'medium') as 'small' | 'medium',
-            color: (color ?? 'primary') as
-              | 'primary'
-              | 'secondary'
-              | 'success'
-              | 'danger'
-              | 'warning',
+            size: size ?? 'medium',
+            color: color ?? 'primary',
             checked: !!checked,
             disabled: !!disabled,
           }),
