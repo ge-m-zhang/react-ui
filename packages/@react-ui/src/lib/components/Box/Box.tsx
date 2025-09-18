@@ -135,51 +135,48 @@ export interface BoxProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'as'>,
     BoxBaseProps {
   as?: keyof JSX.IntrinsicElements;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
-  (
-    {
-      className,
-      display,
-      padding,
-      margin,
-      width,
-      height,
-      background,
-      border,
-      rounded,
-      shadow,
-      position,
-      as = 'div',
-      ...props
-    },
+export const Box = ({
+  className,
+  display,
+  padding,
+  margin,
+  width,
+  height,
+  background,
+  border,
+  rounded,
+  shadow,
+  position,
+  as = 'div',
+  ref,
+  ...props
+}: BoxProps) => {
+  const Component = (as || 'div') as keyof JSX.IntrinsicElements;
+  const elementProps = {
     ref,
-  ) => {
-    const Component = as ?? 'div';
-    const elementProps = {
-      ref,
-      className: cn(
-        boxVariants({
-          display,
-          padding,
-          margin,
-          width,
-          height,
-          background,
-          border,
-          rounded,
-          shadow,
-          position,
-        }),
-        className,
-      ),
-      ...props,
-    };
+    className: cn(
+      boxVariants({
+        display,
+        padding,
+        margin,
+        width,
+        height,
+        background,
+        border,
+        rounded,
+        shadow,
+        position,
+      }),
+      className,
+    ),
+    ...props,
+  };
 
-    return React.createElement(Component, elementProps);
-  },
-);
+  return React.createElement(Component, elementProps);
+};
 
 Box.displayName = 'Box';
 

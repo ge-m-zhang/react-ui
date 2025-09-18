@@ -1,6 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { cn } from '../../tools/classNames';
+import { normalizeAriaChecked } from '../../tools/ariaHelpers';
+import { mergeRefs } from '../../tools/refHelpers';
 
 /**
  * Checkbox Component
@@ -131,6 +133,7 @@ export interface CheckboxProps
     CheckboxBaseProps {
   icon?: React.ReactNode;
   indeterminate?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 // Default check icon
@@ -149,10 +152,6 @@ const DefaultCheckIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-DefaultCheckIcon.defaultProps = {
-  className: '',
-};
-
 // Indeterminate icon
 const IndeterminateIcon = ({ className }: { className?: string }) => (
   <svg
@@ -169,148 +168,121 @@ const IndeterminateIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-IndeterminateIcon.defaultProps = {
-  className: '',
-};
+export const Checkbox = ({
+  className,
+  size,
+  color,
+  checked: checkedProp,
+  disabled,
+  icon,
+  indeterminate = false,
+  onChange,
+  ref,
+  ...props
+}: CheckboxProps) => {
+  const [internalChecked, setInternalChecked] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  (
-    {
-      className,
-      size,
-      color,
-      checked: checkedProp,
-      disabled,
-      icon,
-      indeterminate = false,
-      onChange,
-      ...props
-    },
-    ref,
-  ) => {
-    const [internalChecked, setInternalChecked] = useState<boolean>(false);
-    const inputRef = useRef<HTMLInputElement>(null);
+  // Use controlled or uncontrolled state - pure derived state handles prop changes automatically
+  const checked = checkedProp !== undefined ? checkedProp : internalChecked;
 
-    // Use controlled or uncontrolled state - pure derived state handles prop changes automatically
-    const checked = checkedProp !== undefined ? checkedProp : internalChecked;
+  const handleCheckboxClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-    const handleCheckboxClick = (
-      event: React.SyntheticEvent<HTMLDivElement>,
-    ) => {
-      event.preventDefault();
-      event.stopPropagation();
+    if (!disabled && inputRef.current) {
+      // Trigger the actual input click which will handle state updates and onChange callback
+      inputRef.current.click();
+    }
+  };
 
-      if (!disabled && inputRef.current) {
-        // Trigger the actual input click which will handle state updates and onChange callback
-        inputRef.current.click();
-      }
-    };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newChecked = event.target.checked;
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newChecked = event.target.checked;
+    // Update internal state only in uncontrolled mode
+    if (checkedProp === undefined) {
+      setInternalChecked(newChecked);
+    }
 
-      // Update internal state only in uncontrolled mode
-      if (checkedProp === undefined) {
-        setInternalChecked(newChecked);
-      }
+    // Call onChange callback once with the real event
+    onChange?.(event);
+  };
 
-      // Call onChange callback once with the real event
-      onChange?.(event);
-    };
+  // Helper function to determine which icon to show - clearer than nested ternary
+  const getIconToShow = () => {
+    if (indeterminate) {
+      return <IndeterminateIcon className='text-white' />;
+    }
+    if (icon) {
+      return React.isValidElement(icon)
+        ? React.cloneElement(icon, { className: 'text-white' })
+        : icon;
+    }
+    return <DefaultCheckIcon className='text-white' />;
+  };
 
-    // Helper function to determine which icon to show - clearer than nested ternary
-    const getIconToShow = () => {
-      if (indeterminate) {
-        return <IndeterminateIcon className='text-white' />;
-      }
-      if (icon) {
-        return React.cloneElement(icon as React.ReactElement, {
-          className: 'text-white',
-        });
-      }
-      return <DefaultCheckIcon className='text-white' />;
-    };
+  // Helper function to get aria-checked value - clearer than nested ternary
+  const getAriaChecked = () =>
+    normalizeAriaChecked(indeterminate ? 'mixed' : (checked ?? false));
 
-    // Helper function to get aria-checked value - clearer than nested ternary
-    const getAriaChecked = () => {
-      if (indeterminate) return 'mixed';
-      return checked ? 'true' : 'false';
-    };
-
-    return (
-      <div className='inline-flex items-center'>
-        <div
+  return (
+    <div className='inline-flex items-center'>
+      <div
+        className={cn(
+          checkboxVariants({
+            size,
+            color,
+            checked: checked ?? indeterminate,
+            disabled,
+          }),
+          className,
+        )}
+        onClick={handleCheckboxClick}
+        role='checkbox'
+        aria-checked={getAriaChecked()}
+        tabIndex={disabled ? -1 : 0}
+        onKeyDown={(e) => {
+          if (e.key === ' ') {
+            e.preventDefault();
+            handleCheckboxClick(e);
+          }
+        }}
+      >
+        <input
+          ref={mergeRefs([inputRef, ref])}
+          type='checkbox'
+          className='sr-only'
+          checked={!!checked}
+          disabled={!!disabled}
+          onChange={handleInputChange}
+          aria-hidden='true'
+          tabIndex={-1}
+          id={props.id}
+          name={props.name}
+          value={props.value}
+          required={props.required}
+          form={props.form}
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
+          onKeyDown={props.onKeyDown}
+          onKeyUp={props.onKeyUp}
+          aria-label={props['aria-label']}
+          aria-labelledby={props['aria-labelledby']}
+          aria-describedby={props['aria-describedby']}
+        />
+        <span
           className={cn(
-            checkboxVariants({
+            checkboxIconVariants({
               size,
-              color,
-              checked: checked ?? indeterminate,
-              disabled,
+              visible: checked ?? indeterminate,
             }),
-            className,
           )}
-          onClick={handleCheckboxClick}
-          role='checkbox'
-          aria-checked={getAriaChecked()}
-          tabIndex={disabled ? -1 : 0}
-          onKeyDown={(e) => {
-            if (e.key === ' ') {
-              e.preventDefault();
-              handleCheckboxClick(e);
-            }
-          }}
         >
-          <input
-            ref={(node) => {
-              const inputElement =
-                inputRef as React.MutableRefObject<HTMLInputElement | null>;
-              inputElement.current = node;
-              if (typeof ref === 'function') {
-                ref(node);
-              } else if (ref) {
-                const refObj =
-                  ref as React.MutableRefObject<HTMLInputElement | null>;
-                refObj.current = node;
-              }
-            }}
-            type='checkbox'
-            className='sr-only'
-            checked={!!checked}
-            disabled={!!disabled}
-            onChange={handleInputChange}
-            aria-hidden='true'
-            tabIndex={-1}
-            id={props.id}
-            name={props.name}
-            value={props.value}
-            required={props.required}
-            form={props.form}
-            onFocus={props.onFocus}
-            onBlur={props.onBlur}
-            onKeyDown={props.onKeyDown}
-            onKeyUp={props.onKeyUp}
-            aria-label={props['aria-label']}
-            aria-labelledby={props['aria-labelledby']}
-            aria-describedby={props['aria-describedby']}
-          />
-          <span
-            className={cn(
-              checkboxIconVariants({
-                size,
-                visible: checked ?? indeterminate,
-              }),
-            )}
-          >
-            {getIconToShow()}
-          </span>
-        </div>
+          {getIconToShow()}
+        </span>
       </div>
-    );
-  },
-);
+    </div>
+  );
+};
 
 Checkbox.displayName = 'Checkbox';
-Checkbox.defaultProps = {
-  icon: undefined,
-  indeterminate: false,
-};

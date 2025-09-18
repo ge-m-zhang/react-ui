@@ -53,7 +53,8 @@ export const findNextEnabledTab = (
     } else {
       idx = (idx - 1 + tabInfo.length) % tabInfo.length;
     }
-    if (!tabInfo[idx].disabled) {
+    const tab = tabInfo[idx];
+    if (tab && !tab.disabled) {
       return idx;
     }
   }
@@ -148,15 +149,18 @@ export const handleTabKeyboardNavigation = (
 
   if (shouldPreventDefault && nextIndex !== currentIndex) {
     event.preventDefault();
-    const newValue = tabInfo[nextIndex].value;
-    onNavigate(newValue);
+    const nextTab = tabInfo[nextIndex];
+    if (nextTab) {
+      const newValue = nextTab.value;
+      onNavigate(newValue);
 
-    // Focus the new tab
-    setTimeout(() => {
-      // Sanitize newValue before using it in DOM queries to prevent XSS attacks
-      const safeValue = CSS.escape(newValue);
-      const newTab = document.getElementById(`tab-${safeValue}`);
-      newTab?.focus();
-    }, 0);
+      // Focus the new tab
+      setTimeout(() => {
+        // Sanitize newValue before using it in DOM queries to prevent XSS attacks
+        const safeValue = CSS.escape(newValue);
+        const newTab = document.getElementById(`tab-${safeValue}`);
+        newTab?.focus();
+      }, 0);
+    }
   }
 };

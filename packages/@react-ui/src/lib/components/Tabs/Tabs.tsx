@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { createContext, forwardRef, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 import { cn } from '../../tools/classNames';
 import {
@@ -10,7 +10,7 @@ import {
 /**
  * Tab Component System
  *
- * A flexible tab component with context-based state management.
+ * A flexible tab component with  context-based state management.
  * Built with accessibility in mind and styled with Tailwind CSS.
  *
  * @features
@@ -163,66 +163,64 @@ interface TabProps
   value: string;
   onSelect?: (value: string) => void;
   'data-testid'?: string;
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
-const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
-  (
-    {
-      className,
-      value: tabValue,
-      onSelect,
-      disabled,
-      children,
-      onClick,
-      onKeyDown,
-      onFocus,
-      onBlur,
-      id,
-      style,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      'data-testid': dataTestId,
-    },
-    ref,
-  ) => {
-    const { value, setValue, variant } = useContext(TabContext);
-    const active = tabValue === value;
+const TabComponent = ({
+  className,
+  value: tabValue,
+  onSelect,
+  disabled,
+  children,
+  onClick,
+  onKeyDown,
+  onFocus,
+  onBlur,
+  id,
+  style,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'data-testid': dataTestId,
+  ref,
+  ..._props
+}: TabProps) => {
+  const { value, setValue, variant } = useContext(TabContext);
+  const active = tabValue === value;
 
-    const handleClick = () => {
-      if (!disabled) {
-        setValue(tabValue);
-        onSelect?.(tabValue);
-      }
-    };
+  const handleClick = () => {
+    if (!disabled) {
+      setValue(tabValue);
+      onSelect?.(tabValue);
+    }
+  };
 
-    return (
-      <button
-        type='button'
-        ref={ref}
-        className={cn(tabVariants({ variant, active, disabled }), className)}
-        onClick={(e) => {
-          handleClick();
-          onClick?.(e);
-        }}
-        onKeyDown={onKeyDown}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        disabled={!!disabled}
-        role='tab'
-        aria-selected={active}
-        aria-controls={`tabpanel-${tabValue}`}
-        id={id ?? `tab-${tabValue}`}
-        tabIndex={active ? 0 : -1}
-        style={style}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        data-testid={dataTestId}
-      >
-        {children}
-      </button>
-    );
-  },
-);
+  return (
+    <button
+      type='button'
+      ref={ref}
+      className={cn(tabVariants({ variant, active, disabled }), className)}
+      onClick={(e) => {
+        handleClick();
+        onClick?.(e);
+      }}
+      onKeyDown={onKeyDown}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      disabled={!!disabled}
+      role='tab'
+      aria-selected={active}
+      aria-controls={`tabpanel-${tabValue}`}
+      id={id ?? `tab-${tabValue}`}
+      tabIndex={active ? 0 : -1}
+      style={style}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      data-testid={dataTestId}
+    >
+      {children}
+    </button>
+  );
+};
 
 TabComponent.displayName = 'Tab';
 
@@ -236,51 +234,49 @@ TabComponent.defaultProps = {
 interface TabListProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical';
   'data-testid'?: string;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-const TabList = forwardRef<HTMLDivElement, TabListProps>(
-  (
-    {
-      className,
-      orientation = 'horizontal',
-      children,
-      id,
-      style,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      'data-testid': dataTestId,
-      onKeyDown: onKeyDownProp,
-    },
-    ref,
-  ) => {
-    const { variant, value, setValue } = useContext(TabContext);
+const TabList = ({
+  className,
+  orientation = 'horizontal',
+  children,
+  id,
+  style,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'data-testid': dataTestId,
+  onKeyDown: onKeyDownProp,
+  ref,
+  ..._props
+}: TabListProps) => {
+  const { variant, value, setValue } = useContext(TabContext);
 
-    // Handle keyboard navigation
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      const tabInfo = getTabInfo(children);
-      handleTabKeyboardNavigation(event, tabInfo, value, orientation, setValue);
-      onKeyDownProp?.(event);
-    };
+  // Handle keyboard navigation
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const tabInfo = getTabInfo(children);
+    handleTabKeyboardNavigation(event, tabInfo, value, orientation, setValue);
+    onKeyDownProp?.(event);
+  };
 
-    return (
-      <div
-        ref={ref}
-        className={cn(tabListVariants({ variant, orientation }), className)}
-        role='tablist'
-        aria-orientation={orientation}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        id={id}
-        style={style}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        data-testid={dataTestId}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      ref={ref}
+      className={cn(tabListVariants({ variant, orientation }), className)}
+      role='tablist'
+      aria-orientation={orientation}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      id={id}
+      style={style}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      data-testid={dataTestId}
+    >
+      {children}
+    </div>
+  );
+};
 
 TabList.displayName = 'TabList';
 
@@ -295,47 +291,45 @@ interface TabPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
   forceMount?: boolean;
   'data-testid'?: string;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
-  (
-    {
-      className,
-      value: panelValue,
-      forceMount = false,
-      children,
-      id,
-      style,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      'data-testid': dataTestId,
-    },
-    ref,
-  ) => {
-    const { value } = useContext(TabContext);
-    const active = panelValue === value;
+const TabPanel = ({
+  className,
+  value: panelValue,
+  forceMount = false,
+  children,
+  id,
+  style,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'data-testid': dataTestId,
+  ref,
+  ..._props
+}: TabPanelProps) => {
+  const { value } = useContext(TabContext);
+  const active = panelValue === value;
 
-    if (!active && !forceMount) {
-      return null;
-    }
+  if (!active && !forceMount) {
+    return null;
+  }
 
-    return (
-      <div
-        ref={ref}
-        className={cn('mt-4', !active && 'hidden', className)}
-        role='tabpanel'
-        aria-labelledby={ariaLabelledBy ?? `tab-${panelValue}`}
-        id={id ?? `tabpanel-${panelValue}`}
-        tabIndex={0}
-        style={style}
-        aria-label={ariaLabel}
-        data-testid={dataTestId}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      ref={ref}
+      className={cn('mt-4', !active && 'hidden', className)}
+      role='tabpanel'
+      aria-labelledby={ariaLabelledBy ?? `tab-${panelValue}`}
+      id={id ?? `tabpanel-${panelValue}`}
+      tabIndex={0}
+      style={style}
+      aria-label={ariaLabel}
+      data-testid={dataTestId}
+    >
+      {children}
+    </div>
+  );
+};
 
 TabPanel.displayName = 'TabPanel';
 
@@ -349,33 +343,32 @@ TabPanel.defaultProps = {
 interface TabContentProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   'data-testid'?: string;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-const TabContent = forwardRef<HTMLDivElement, TabContentProps>(
-  (
-    {
-      className,
-      children,
-      id,
-      style,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      'data-testid': dataTestId,
-    },
-    ref,
-  ) => (
-    <div
-      ref={ref}
-      className={cn('tab-content', className)}
-      id={id}
-      style={style}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledBy}
-      data-testid={dataTestId}
-    >
-      {children}
-    </div>
-  ),
+const TabContent = ({
+  className,
+  children,
+  id,
+  style,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'data-testid': dataTestId,
+  ref,
+  ...props
+}: TabContentProps) => (
+  <div
+    ref={ref}
+    className={cn('tab-content', className)}
+    id={id}
+    style={style}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledBy}
+    data-testid={dataTestId}
+    {...props}
+  >
+    {children}
+  </div>
 );
 
 TabContent.displayName = 'TabContent';

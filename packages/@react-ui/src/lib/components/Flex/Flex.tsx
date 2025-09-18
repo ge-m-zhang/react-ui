@@ -91,48 +91,45 @@ export interface FlexProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'as'>,
     FlexBaseProps {
   as?: keyof JSX.IntrinsicElements;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
-  (
-    {
+export const Flex = ({
+  className,
+  direction,
+  align,
+  justify,
+  wrap,
+  gap,
+  width,
+  height,
+  grow,
+  shrink,
+  as = 'div',
+  ref,
+  ...props
+}: FlexProps) => {
+  const Component = (as || 'div') as keyof JSX.IntrinsicElements;
+  const elementProps = {
+    ref: ref as React.Ref<HTMLDivElement>,
+    className: cn(
+      flexVariants({
+        direction,
+        align,
+        justify,
+        wrap,
+        gap,
+        width,
+        height,
+        grow,
+        shrink,
+      }),
       className,
-      direction,
-      align,
-      justify,
-      wrap,
-      gap,
-      width,
-      height,
-      grow,
-      shrink,
-      as = 'div',
-      ...props
-    },
-    ref,
-  ) => {
-    const Component = as ?? 'div';
-    const elementProps = {
-      ref: ref as React.Ref<HTMLDivElement>,
-      className: cn(
-        flexVariants({
-          direction,
-          align,
-          justify,
-          wrap,
-          gap,
-          width,
-          height,
-          grow,
-          shrink,
-        }),
-        className,
-      ),
-      ...props,
-    };
+    ),
+    ...props,
+  };
 
-    return React.createElement(Component, elementProps);
-  },
-);
+  return React.createElement(Component, elementProps);
+};
 
 Flex.displayName = 'Flex';

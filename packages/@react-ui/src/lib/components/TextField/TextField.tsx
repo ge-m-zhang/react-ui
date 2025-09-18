@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import type React from 'react';
-import { forwardRef, useId, useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import { cn } from '../../tools/classNames';
 import { createNumberInputWheelHandler } from '../../tools/formEventHelpers';
 
@@ -118,172 +118,108 @@ export interface TextFieldProps
   label?: string;
   hiddenLabel?: boolean;
   wrapperClassName?: string;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
-  (
-    {
-      className,
-      wrapperClassName,
-      size,
-      state: stateProp,
-      fullWidth,
-      disabled,
-      error,
-      helperText,
-      symbol,
-      label,
-      hiddenLabel = false,
-      id,
-      onWheel,
-      type,
-      ...props
-    },
-    ref,
-  ) => {
-    // Determine state based on error prop
-    const state = error ? 'error' : stateProp ?? 'default';
-    const hasSymbol = Boolean(symbol);
+export const TextField = ({
+  className,
+  wrapperClassName,
+  size,
+  state: stateProp,
+  fullWidth,
+  disabled,
+  error,
+  helperText,
+  symbol,
+  label,
+  hiddenLabel = false,
+  id,
+  onWheel,
+  type,
+  ref,
+  ...inputProps
+}: TextFieldProps) => {
+  // Determine state based on error prop
+  const state = error ? 'error' : stateProp ?? 'default';
+  const hasSymbol = Boolean(symbol);
 
-    // Generate ID if not provided
-    const generatedId = useId();
-    const inputId = id ?? `textfield-${generatedId}`;
-    const helperId = useMemo(() => `${inputId}-helper`, [inputId]);
-    const errorId = useMemo(() => `${inputId}-error`, [inputId]);
+  // Generate ID if not provided
+  const generatedId = useId();
+  const inputId = id ?? `textfield-${generatedId}`;
+  const helperId = useMemo(() => `${inputId}-helper`, [inputId]);
+  const errorId = useMemo(() => `${inputId}-error`, [inputId]);
 
-    // Create wheel handler for number inputs to prevent accidental value changes
-    const wheelHandler =
-      type === 'number' ? createNumberInputWheelHandler(onWheel) : onWheel;
+  // Create wheel handler for number inputs to prevent accidental value changes
+  const wheelHandler =
+    type === 'number' ? createNumberInputWheelHandler(onWheel) : onWheel;
 
-    return (
-      <div className={cn('relative', fullWidth && 'w-full', wrapperClassName)}>
-        {/* Label */}
-        {label && (
-          <label
-            htmlFor={inputId}
-            className={cn(
-              'block text-sm font-medium text-gray-700 mb-1',
-              hiddenLabel && 'sr-only',
-            )}
-          >
-            {label}
-          </label>
-        )}
-
-        {/* Input container */}
-        <div className='relative'>
-          {/* Symbol */}
-          {symbol && (
-            <div className={symbolVariants({ size })}>
-              {typeof symbol === 'string' ? <span>{symbol}</span> : symbol}
-            </div>
+  return (
+    <div className={cn('relative', fullWidth && 'w-full', wrapperClassName)}>
+      {/* Label */}
+      {label && (
+        <label
+          htmlFor={inputId}
+          className={cn(
+            'block text-sm font-medium text-gray-700 mb-1',
+            hiddenLabel && 'sr-only',
           )}
+        >
+          {label}
+        </label>
+      )}
 
-          {/* Input */}
-          <input
-            ref={ref}
-            id={inputId}
-            type={type}
-            className={cn(
-              textFieldVariants({
-                size,
-                state,
-                fullWidth,
-                disabled,
-                hasSymbol,
-              }),
-              className,
-            )}
-            disabled={!!disabled}
-            onWheel={wheelHandler}
-            aria-invalid={error ? 'true' : 'false'}
-            aria-describedby={
-              [error && errorId, helperText && !error && helperId]
-                .filter(Boolean)
-                .join(' ') || undefined
-            }
-            placeholder={props.placeholder}
-            defaultValue={props.defaultValue}
-            value={props.value}
-            autoComplete={props.autoComplete}
-            checked={props.checked}
-            defaultChecked={props.defaultChecked}
-            form={props.form}
-            formAction={props.formAction}
-            formEncType={props.formEncType}
-            formMethod={props.formMethod}
-            formNoValidate={props.formNoValidate}
-            formTarget={props.formTarget}
-            height={props.height}
-            list={props.list}
-            max={props.max}
-            maxLength={props.maxLength}
-            min={props.min}
-            minLength={props.minLength}
-            multiple={props.multiple}
-            name={props.name}
-            pattern={props.pattern}
-            readOnly={props.readOnly}
-            required={props.required}
-            src={props.src}
-            step={props.step}
-            width={props.width}
-            accept={props.accept}
-            alt={props.alt}
-            capture={props.capture}
-            onClick={props.onClick}
-            onFocus={props.onFocus}
-            onBlur={props.onBlur}
-            onChange={props.onChange}
-            onKeyDown={props.onKeyDown}
-            onKeyUp={props.onKeyUp}
-            onKeyPress={props.onKeyPress}
-            onInput={props.onInput}
-            onInvalid={props.onInvalid}
-            onSelect={props.onSelect}
-            onMouseDown={props.onMouseDown}
-            onMouseUp={props.onMouseUp}
-            onMouseEnter={props.onMouseEnter}
-            onMouseLeave={props.onMouseLeave}
-            onMouseMove={props.onMouseMove}
-            onMouseOver={props.onMouseOver}
-            onMouseOut={props.onMouseOut}
-            onContextMenu={props.onContextMenu}
-            onDoubleClick={props.onDoubleClick}
-            onDrag={props.onDrag}
-            onDragEnd={props.onDragEnd}
-            onDragEnter={props.onDragEnter}
-            onDragExit={props.onDragExit}
-            onDragLeave={props.onDragLeave}
-            onDragOver={props.onDragOver}
-            onDragStart={props.onDragStart}
-            onDrop={props.onDrop}
-            tabIndex={props.tabIndex}
-            role={props.role}
-            aria-label={props['aria-label']}
-            aria-labelledby={props['aria-labelledby']}
-            aria-required={props['aria-required']}
-            style={props.style}
-          />
-        </div>
-
-        {/* Error message */}
-        {error && (
-          <div id={errorId} className={helperTextVariants({ state: 'error' })}>
-            {error}
+      {/* Input container */}
+      <div className='relative'>
+        {/* Symbol */}
+        {symbol && (
+          <div className={symbolVariants({ size })}>
+            {typeof symbol === 'string' ? <span>{symbol}</span> : symbol}
           </div>
         )}
 
-        {/* Helper text */}
-        {helperText && !error && (
-          <div id={helperId} className={helperTextVariants({ state })}>
-            {helperText}
-          </div>
-        )}
+        {/* Input */}
+        <input
+          ref={ref}
+          id={inputId}
+          type={type}
+          className={cn(
+            textFieldVariants({
+              size,
+              state,
+              fullWidth,
+              disabled,
+              hasSymbol,
+            }),
+            className,
+          )}
+          disabled={!!disabled}
+          onWheel={wheelHandler}
+          aria-invalid={error ? 'true' : 'false'}
+          aria-describedby={
+            [error && errorId, helperText && !error && helperId]
+              .filter(Boolean)
+              .join(' ') || undefined
+          }
+          {...inputProps}
+        />
       </div>
-    );
-  },
-);
+
+      {/* Error message */}
+      {error && (
+        <div id={errorId} className={helperTextVariants({ state: 'error' })}>
+          {error}
+        </div>
+      )}
+
+      {/* Helper text */}
+      {helperText && !error && (
+        <div id={helperId} className={helperTextVariants({ state })}>
+          {helperText}
+        </div>
+      )}
+    </div>
+  );
+};
 
 TextField.displayName = 'TextField';
 
