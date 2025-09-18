@@ -15,7 +15,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": false
+    "noEmit": false,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["src/**/*"],
   "exclude": [

@@ -37,6 +37,8 @@ module.exports = {
     'react/default-props-match-prop-types': 'off',
     // Prefer default parameters over defaultProps for function components
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+    // Allow prop spreading in component libraries for better DX
+    'react/jsx-props-no-spreading': 'off',
   },
   parserOptions: {
     project: [
