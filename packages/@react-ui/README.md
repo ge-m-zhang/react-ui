@@ -8,6 +8,7 @@ A comprehensive React UI component library built with TypeScript and Tailwind CS
 
 - **Components** - Complete UI toolkit from buttons to complex data tables
 - **TypeScript First** - Full type safety with excellent IntelliSense support
+- **React 19 Ready** - Full compatibility with React 18+ and React 19
 - **Dark Mode Built-in** - System-aware theme switching with custom CSS variables
 - **Zero Config** - Works out of the box, no Tailwind CSS setup required
 - **Accessibility** - ARIA compliant and keyboard navigable components
