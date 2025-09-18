@@ -1,6 +1,6 @@
 // packages/@react-ui/src/lib/components/Typography/Typography.tsx
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { type VariantProps } from 'class-variance-authority';
 import { cn } from '../../tools/classNames';
 import { typographyVariants, variantElementMap } from './typography.config';
@@ -26,47 +26,44 @@ export interface TypographyProps
     VariantProps<typeof typographyVariants> {
   as?: keyof JSX.IntrinsicElements;
   children?: React.ReactNode;
+  ref?: React.Ref<HTMLElement>;
 }
 
-export const Typography = forwardRef<HTMLElement, TypographyProps>(
-  (
-    {
-      variant = 'body1',
-      align = 'inherit',
-      noWrap = false,
-      bold = false,
-      hyperlink = false,
-      strikethrough = false,
-      as = 'span',
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    // Determine the element type
-    const Element = as ?? variantElementMap[variant ?? 'body1'];
+export const Typography = ({
+  variant = 'body1',
+  align = 'inherit',
+  noWrap = false,
+  bold = false,
+  hyperlink = false,
+  strikethrough = false,
+  as = 'span',
+  className,
+  children,
+  ref,
+  ...props
+}: TypographyProps) => {
+  // Determine the element type
+  const Element = as ?? variantElementMap[variant ?? 'body1'];
 
-    return React.createElement(
-      Element,
-      {
-        ref,
-        className: cn(
-          typographyVariants({
-            variant,
-            align,
-            noWrap,
-            bold,
-            hyperlink,
-            strikethrough,
-          }),
-          className,
-        ),
-        ...props,
-      },
-      children,
-    );
-  },
-);
+  return React.createElement(
+    Element,
+    {
+      ref,
+      className: cn(
+        typographyVariants({
+          variant: variant ?? 'body1',
+          align: align ?? 'inherit',
+          noWrap,
+          bold,
+          hyperlink,
+          strikethrough,
+        }),
+        className,
+      ),
+      ...props,
+    },
+    children,
+  );
+};
 
 Typography.displayName = 'Typography';
