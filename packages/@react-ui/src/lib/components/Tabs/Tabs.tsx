@@ -10,17 +10,7 @@ import {
 /**
  * Tab Component System
  *
- * A flexible tab component with conteconst TabContent = ({
-  className,
-  children,
-  id,
-  style,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledBy,
-  'data-testid': dataTestId,
-  ref,
-  ...props
-}: TabContentProps) => {e management.
+ * A flexible tab component with  context-based state management.
  * Built with accessibility in mind and styled with Tailwind CSS.
  *
  * @features
