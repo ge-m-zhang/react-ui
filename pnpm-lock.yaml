@@ -81,8 +81,8 @@ importers:
   apps/storybook-react-ui:
     dependencies:
       '@gmzh/react-ui':
-        specifier: 0.2.9
-        version: 0.2.9(react@18.3.1)
+        specifier: 0.2.10
+        version: 0.2.10(react@18.3.1)
       react:
         specifier: '>=16.8.0'
         version: 18.3.1
@@ -615,8 +615,8 @@ packages:
     resolution: {integrity: sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@gmzh/react-ui@0.2.9':
-    resolution: {integrity: sha512-Kxod6glHkGd8NFAHDNOspPXZst0DReCajMGR/b1OoH6MbTJzFSCPuxt/2kHRguM7ZQaEQe47Qxl77KUFWtUE0Q==}
+  '@gmzh/react-ui@0.2.10':
+    resolution: {integrity: sha512-rDBz1jTday4M6l8r/cZQsb8b2QKAFgq44ee5Y/wybdaIztCXG0hEcO6eAhwlOC8yq699pvPXVOZal3A3YrqpaA==}
     peerDependencies:
       react: ^18.2.0
 
@@ -3216,7 +3216,7 @@ snapshots:
 
   '@eslint/js@8.57.1': {}
 
-  '@gmzh/react-ui@0.2.9(react@18.3.1)':
+  '@gmzh/react-ui@0.2.10(react@18.3.1)':
     dependencies:
       class-variance-authority: 0.7.1
       clsx: 2.1.1
